@@ -1,0 +1,23 @@
+#pragma once
+
+#include <Eigen/Geometry>
+#include <memory>
+
+namespace csVisOpenGL {
+class UniformLineRenderer;
+class ShaderFactory;
+class Camera;
+
+class PainterGrid {
+  std::unique_ptr<UniformLineRenderer> primaryRenderer, secondaryRenderer;
+
+public:
+  PainterGrid();
+  virtual ~PainterGrid();
+
+  void initialize(ShaderFactory* shaderFactory);
+  void draw(const Camera& camera);
+
+  void setGrid(const Eigen::Isometry3f& p, const Eigen::Vector2f& size, const Eigen::Vector2i& steps);
+};
+} // namespace csVisOpenGL

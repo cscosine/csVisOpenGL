@@ -1,0 +1,19 @@
+<RCC>
+  <qresource prefix="/shaders">
+    <file alias="uniformColor.vp">shaders/uniformColor.vp</file>
+    <file alias="vertexColor.vp">shaders/vertexColor.vp</file>
+    <file alias="diffuse.fp">shaders/diffuse.fp</file>
+
+    <file alias="mesh.fp">shaders/mesh.fp</file>
+    <file alias="mesh.vp">shaders/mesh.vp</file>
+
+    <file alias="meshColor.fp">shaders/meshColor.fp</file>
+    <file alias="meshColor.vp">shaders/meshColor.vp</file>
+
+    <file alias="bkg.fp">shaders/bkg.fp</file>
+    <file alias="bkg.vp">shaders/bkg.vp</file>
+
+    <file alias="texture.fp">shaders/texture.fp</file>
+    <file alias="texture.vp">shaders/texture.vp</file>
+  </qresource>
+</RCC>

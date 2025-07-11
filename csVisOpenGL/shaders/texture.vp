@@ -1,0 +1,19 @@
+// Inputs: uniforms
+uniform mat4 mvp;
+uniform vec4 uniformColor;
+
+// Inputs: per vertex
+in vec3 position;
+in vec2 texCoord0;
+
+// Output
+out vec4 outputColor;
+out vec2 tc;
+
+void main()
+{
+    outputColor = uniformColor;
+    gl_Position = mvp * vec4(position,1.0);
+	tc = texCoord0;
+
+}

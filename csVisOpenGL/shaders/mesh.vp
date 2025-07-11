@@ -1,0 +1,21 @@
+// Inputs: uniforms
+uniform mat4 mvp;
+uniform mat4 m;
+
+// Inputs: per vertex
+in vec3 position;
+in vec3 normal;
+
+// Outputs
+out vec3 fragPosition;
+out vec3 fragNormal;
+
+void main()
+{
+    // Pass vertex stuff to the fragment shader
+	fragPosition = position;
+	fragNormal = normal;
+
+	// Compute vertex position (screen coordinates)
+    gl_Position = mvp * vec4(position, 1.0);
+}
