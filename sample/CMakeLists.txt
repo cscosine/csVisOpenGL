@@ -21,6 +21,6 @@ cs_target_link_libraries(csVisOpenGLSample
 		csVisOpenGL::csVisOpenGL
 )
 
-cs_install_target(csVisOpenGLSample csVisOpenGLSampleExport DEFAULT)
+cs_install_target(csVisOpenGLSample csVisOpenGLSample)
 
 cs_finalize_target(csVisOpenGLSample)

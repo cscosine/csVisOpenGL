@@ -109,6 +109,6 @@ cs_target_link_libraries(csVisOpenGL
 
 )
 
-cs_install_target(csVisOpenGL csVisOpenGLExport DEFAULT)
+cs_install_target(csVisOpenGL csVisOpenGL DEFAULT)
 
 cs_finalize_target(csVisOpenGL)
