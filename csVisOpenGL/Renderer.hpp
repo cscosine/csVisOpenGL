@@ -1,6 +1,6 @@
 #pragma once
-#include "ShaderFactory.h"
 #include <Eigen/Core>
+#include <csVisOpenGL/ShaderFactory.hpp>
 
 class QOpenGLExtraFunctions;
 

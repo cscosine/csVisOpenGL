@@ -1,8 +1,8 @@
-#include "ShaderFactory.h"
 #include <QOpenGLContext>
+#include <csVisOpenGL/ShaderFactory.hpp>
 #include <iostream>
 
-#include "Shader.h"
+#include <csVisOpenGL/Shader.hpp>
 
 #include <QFile>
 #include <QImage>

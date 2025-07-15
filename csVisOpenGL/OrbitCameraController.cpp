@@ -1,8 +1,8 @@
-#include "OrbitCameraController.h"
+#include <csVisOpenGL/OrbitCameraController.hpp>
 
 #include <math.h>
 
-#include "Camera.h"
+#include <csVisOpenGL/Camera.hpp>
 
 #include <QFocusEvent>
 #include <QMouseEvent>

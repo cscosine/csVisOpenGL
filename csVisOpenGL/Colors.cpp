@@ -1,5 +1,5 @@
-#include "Colors.h"
 #include <QColor>
+#include <csVisOpenGL/Colors.hpp>
 
 namespace csVisOpenGL {
 const Eigen::Vector4f Color::red = Eigen::Vector4f(0.96f, 0.26f, 0.21f, 1.0f);

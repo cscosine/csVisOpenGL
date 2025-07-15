@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include <csVisOpenGL/Camera.hpp>
 
 #define _USE_MATH_DEFINES
 #include <math.h>

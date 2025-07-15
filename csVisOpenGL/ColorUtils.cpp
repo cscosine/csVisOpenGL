@@ -1,5 +1,5 @@
-#include "ColorUtils.h"
 #include <QColor>
+#include <csVisOpenGL/ColorUtils.hpp>
 
 namespace csVisOpenGL {
 

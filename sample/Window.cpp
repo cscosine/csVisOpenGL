@@ -1,9 +1,9 @@
-#include "Window.h"
+#include <sample/Window.hpp>
 
-#include "ui_Window.h"
+#include <sample/ui_Window.h>
 
-#include "csVisOpenGL/Camera.h"
-#include "csVisOpenGL/OrbitCameraController.h"
+#include <csVisOpenGL/Camera.hpp>
+#include <csVisOpenGL/OrbitCameraController.hpp>
 
 #include <QFileDialog>
 #include <atomic>

@@ -1,8 +1,8 @@
-#include "UniformPointRenderer.h"
+#include <csVisOpenGL/UniformPointRenderer.hpp>
 
-#include "Camera.h"
-#include "Shader.h"
-#include "Vao.h"
+#include <csVisOpenGL/Camera.hpp>
+#include <csVisOpenGL/Shader.hpp>
+#include <csVisOpenGL/Vao.hpp>
 
 namespace csVisOpenGL {
 

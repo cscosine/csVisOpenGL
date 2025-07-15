@@ -1,9 +1,9 @@
-#include "TestVis.h"
-#include "csVisOpenGL/Colors.h"
+#include <sample/TestVis.hpp>
+
+#include <csVisOpenGL/Camera.hpp>
+#include <csVisOpenGL/Colors.hpp>
+
 #include <iostream>
-
-#include "csVisOpenGL/Camera.h"
-
 #include <math.h>
 
 TestcsVisOpenGL::TestcsVisOpenGL()

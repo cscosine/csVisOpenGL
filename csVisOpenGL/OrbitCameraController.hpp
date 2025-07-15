@@ -1,9 +1,9 @@
 #pragma once
 
-#include "CameraController.h"
 #include <Eigen/Core>
 #include <QObject>
 #include <QPoint>
+#include <csVisOpenGL/CameraController.hpp>
 
 namespace csVisOpenGL {
 class OrbitCameraController : public QObject, public CameraController {

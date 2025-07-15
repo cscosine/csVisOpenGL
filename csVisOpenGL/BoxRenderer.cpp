@@ -1,9 +1,9 @@
-#include "BoxRenderer.h"
+#include <csVisOpenGL/BoxRenderer.hpp>
 
-#include "PerVertexMeshRenderer.h"
+#include <csVisOpenGL/PerVertexMeshRenderer.hpp>
 
-#include "Camera.h"
-#include "ShaderFactory.h"
+#include <csVisOpenGL/Camera.hpp>
+#include <csVisOpenGL/ShaderFactory.hpp>
 
 namespace csVisOpenGL {
 

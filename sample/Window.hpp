@@ -1,6 +1,6 @@
 #pragma once
-#include "TestVis.h"
 #include <QMainWindow>
+#include <sample/TestVis.hpp>
 
 namespace Ui {
 class Window;

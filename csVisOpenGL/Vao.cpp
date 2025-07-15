@@ -1,4 +1,4 @@
-#include "Vao.h"
+#include <csVisOpenGL/Vao.hpp>
 
 namespace csVisOpenGL {
 

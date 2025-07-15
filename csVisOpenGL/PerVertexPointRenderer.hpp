@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Renderer.h"
+#include <csVisOpenGL/Renderer.hpp>
 
 namespace csVisOpenGL {
-class UniformPointRenderer : public Renderer {
+class PerVertexPointRenderer : public Renderer {
   GLfloat pointSize;
   bool smoothPoints;
 
 public:
-  UniformPointRenderer();
-  virtual ~UniformPointRenderer();
+  PerVertexPointRenderer();
+  virtual ~PerVertexPointRenderer();
 
   void setPointSize(float pointSize) {
     this->pointSize = pointSize;
@@ -20,7 +20,10 @@ public:
 
   void setUniformColor(const Eigen::Vector4f& color);
   void setUniformColor(const Eigen::Vector3f& color);
-  void setPoints(const Eigen::Matrix3Xf& positions);
+  void setPoints(const Eigen::Matrix3Xf& positions, const Eigen::Matrix4Xf& colors);
+  void setPoints(const Eigen::Matrix3Xf& positions, const Eigen::Matrix3Xf& colors);
+  void setColors(const Eigen::Matrix3Xf& colors);
+  void setColors(const Eigen::Matrix4Xf& colors);
 
 protected:
   virtual void initializeConcrete() override;

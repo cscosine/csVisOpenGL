@@ -1,5 +1,5 @@
-#include "PainterCameras.h"
-#include "UniformLineRenderer.h"
+#include <csVisOpenGL/PainterCameras.hpp>
+#include <csVisOpenGL/UniformLineRenderer.hpp>
 
 namespace csVisOpenGL {
 

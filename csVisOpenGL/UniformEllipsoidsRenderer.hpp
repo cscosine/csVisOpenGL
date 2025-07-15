@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Renderer.h"
 #include <Eigen/Geometry>
+#include <csVisOpenGL/Renderer.hpp>
 
 namespace csVisOpenGL {
 class UniformEllipsoidsRenderer3D : public Renderer {

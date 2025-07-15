@@ -1,4 +1,4 @@
-#include "Shader.h"
+#include <csVisOpenGL/Shader.hpp>
 #include <iostream>
 
 namespace csVisOpenGL {

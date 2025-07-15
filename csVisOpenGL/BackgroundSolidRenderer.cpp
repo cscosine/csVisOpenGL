@@ -1,7 +1,7 @@
-#include "BackgroundSolidRenderer.h"
-#include "Colors.h"
+#include <csVisOpenGL/BackgroundSolidRenderer.hpp>
+#include <csVisOpenGL/Colors.hpp>
 
-#include "ShaderFactory.h"
+#include <csVisOpenGL/ShaderFactory.hpp>
 #include <iostream>
 
 namespace csVisOpenGL {

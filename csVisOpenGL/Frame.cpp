@@ -1,15 +1,15 @@
-#include "Frame.h"
-#include "Camera.h"
-#include "OrbitCameraController.h"
-#include "Visualizer.h"
 #include <QPainter>
 #include <QtGui/QOpenGLFunctions>
+#include <csVisOpenGL/Camera.hpp>
+#include <csVisOpenGL/Frame.hpp>
+#include <csVisOpenGL/OrbitCameraController.hpp>
+#include <csVisOpenGL/Visualizer.hpp>
 
 #include <QFocusEvent>
 #include <QMouseEvent>
 #include <QWheelEvent>
 
-#include "ShaderFactory.h"
+#include <csVisOpenGL/ShaderFactory.hpp>
 
 namespace csVisOpenGL {
 

@@ -28,35 +28,35 @@ cs_find_package(csVisOpenGL PUBLIC OpenGL REQUIRED)
 
 cs_target_sources(csVisOpenGL
 	PRIVATE_INSTALL
-		BackgroundRenderer.h
-		BackgroundSolidRenderer.h
-		BoxRenderer.h
-		CameraController.h
-		Camera.h
-		Colors.h
-		ColorUtils.h
-		Frame.h
-		MeshColorRenderer.h
-		MeshRenderer.h
-		OrbitCameraController.h
-		PainterAxes.h
-		PainterCameras.h
-		PainterCheckerBoard.h
-		PainterGrid.h
-		PerVertexLineRenderer.h
-		PerVertexMeshRenderer.h
-		PerVertexPointRenderer.h
-		Renderer.h
-		ShaderFactory.h
-		Shader.h
-		SingleTextureRenderer.h
-		UniformEllipsoidsRenderer.h
-		UniformLineRenderer.h
-		UniformMeshRenderer.h
-		UniformPointRenderer.h
-		Utils.h
-		Vao.h
-		Visualizer.h
+		BackgroundRenderer.hpp
+		BackgroundSolidRenderer.hpp
+		BoxRenderer.hpp
+		CameraController.hpp
+		Camera.hpp
+		Colors.hpp
+		ColorUtils.hpp
+		Frame.hpp
+		MeshColorRenderer.hpp
+		MeshRenderer.hpp
+		OrbitCameraController.hpp
+		PainterAxes.hpp
+		PainterCameras.hpp
+		PainterCheckerBoard.hpp
+		PainterGrid.hpp
+		PerVertexLineRenderer.hpp
+		PerVertexMeshRenderer.hpp
+		PerVertexPointRenderer.hpp
+		Renderer.hpp
+		ShaderFactory.hpp
+		Shader.hpp
+		SingleTextureRenderer.hpp
+		UniformEllipsoidsRenderer.hpp
+		UniformLineRenderer.hpp
+		UniformMeshRenderer.hpp
+		UniformPointRenderer.hpp
+		Utils.hpp
+		Vao.hpp
+		Visualizer.hpp
 	PRIVATE
 		BackgroundRenderer.cpp
 		BackgroundSolidRenderer.cpp

@@ -5,8 +5,8 @@ cs_add_executable(csVisOpenGLSample)
 
 cs_target_sources(csVisOpenGLSample
 	PRIVATE
-	TestVis.h
-	Window.h
+	TestVis.hpp
+	Window.hpp
 	Window.cpp
 	TestVis.cpp
 	main.cpp

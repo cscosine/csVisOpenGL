@@ -1,5 +1,5 @@
-#include "CameraController.h"
 #include <QKeyEvent>
+#include <csVisOpenGL/CameraController.hpp>
 
 namespace csVisOpenGL {
 

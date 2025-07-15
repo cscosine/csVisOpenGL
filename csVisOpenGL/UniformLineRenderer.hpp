@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Renderer.h"
+#include <csVisOpenGL/Renderer.hpp>
 
 namespace csVisOpenGL {
-class PerVertexLineRenderer : public Renderer {
+class UniformLineRenderer : public Renderer {
   GLfloat lineWidth;
 
 public:
-  PerVertexLineRenderer();
-  virtual ~PerVertexLineRenderer();
+  UniformLineRenderer();
+  virtual ~UniformLineRenderer();
 
   void setLineWidth(float lineWidth) {
     this->lineWidth = lineWidth;
@@ -16,8 +16,7 @@ public:
 
   void setUniformColor(const Eigen::Vector4f& color);
   void setUniformColor(const Eigen::Vector3f& color);
-  void setLines(const Eigen::Matrix3Xf& positions, const Eigen::Matrix4Xf& colors);
-  void setLines(const Eigen::Matrix3Xf& positions, const Eigen::Matrix3Xf& colors);
+  void setLines(const Eigen::Matrix3Xf& positions);
 
 protected:
   virtual void initializeConcrete() override;

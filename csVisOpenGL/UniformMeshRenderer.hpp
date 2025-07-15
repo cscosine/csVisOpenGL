@@ -1,22 +1,22 @@
 #pragma once
 
-#include "Renderer.h"
+#include <csVisOpenGL/Renderer.hpp>
 
 namespace csVisOpenGL {
-class UniformLineRenderer : public Renderer {
-  GLfloat lineWidth;
+class UniformMeshRenderer : public Renderer {
+  bool cull;
 
 public:
-  UniformLineRenderer();
-  virtual ~UniformLineRenderer();
-
-  void setLineWidth(float lineWidth) {
-    this->lineWidth = lineWidth;
-  }
+  UniformMeshRenderer();
+  virtual ~UniformMeshRenderer();
 
   void setUniformColor(const Eigen::Vector4f& color);
   void setUniformColor(const Eigen::Vector3f& color);
-  void setLines(const Eigen::Matrix3Xf& positions);
+  void setTriangles(const Eigen::Matrix3Xf& positions);
+
+  void setCullFaceEnabled(bool set) {
+    this->cull = set;
+  }
 
 protected:
   virtual void initializeConcrete() override;

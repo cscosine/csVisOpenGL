@@ -1,10 +1,10 @@
-#include "MeshRenderer.h"
+#include <csVisOpenGL/MeshRenderer.hpp>
 
 #include <math.h>
 
-#include "Camera.h"
-#include "Shader.h"
-#include "Vao.h"
+#include <csVisOpenGL/Camera.hpp>
+#include <csVisOpenGL/Shader.hpp>
+#include <csVisOpenGL/Vao.hpp>
 
 namespace csVisOpenGL {
 

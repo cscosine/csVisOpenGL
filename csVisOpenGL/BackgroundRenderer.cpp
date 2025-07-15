@@ -1,9 +1,9 @@
-#include "BackgroundRenderer.h"
+#include <csVisOpenGL/BackgroundRenderer.hpp>
 
-#include "Camera.h"
-#include "Shader.h"
-#include "ShaderFactory.h"
-#include "Vao.h"
+#include <csVisOpenGL/Camera.hpp>
+#include <csVisOpenGL/Shader.hpp>
+#include <csVisOpenGL/ShaderFactory.hpp>
+#include <csVisOpenGL/Vao.hpp>
 
 namespace csVisOpenGL {
 
