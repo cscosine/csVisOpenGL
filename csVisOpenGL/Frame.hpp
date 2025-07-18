@@ -12,7 +12,7 @@ class CameraController;
 class ShaderFactory;
 class Visualizer;
 
-class Frame : public QOpenGLWidget, public QOpenGLExtraFunctions {
+class Frame : public QOpenGLWidget {
   bool initialized;
   bool enabled;
 
@@ -43,6 +43,10 @@ public:
     return cameraController.get();
   }
 
+  std::shared_ptr<QOpenGLExtraFunctions> const& getQOpenGLExtraFunctions() const {
+    return m_openGLExtraFunctions;
+  }
+
 protected:
   // ------------- GL methods
   virtual void initializeGL() override;
@@ -59,5 +63,8 @@ protected:
   void mouseReleaseEvent(QMouseEvent* e) override;
   void mouseDoubleClick(QMouseEvent* e);
   void wheelEvent(QWheelEvent* e) override;
+
+private:
+  std::shared_ptr<QOpenGLExtraFunctions> m_openGLExtraFunctions;
 };
 } // namespace csVisOpenGL

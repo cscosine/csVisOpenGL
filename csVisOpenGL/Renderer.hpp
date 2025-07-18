@@ -1,6 +1,7 @@
 #pragma once
 #include <Eigen/Core>
 #include <csVisOpenGL/ShaderFactory.hpp>
+#include <memory>
 
 class QOpenGLExtraFunctions;
 
@@ -17,7 +18,7 @@ protected:
   Vao* vao;
 
   Frame* frame;
-  QOpenGLExtraFunctions* glExtraFunctions;
+  std::shared_ptr<QOpenGLExtraFunctions> glExtraFunctions;
 
 public:
   Renderer(ShaderFactory::ShaderNames shaderName);

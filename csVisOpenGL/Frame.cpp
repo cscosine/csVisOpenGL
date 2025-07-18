@@ -18,7 +18,8 @@ Frame::Frame(QWidget* parent)
     , initialized(false)
     , enabled(false)
     , camera(new Camera())
-    , cameraController(new OrbitCameraController(*camera)) {
+    , cameraController(new OrbitCameraController(*camera))
+    , m_openGLExtraFunctions{std::make_unique<QOpenGLExtraFunctions>()} {
   setMinimumSize(300, 200);
   setMouseTracking(true);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -54,13 +55,13 @@ bool Frame::removeVisualizer(Visualizer* visualizer) {
 void Frame::initializeGL() {
   // Initialize OpenGL
   makeCurrent();
-  initializeOpenGLFunctions();
+  m_openGLExtraFunctions->initializeOpenGLFunctions();
 
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_SCISSOR_TEST);
+  m_openGLExtraFunctions->glEnable(GL_DEPTH_TEST);
+  m_openGLExtraFunctions->glEnable(GL_SCISSOR_TEST);
   // glShadeModel(GL_SMOOTH);
-  glClearColor(0.0, 0.0, 0.0, 0.0);
-  glClearDepthf(0.0);
+  m_openGLExtraFunctions->glClearColor(0.0, 0.0, 0.0, 0.0);
+  m_openGLExtraFunctions->glClearDepthf(0.0);
 
   // Create shader factory
   shaderFactory.reset(new ShaderFactory(this));

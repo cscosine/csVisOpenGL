@@ -10,7 +10,7 @@ public:
   Vao();
   virtual ~Vao();
 
-  void initialize(QOpenGLExtraFunctions* glExtraFunctions) {
+  void initialize(std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
     this->m_glExtraFunctions = glExtraFunctions;
   }
   GLuint getVao() const {
@@ -32,6 +32,6 @@ private:
   std::map<GLint, GLuint> m_locationToVbo;
   int m_count;
 
-  QOpenGLExtraFunctions* m_glExtraFunctions;
+  std::shared_ptr<QOpenGLExtraFunctions> m_glExtraFunctions;
 };
 } // namespace csVisOpenGL

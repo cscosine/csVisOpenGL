@@ -23,9 +23,9 @@ Renderer::~Renderer() {
 
 void Renderer::initialize(ShaderFactory* shaderFactory) {
   this->frame = shaderFactory->getFrame();
-  this->glExtraFunctions = static_cast<QOpenGLExtraFunctions*>(frame);
+  glExtraFunctions = frame->getQOpenGLExtraFunctions();
   this->shader = shaderFactory->createShader(shaderName);
-  vao->initialize(this->glExtraFunctions);
+  vao->initialize(glExtraFunctions);
   assert(this->shader);
   initializeConcrete();
 }
