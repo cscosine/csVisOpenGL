@@ -1,4 +1,4 @@
-#include <csVisOpenGL/BackgroundRenderer.hpp>
+#include <csVisOpenGL/renderers/BackgroundRenderer.hpp>
 
 #include <csVisOpenGL/Camera.hpp>
 #include <csVisOpenGL/Shader.hpp>

@@ -1,4 +1,4 @@
-#include <csVisOpenGL/UniformEllipsoidsRenderer.hpp>
+#include <csVisOpenGL/renderers/UniformEllipsoidsRenderer.hpp>
 
 #include <math.h>
 

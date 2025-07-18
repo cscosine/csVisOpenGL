@@ -1,4 +1,4 @@
-#include <csVisOpenGL/MeshColorRenderer.hpp>
+#include <csVisOpenGL/renderers/MeshColorRenderer.hpp>
 
 #include <math.h>
 

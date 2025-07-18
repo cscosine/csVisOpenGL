@@ -1,5 +1,5 @@
-#include <csVisOpenGL/BackgroundSolidRenderer.hpp>
 #include <csVisOpenGL/Colors.hpp>
+#include <csVisOpenGL/renderers/BackgroundSolidRenderer.hpp>
 
 #include <csVisOpenGL/ShaderFactory.hpp>
 #include <iostream>

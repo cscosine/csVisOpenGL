@@ -1,8 +1,8 @@
-#include <csVisOpenGL/PainterCheckerBoard.hpp>
+#include <csVisOpenGL/painters/PainterCheckerBoard.hpp>
 
 #include <csVisOpenGL/Colors.hpp>
-#include <csVisOpenGL/PainterAxes.hpp>
-#include <csVisOpenGL/UniformMeshRenderer.hpp>
+#include <csVisOpenGL/painters/PainterAxes.hpp>
+#include <csVisOpenGL/renderers/UniformMeshRenderer.hpp>
 
 namespace csVisOpenGL {
 

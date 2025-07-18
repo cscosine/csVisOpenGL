@@ -28,66 +28,64 @@ cs_find_package(csVisOpenGL PUBLIC OpenGL REQUIRED)
 
 cs_target_sources(csVisOpenGL
 	PRIVATE_INSTALL
-		BackgroundRenderer.hpp
-		BackgroundSolidRenderer.hpp
-		BoxRenderer.hpp
-		CameraController.hpp
-		Camera.hpp
-		Colors.hpp
-		ColorUtils.hpp
-		Frame.hpp
-		MeshColorRenderer.hpp
-		MeshRenderer.hpp
-		OrbitCameraController.hpp
-		PainterAxes.hpp
-		PainterCameras.hpp
-		PainterCheckerBoard.hpp
-		PainterGrid.hpp
-		PerVertexLineRenderer.hpp
-		PerVertexMeshRenderer.hpp
-		PerVertexPointRenderer.hpp
-		Renderer.hpp
-		ShaderFactory.hpp
-		Shader.hpp
-		SingleTextureRenderer.hpp
-		UniformEllipsoidsRenderer.hpp
-		UniformLineRenderer.hpp
-		UniformMeshRenderer.hpp
-		UniformPointRenderer.hpp
-		Utils.hpp
-		Vao.hpp
-		Visualizer.hpp
-	PRIVATE
-		BackgroundRenderer.cpp
-		BackgroundSolidRenderer.cpp
-		BoxRenderer.cpp
-		CameraController.cpp
-		Camera.cpp
-		Colors.cpp
-		ColorUtils.cpp
-		Frame.cpp
-		MeshColorRenderer.cpp
-		MeshRenderer.cpp
-		OrbitCameraController.cpp
-		PainterAxes.cpp
-		PainterCameras.cpp
-		PainterCheckerBoard.cpp
-		PainterGrid.cpp
-		PerVertexLineRenderer.cpp
-		PerVertexMeshRenderer.cpp
-		PerVertexPointRenderer.cpp
-		Renderer.cpp
-		Shader.cpp
-		ShaderFactory.cpp
-		SingleTextureRenderer.cpp
-		UniformEllipsoidsRenderer.cpp
-		UniformLineRenderer.cpp
-		UniformMeshRenderer.cpp
-		UniformPointRenderer.cpp
-		Utils.cpp
-		Vao.cpp
+renderers/BackgroundRenderer.hpp
+renderers/BackgroundSolidRenderer.hpp
+renderers/BoxRenderer.hpp
+CameraController.hpp
+Camera.hpp
+Colors.hpp
+ColorUtils.hpp
+Frame.hpp
+renderers/MeshColorRenderer.hpp
+renderers/MeshRenderer.hpp
+OrbitCameraController.hpp
+painters/PainterAxes.hpp
+painters/PainterCameras.hpp
+painters/PainterCheckerBoard.hpp
+painters/PainterGrid.hpp
+renderers/PerVertexLineRenderer.hpp
+renderers/PerVertexMeshRenderer.hpp
+renderers/PerVertexPointRenderer.hpp
+Renderer.hpp
+ShaderFactory.hpp
+Shader.hpp
+renderers/SingleTextureRenderer.hpp
+renderers/UniformEllipsoidsRenderer.hpp
+renderers/UniformLineRenderer.hpp
+renderers/UniformMeshRenderer.hpp
+renderers/UniformPointRenderer.hpp
+Vao.hpp
+Visualizer.hpp
+PRIVATE
+renderers/BackgroundRenderer.cpp
+renderers/BackgroundSolidRenderer.cpp
+renderers/BoxRenderer.cpp
+CameraController.cpp
+Camera.cpp
+Colors.cpp
+ColorUtils.cpp
+Frame.cpp
+renderers/MeshColorRenderer.cpp
+renderers/MeshRenderer.cpp
+OrbitCameraController.cpp
+painters/PainterAxes.cpp
+painters/PainterCameras.cpp
+painters/PainterCheckerBoard.cpp
+painters/PainterGrid.cpp
+renderers/PerVertexLineRenderer.cpp
+renderers/PerVertexMeshRenderer.cpp
+renderers/PerVertexPointRenderer.cpp
+Renderer.cpp
+Shader.cpp
+ShaderFactory.cpp
+renderers/SingleTextureRenderer.cpp
+renderers/UniformEllipsoidsRenderer.cpp
+renderers/UniformLineRenderer.cpp
+renderers/UniformMeshRenderer.cpp
+renderers/UniformPointRenderer.cpp
+Vao.cpp
 # resources
-		vis.qrc
+vis.qrc
 		)
 
 set_target_properties(csVisOpenGL PROPERTIES AUTOMOC ON)

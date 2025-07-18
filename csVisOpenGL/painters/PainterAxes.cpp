@@ -1,6 +1,6 @@
-#include <csVisOpenGL/PainterAxes.hpp>
+#include <csVisOpenGL/painters/PainterAxes.hpp>
 
-#include <csVisOpenGL/PerVertexLineRenderer.hpp>
+#include <csVisOpenGL/renderers/PerVertexLineRenderer.hpp>
 
 namespace csVisOpenGL {
 

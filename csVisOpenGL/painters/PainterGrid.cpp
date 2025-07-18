@@ -1,6 +1,6 @@
-#include <csVisOpenGL/PainterGrid.hpp>
+#include <csVisOpenGL/painters/PainterGrid.hpp>
 
-#include <csVisOpenGL/UniformLineRenderer.hpp>
+#include <csVisOpenGL/renderers/UniformLineRenderer.hpp>
 
 namespace csVisOpenGL {
 

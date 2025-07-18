@@ -1,19 +1,19 @@
 #pragma once
-#include <csVisOpenGL/BackgroundRenderer.hpp>
-#include <csVisOpenGL/BackgroundSolidRenderer.hpp>
-#include <csVisOpenGL/MeshColorRenderer.hpp>
-#include <csVisOpenGL/MeshRenderer.hpp>
-#include <csVisOpenGL/PainterAxes.hpp>
-#include <csVisOpenGL/PainterGrid.hpp>
-#include <csVisOpenGL/PerVertexLineRenderer.hpp>
-#include <csVisOpenGL/PerVertexMeshRenderer.hpp>
-#include <csVisOpenGL/PerVertexPointRenderer.hpp>
-#include <csVisOpenGL/SingleTextureRenderer.hpp>
-#include <csVisOpenGL/UniformEllipsoidsRenderer.hpp>
-#include <csVisOpenGL/UniformLineRenderer.hpp>
-#include <csVisOpenGL/UniformMeshRenderer.hpp>
-#include <csVisOpenGL/UniformPointRenderer.hpp>
 #include <csVisOpenGL/Visualizer.hpp>
+#include <csVisOpenGL/painters/PainterAxes.hpp>
+#include <csVisOpenGL/painters/PainterGrid.hpp>
+#include <csVisOpenGL/renderers/BackgroundRenderer.hpp>
+#include <csVisOpenGL/renderers/BackgroundSolidRenderer.hpp>
+#include <csVisOpenGL/renderers/MeshColorRenderer.hpp>
+#include <csVisOpenGL/renderers/MeshRenderer.hpp>
+#include <csVisOpenGL/renderers/PerVertexLineRenderer.hpp>
+#include <csVisOpenGL/renderers/PerVertexMeshRenderer.hpp>
+#include <csVisOpenGL/renderers/PerVertexPointRenderer.hpp>
+#include <csVisOpenGL/renderers/SingleTextureRenderer.hpp>
+#include <csVisOpenGL/renderers/UniformEllipsoidsRenderer.hpp>
+#include <csVisOpenGL/renderers/UniformLineRenderer.hpp>
+#include <csVisOpenGL/renderers/UniformMeshRenderer.hpp>
+#include <csVisOpenGL/renderers/UniformPointRenderer.hpp>
 
 class TestcsVisOpenGL : public csVisOpenGL::Visualizer {
   csVisOpenGL::UniformPointRenderer uniformPointRenderer;

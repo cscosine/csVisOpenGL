@@ -1,4 +1,4 @@
-#include <csVisOpenGL/PerVertexLineRenderer.hpp>
+#include <csVisOpenGL/renderers/PerVertexLineRenderer.hpp>
 
 #include <csVisOpenGL/Camera.hpp>
 #include <csVisOpenGL/Shader.hpp>

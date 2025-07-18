@@ -1,4 +1,4 @@
-#include <csVisOpenGL/MeshRenderer.hpp>
+#include <csVisOpenGL/renderers/MeshRenderer.hpp>
 
 #include <math.h>
 

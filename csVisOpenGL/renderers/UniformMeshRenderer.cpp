@@ -1,4 +1,4 @@
-#include <csVisOpenGL/UniformMeshRenderer.hpp>
+#include <csVisOpenGL/renderers/UniformMeshRenderer.hpp>
 
 #include <csVisOpenGL/Camera.hpp>
 #include <csVisOpenGL/Shader.hpp>

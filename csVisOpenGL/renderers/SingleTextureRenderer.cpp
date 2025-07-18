@@ -1,4 +1,4 @@
-#include <csVisOpenGL/SingleTextureRenderer.hpp>
+#include <csVisOpenGL/renderers/SingleTextureRenderer.hpp>
 
 #include <csVisOpenGL/Camera.hpp>
 #include <csVisOpenGL/Shader.hpp>
