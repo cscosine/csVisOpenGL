@@ -6,24 +6,18 @@
 
 namespace csVisOpenGL {
 class Vao {
-  GLuint vao;
-  std::map<GLint, GLuint> locationToVbo;
-  int count;
-
-  QOpenGLExtraFunctions* glExtraFunctions;
-
 public:
   Vao();
   virtual ~Vao();
 
   void initialize(QOpenGLExtraFunctions* glExtraFunctions) {
-    this->glExtraFunctions = glExtraFunctions;
+    this->m_glExtraFunctions = glExtraFunctions;
   }
   GLuint getVao() const {
-    return vao;
+    return m_vao;
   }
   int size() const {
-    return count;
+    return m_count;
   }
 
   void uploadPositions(GLuint location, const float* values, int count);
@@ -34,16 +28,10 @@ public:
 private:
   void createVBO(GLuint location, GLint size, GLenum type, GLboolean normalized);
 
-  template <typename T>
-  void uploadVBO(GLuint vbo, const T* values, int count, GLenum usage = GL_STATIC_DRAW) {
-    assert(vbo > 0);
-    glExtraFunctions->glBindVertexArray(vao);
-    {
-      glExtraFunctions->glBindBuffer(GL_ARRAY_BUFFER, vbo);
-      glExtraFunctions->glBufferData(GL_ARRAY_BUFFER, sizeof(T) * count, values, usage);
-      glExtraFunctions->glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-    glExtraFunctions->glBindVertexArray(0);
-  }
+  GLuint m_vao;
+  std::map<GLint, GLuint> m_locationToVbo;
+  int m_count;
+
+  QOpenGLExtraFunctions* m_glExtraFunctions;
 };
 } // namespace csVisOpenGL
