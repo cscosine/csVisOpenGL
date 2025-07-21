@@ -8,19 +8,10 @@ class Camera;
 class ShaderFactory;
 
 class Visualizer {
-  bool enabled;
 
 public:
-  Visualizer()
-      : enabled(true) {}
+  Visualizer() {}
   virtual ~Visualizer() {}
-
-  bool isEnabled() const {
-    return enabled;
-  }
-  void setEnabled(bool set) {
-    enabled = set;
-  }
 
   virtual void initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {};
   virtual void update(const Camera& camera) {};

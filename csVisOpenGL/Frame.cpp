@@ -96,8 +96,7 @@ void Frame::paintGL() {
 
   // Update visualizers
   for (int i = 0; i < visualizers.size(); i++) {
-    if (visualizers[i]->isEnabled())
-      visualizers[i]->update(*camera);
+    visualizers[i]->update(*camera);
   }
 
   // Draw
@@ -107,15 +106,13 @@ void Frame::paintGL() {
   // Background
   glDisable(GL_DEPTH_TEST);
   for (int i = 0; i < visualizers.size(); i++) {
-    if (visualizers[i]->isEnabled())
-      visualizers[i]->paintBackground(*camera);
+    visualizers[i]->paintBackground(*camera);
   }
 
   // Solid
   glEnable(GL_DEPTH_TEST);
   for (int i = 0; i < visualizers.size(); i++) {
-    if (visualizers[i]->isEnabled())
-      visualizers[i]->paint(*camera);
+    visualizers[i]->paint(*camera);
   }
 
   // Transparent
@@ -123,8 +120,7 @@ void Frame::paintGL() {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   for (int i = 0; i < visualizers.size(); i++) {
-    if (visualizers[i]->isEnabled())
-      visualizers[i]->paintTransparent(*camera);
+    visualizers[i]->paintTransparent(*camera);
   }
   glDepthMask(true);
   glDisable(GL_BLEND);
@@ -138,8 +134,7 @@ void Frame::paintGL() {
   painter.translate(QPoint(0, 0));
 
   for (int i = 0; i < visualizers.size(); i++) {
-    if (visualizers[i]->isEnabled())
-      visualizers[i]->paintQt(*camera, painter);
+    visualizers[i]->paintQt(*camera, painter);
   }
 
   painter.restore();
@@ -151,8 +146,7 @@ void Frame::paintGL() {
   // after
   // glFlush();
   for (int i = 0; i < visualizers.size(); i++) {
-    if (visualizers[i]->isEnabled())
-      visualizers[i]->afterPaint(*camera);
+    visualizers[i]->afterPaint(*camera);
   }
 }
 

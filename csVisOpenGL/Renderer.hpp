@@ -22,10 +22,6 @@ public:
   Renderer(ShaderFactory::ShaderNames shaderName);
   virtual ~Renderer();
 
-  bool isInitialized() {
-    return shader != nullptr;
-  }
-
   void initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
 
   void draw(const Camera& camera);

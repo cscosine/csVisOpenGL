@@ -28,8 +28,7 @@ void Renderer::draw(const Camera& camera) {
 }
 
 void Renderer::draw(const Camera& camera, const Eigen::Matrix4f& m) {
-  if (!isInitialized())
-    return;
+  assert(this->shader);
 
   Eigen::Matrix4f mvp = camera.getViewProjection() * m;
   Eigen::Matrix4f mv = camera.getView() * m;
