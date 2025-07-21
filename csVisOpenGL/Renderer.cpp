@@ -10,20 +10,12 @@ namespace csVisOpenGL {
 Renderer::Renderer(ShaderFactory::ShaderNames shaderName)
     : shaderName(shaderName)
     , shader(nullptr)
-    , vao(new Vao())
-    , frame(nullptr) {}
+    , vao(std::make_unique<Vao>()) {}
 
-Renderer::~Renderer() {
-  if (frame) {
-    frame->makeCurrent();
-    delete shader;
-    delete vao;
-  }
-}
+Renderer::~Renderer() {}
 
-void Renderer::initialize(ShaderFactory* shaderFactory) {
-  this->frame = shaderFactory->getFrame();
-  glExtraFunctions = frame->getQOpenGLExtraFunctions();
+void Renderer::initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+  this->glExtraFunctions = glExtraFunctions;
   this->shader = shaderFactory->createShader(shaderName);
   vao->initialize(glExtraFunctions);
   assert(this->shader);

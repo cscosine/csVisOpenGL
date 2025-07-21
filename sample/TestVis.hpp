@@ -42,7 +42,7 @@ public:
   TestcsVisOpenGL();
   virtual ~TestcsVisOpenGL();
 
-  void initialize(csVisOpenGL::ShaderFactory* shaderFactory) override;
+  void initialize(csVisOpenGL::ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) override;
   void update(const csVisOpenGL::Camera& camera) override;
   void paintBackground(const csVisOpenGL::Camera& camera) override;
   void paint(const csVisOpenGL::Camera& camera) override;

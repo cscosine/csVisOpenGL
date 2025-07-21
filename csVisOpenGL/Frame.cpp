@@ -26,28 +26,19 @@ Frame::Frame(QWidget* parent)
   setFocusPolicy(Qt::StrongFocus);
 }
 
-Frame::~Frame() {}
+Frame::~Frame() {
+  // make sure is current frame, to allow visualizer deletion
+  this->makeCurrent();
+}
 
 // -------------------------------------------------- Visualizers -------------------------------------------------
 
-void Frame::addVisualizer(Visualizer* visualizer) {
-  if (!visualizer)
-    return;
-  visualizers.push_back(visualizer);
+void Frame::addVisualizer(std::shared_ptr<Visualizer> const& visualizer) {
+  visualizers.emplace_back(visualizer);
   if (initialized) {
     this->makeCurrent();
-    visualizer->initialize(shaderFactory.get());
+    visualizer->initialize(shaderFactory.get(), m_openGLExtraFunctions);
   }
-}
-
-bool Frame::removeVisualizer(Visualizer* visualizer) {
-  for (int i = 0; i < visualizers.size(); i++) {
-    if (visualizers[i] == visualizer) {
-      visualizers.erase(visualizers.begin() + i);
-      return true;
-    }
-  }
-  return false;
 }
 
 // -------------------------------------------------- GL Methdos --------------------------------------------------
@@ -64,11 +55,11 @@ void Frame::initializeGL() {
   m_openGLExtraFunctions->glClearDepthf(0.0);
 
   // Create shader factory
-  shaderFactory.reset(new ShaderFactory(this));
+  shaderFactory = std::make_unique<ShaderFactory>();
 
   // Initialize visualizers already added
   for (int i = 0; i < visualizers.size(); i++)
-    visualizers[i]->initialize(shaderFactory.get());
+    visualizers[i]->initialize(shaderFactory.get(), m_openGLExtraFunctions);
 
   // Initialize timers
   this->startTimer(40);

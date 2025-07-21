@@ -9,8 +9,8 @@ PainterCameras::PainterCameras()
     : renderer(new UniformLineRenderer()) {}
 PainterCameras::~PainterCameras() {}
 
-void PainterCameras::initialize(ShaderFactory* shaderFactory) {
-  renderer->initialize(shaderFactory);
+void PainterCameras::initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+  renderer->initialize(shaderFactory, glExtraFunctions);
   renderer->setLines(Eigen::Matrix3Xf());
 
   if (_baselines.cols() == 0) {

@@ -10,8 +10,7 @@
 
 namespace csVisOpenGL {
 
-ShaderFactory::ShaderFactory(Frame* frame)
-    : frame(frame) {
+ShaderFactory::ShaderFactory() {
   shaderProgramNames[ShaderNames::DiffuseUniform] = ShaderProgramNames(":/shaders/uniformColor.vp", ":/shaders/diffuse.fp");
   shaderProgramNames[ShaderNames::DiffusePerVertex] = ShaderProgramNames(":/shaders/vertexColor.vp", ":/shaders/diffuse.fp");
   shaderProgramNames[ShaderNames::Mesh] = ShaderProgramNames(":/shaders/mesh.vp", ":/shaders/mesh.fp");
@@ -35,7 +34,7 @@ ShaderFactory::~ShaderFactory() {
   }
 }
 
-Shader* ShaderFactory::createShader(ShaderNames shader) {
+std::unique_ptr<Shader> ShaderFactory::createShader(ShaderNames shader) {
   // Get the program names
   auto shaderNamesIterator = shaderProgramNames.find(int(shader));
   if (shaderNamesIterator == shaderProgramNames.end())
@@ -96,8 +95,7 @@ Shader* ShaderFactory::createShader(ShaderNames shader) {
   }
 
   // Crate shader
-  Shader* res = Shader::createShader(vertex, fragment);
-  return res;
+  return std::make_unique<Shader>(vertex, fragment);
 }
 
 GLuint ShaderFactory::uploadTexture(const QImage& tex) {

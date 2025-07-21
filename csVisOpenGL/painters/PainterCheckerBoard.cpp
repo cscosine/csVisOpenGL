@@ -15,17 +15,17 @@ PainterCheckerBoard::PainterCheckerBoard()
 
 PainterCheckerBoard::~PainterCheckerBoard() {}
 
-void PainterCheckerBoard::initialize(ShaderFactory* shaderFactory) {
+void PainterCheckerBoard::initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
 
-  blackSquares->initialize(shaderFactory);
+  blackSquares->initialize(shaderFactory, glExtraFunctions);
   blackSquares->setUniformColor(Color::black);
   blackSquares->setTriangles(Eigen::Matrix3Xf());
 
-  whiteSquares->initialize(shaderFactory);
+  whiteSquares->initialize(shaderFactory, glExtraFunctions);
   whiteSquares->setUniformColor(Color::white);
   whiteSquares->setTriangles(Eigen::Matrix3Xf());
 
-  axes->initialize(shaderFactory);
+  axes->initialize(shaderFactory, glExtraFunctions);
 }
 
 void PainterCheckerBoard::draw(const Camera& camera) {

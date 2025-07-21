@@ -9,16 +9,20 @@
 TestcsVisOpenGL::TestcsVisOpenGL()
     : csVisOpenGL::Visualizer()
     , bkgSolid(false) {}
-TestcsVisOpenGL::~TestcsVisOpenGL() {}
+TestcsVisOpenGL::~TestcsVisOpenGL() {
 
-void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory* shaderFactory) {
+  std::cout << "~TestcsVisOpenGL" << std::endl;
+}
+
+void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory* shaderFactory,
+                                 std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
 
   {
     QImage img(2, 2, QImage::Format_RGB32);
     img.fill(Qt::red);
 
     auto tid = shaderFactory->uploadTexture(img);
-    singleTextureRenderer.initialize(shaderFactory);
+    singleTextureRenderer.initialize(shaderFactory, glExtraFunctions);
     csVisOpenGL::SingleTextureRenderer::Matrix3x4f vectCoords;
     vectCoords.col(0) = Eigen::Vector3f(4 + 0, 4 + 0, 0);
     vectCoords.col(1) = Eigen::Vector3f(4 + 2, 4 + 0, 1);
@@ -32,14 +36,14 @@ void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory* shaderFactory) {
     singleTextureRenderer.setTexture(tid, vectCoords, texCoords, csVisOpenGL::SingleTextureRenderer::TextureInterpolation::Linear);
   }
 
-  bkgRenderer.initialize(shaderFactory);
+  bkgRenderer.initialize(shaderFactory, glExtraFunctions);
 
   bkgSolidRenderer.setColor(Eigen::Vector3f(123 / 255.0f, 72 / 255.0f, 48 / 255.0f));
-  bkgSolidRenderer.initialize(shaderFactory);
-  uniformPointRenderer.initialize(shaderFactory);
-  perVertexPointRenderer.initialize(shaderFactory);
-  uniformLineRenderer.initialize(shaderFactory);
-  perVertexLineRenderer.initialize(shaderFactory);
+  bkgSolidRenderer.initialize(shaderFactory, glExtraFunctions);
+  uniformPointRenderer.initialize(shaderFactory, glExtraFunctions);
+  perVertexPointRenderer.initialize(shaderFactory, glExtraFunctions);
+  uniformLineRenderer.initialize(shaderFactory, glExtraFunctions);
+  perVertexLineRenderer.initialize(shaderFactory, glExtraFunctions);
 
   {
     Eigen::Matrix3Xf points = Eigen::Matrix3Xf::Random(3, 512);
@@ -80,11 +84,11 @@ void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory* shaderFactory) {
     perVertexLineRenderer.setLineWidth(1);
   }
 
-  axes.initialize(shaderFactory);
+  axes.initialize(shaderFactory, glExtraFunctions);
   axes.setPose(Eigen::Isometry3f::Identity(), 1.0f);
-  grid.initialize(shaderFactory);
+  grid.initialize(shaderFactory, glExtraFunctions);
 
-  uniformMeshRenderer.initialize(shaderFactory);
+  uniformMeshRenderer.initialize(shaderFactory, glExtraFunctions);
   {
     Eigen::Matrix3Xf triangles(3, 6);
     double d = 0.5;
@@ -101,7 +105,7 @@ void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory* shaderFactory) {
     uniformMeshRenderer.setUniformColor(c);
   }
 
-  perVertexMeshRendered.initialize(shaderFactory);
+  perVertexMeshRendered.initialize(shaderFactory, glExtraFunctions);
   {
     Eigen::Matrix3Xf triangles(3, 6);
     Eigen::Matrix3Xf colors(3, 6);
@@ -125,7 +129,7 @@ void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory* shaderFactory) {
   }
 
   //
-  meshRenderer.initialize(shaderFactory);
+  meshRenderer.initialize(shaderFactory, glExtraFunctions);
   {
     Eigen::Matrix3Xf triangles(3, 6);
     Eigen::Matrix3Xf normals(3, 6);
@@ -156,7 +160,7 @@ void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory* shaderFactory) {
   }
 
   //
-  meshColorRenderer.initialize(shaderFactory);
+  meshColorRenderer.initialize(shaderFactory, glExtraFunctions);
   {
     Eigen::Matrix3Xf triangles(3, 6);
     Eigen::Matrix3Xf normals(3, 6);
@@ -189,7 +193,7 @@ void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory* shaderFactory) {
     meshColorRenderer.setMaterialSpecularIntensity(0.4f);
   }
   {
-    unifEllipsRenderer3d.initialize(shaderFactory);
+    unifEllipsRenderer3d.initialize(shaderFactory, glExtraFunctions);
     unifEllipsRenderer3d.setUniformColor(csVisOpenGL::Color::indigo);
     std::vector<Eigen::Isometry3f> poses;
     std::vector<Eigen::Matrix3d> covs;
@@ -211,7 +215,7 @@ void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory* shaderFactory) {
     unifEllipsRenderer3d.setCovariances(poses, covs, 1.0);
   }
   {
-    unifEllipsRenderer2d.initialize(shaderFactory);
+    unifEllipsRenderer2d.initialize(shaderFactory, glExtraFunctions);
     unifEllipsRenderer2d.setUniformColor(csVisOpenGL::Color::indigo);
     std::vector<Eigen::Isometry3f> poses;
     std::vector<Eigen::Matrix2d> covs;

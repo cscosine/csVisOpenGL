@@ -21,7 +21,7 @@ class Frame : public QOpenGLWidget {
   std::unique_ptr<Camera> camera;
   std::unique_ptr<CameraController> cameraController;
   std::unique_ptr<ShaderFactory> shaderFactory;
-  std::vector<Visualizer*> visualizers;
+  std::vector<std::shared_ptr<Visualizer>> visualizers;
 
   void timerEvent(QTimerEvent* event) override;
 
@@ -29,8 +29,7 @@ public:
   Frame(QWidget* parent = 0);
   virtual ~Frame();
   // ------------- Visualizers
-  void addVisualizer(Visualizer* visualizer);
-  bool removeVisualizer(Visualizer* visualizer);
+  void addVisualizer(std::shared_ptr<Visualizer> const& visualizer);
 
   // ------------- Getters
   const Camera& getCamera() const {

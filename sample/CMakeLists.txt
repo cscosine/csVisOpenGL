@@ -19,6 +19,8 @@ set_target_properties(csVisOpenGLSample PROPERTIES AUTORCC ON)
 cs_target_link_libraries(csVisOpenGLSample
 	PUBLIC
 		csVisOpenGL::csVisOpenGL
+		csVisOpenGL::renderers
+		csVisOpenGL::painters
 )
 
 cs_install_target(csVisOpenGLSample csVisOpenGLSample)

@@ -10,14 +10,14 @@ PainterGrid::PainterGrid()
 
 PainterGrid::~PainterGrid() {}
 
-void PainterGrid::initialize(ShaderFactory* shaderFactory) {
+void PainterGrid::initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
   Eigen::Vector3f darkGray = Eigen::Vector3f::Ones() * 0.35f;
   Eigen::Vector3f lightGray = Eigen::Vector3f::Ones() * 0.65f;
 
-  primaryRenderer->initialize(shaderFactory);
+  primaryRenderer->initialize(shaderFactory, glExtraFunctions);
   primaryRenderer->setUniformColor(lightGray);
   primaryRenderer->setLineWidth(2);
-  secondaryRenderer->initialize(shaderFactory);
+  secondaryRenderer->initialize(shaderFactory, glExtraFunctions);
   secondaryRenderer->setUniformColor(darkGray);
 
   this->setGrid(Eigen::Isometry3f::Identity(), Eigen::Vector2f(10, 10), Eigen::Vector2i(9, 9));

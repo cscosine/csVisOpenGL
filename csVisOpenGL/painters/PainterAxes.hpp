@@ -3,6 +3,8 @@
 #include <Eigen/Geometry>
 #include <memory>
 
+class QOpenGLExtraFunctions;
+
 namespace csVisOpenGL {
 class PerVertexLineRenderer;
 class ShaderFactory;
@@ -15,7 +17,7 @@ public:
   PainterAxes();
   virtual ~PainterAxes();
 
-  void initialize(ShaderFactory* shaderFactory);
+  void initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
   void draw(const Camera& camera);
 
   void setPose(const Eigen::Isometry3f& p, float size);

@@ -10,8 +10,7 @@ class Window : public QMainWindow {
   Q_OBJECT;
 
   std::unique_ptr<Ui::Window> ui;
-
-  std::unique_ptr<TestcsVisOpenGL> vis;
+  std::shared_ptr<TestcsVisOpenGL> vis;
 
   Eigen::Vector3f pivotPos;
   Eigen::Vector3f ypr;

@@ -1,3 +1,4 @@
+#include <cassert>
 #include <csVisOpenGL/Vao.hpp>
 
 namespace csVisOpenGL {
@@ -16,12 +17,9 @@ void uploadVBO(QOpenGLExtraFunctions& glExtraFunctions, GLuint vao, GLuint vbo, 
 }
 
 // vao is a reference, gets updated
-GLuint createVBO(QOpenGLExtraFunctions& glExtraFunctions, GLuint& vao, GLuint location, GLint size, GLenum type,
-                 GLboolean normalized) {
+GLuint createVBO(QOpenGLExtraFunctions& glExtraFunctions, GLuint vao, GLuint location, GLint size, GLenum type, GLboolean normalized) {
   // Create (if it does not exist) and bind the VAO
-  if (vao == 0) {
-    glExtraFunctions.glGenVertexArrays(1, &vao);
-  }
+  assert(vao != 0);
   glExtraFunctions.glBindVertexArray(vao);
 
   // Create the VBO
@@ -55,6 +53,12 @@ Vao::~Vao() {
     m_glExtraFunctions->glDeleteVertexArrays(1, &m_vao);
   }
   m_vao = 0;
+}
+
+void Vao::initialize(std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+  this->m_glExtraFunctions = glExtraFunctions;
+  m_glExtraFunctions->glGenVertexArrays(1, &m_vao);
+  assert(m_vao != 0);
 }
 
 void Vao::uploadPositions(GLuint location, const float* values, int count) {

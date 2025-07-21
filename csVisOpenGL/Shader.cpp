@@ -3,17 +3,15 @@
 
 namespace csVisOpenGL {
 
-Shader* Shader::createShader(QOpenGLShader* vertexShader, QOpenGLShader* fragmentShader) {
-  Shader* shader = new Shader();
-  shader->shaderProgram.addShader(vertexShader);
-  shader->shaderProgram.addShader(fragmentShader);
-  if (!shader->shaderProgram.link()) {
-    std::cerr << "Program link error: " << shader->shaderProgram.log().toStdString() << std::endl;
-    return nullptr;
+Shader::Shader(QOpenGLShader* vertexShader, QOpenGLShader* fragmentShader) {
+  shaderProgram.addShader(vertexShader);
+  shaderProgram.addShader(fragmentShader);
+  if (!shaderProgram.link()) {
+    std::cerr << "Program link error: " << shaderProgram.log().toStdString() << std::endl;
+    // TODO(sceriani): manage errors here.. maybe a static member that can return null / expected is better
   }
-  shader->shaderProgram.release();
-  shader->bindLocations();
-  return shader;
+  shaderProgram.release();
+  this->bindLocations();
 }
 
 void Shader::bindLocations() {

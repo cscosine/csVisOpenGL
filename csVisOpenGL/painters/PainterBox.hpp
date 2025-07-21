@@ -3,12 +3,14 @@
 #include <Eigen/Core>
 #include <memory>
 
+class QOpenGLExtraFunctions;
+
 namespace csVisOpenGL {
 class ShaderFactory;
 class Camera;
 class PerVertexMeshRenderer;
 
-class BoxRenderer {
+class PainterBox {
 
   std::unique_ptr<PerVertexMeshRenderer> _renderer;
   Eigen::Matrix3Xf _boxes;
@@ -17,10 +19,10 @@ class BoxRenderer {
   const static int _nColsBox;
 
 public:
-  BoxRenderer();
-  virtual ~BoxRenderer();
+  PainterBox();
+  virtual ~PainterBox();
 
-  void initialize(ShaderFactory* shaderFactory);
+  void initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
   void draw(const Camera& camera);
 
   void insertBox(const int i, const Eigen::Matrix3Xf& box, const Eigen::Vector3f& color);

@@ -1,4 +1,4 @@
-#include <csVisOpenGL/renderers/BoxRenderer.hpp>
+#include <csVisOpenGL/painters/PainterBox.hpp>
 
 #include <csVisOpenGL/renderers/PerVertexMeshRenderer.hpp>
 
@@ -7,26 +7,26 @@
 
 namespace csVisOpenGL {
 
-const int BoxRenderer::_nColsBox = 6 * (3 * 2);
+const int PainterBox::_nColsBox = 6 * (3 * 2);
 
-BoxRenderer::BoxRenderer()
+PainterBox::PainterBox()
     : _renderer(new PerVertexMeshRenderer()) {
   resize(0);
 }
 
-BoxRenderer::~BoxRenderer() {}
+PainterBox::~PainterBox() {}
 
-void BoxRenderer::initialize(ShaderFactory* shaderFactory) {
-  _renderer->initialize(shaderFactory);
+void PainterBox::initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+  _renderer->initialize(shaderFactory, glExtraFunctions);
   resize(0);
   apply();
 }
 
-void BoxRenderer::draw(const Camera& camera) {
+void PainterBox::draw(const Camera& camera) {
   _renderer->draw(camera);
 }
 
-Eigen::Matrix3Xf BoxRenderer::createBoxTriangles(const double width, const double length, const double height) {
+Eigen::Matrix3Xf PainterBox::createBoxTriangles(const double width, const double length, const double height) {
   // box with center of mass in (x,y,z)=(0,0,0)
 
   Eigen::Matrix3Xf ret(3, _nColsBox);
@@ -97,23 +97,23 @@ Eigen::Matrix3Xf BoxRenderer::createBoxTriangles(const double width, const doubl
   return ret;
 }
 
-const int BoxRenderer::size() const {
+const int PainterBox::size() const {
   return _size;
 }
 
-void BoxRenderer::insertBox(const int i, const Eigen::Matrix3Xf& box, const Eigen::Vector3f& color) {
+void PainterBox::insertBox(const int i, const Eigen::Matrix3Xf& box, const Eigen::Vector3f& color) {
   assert(i < _size);
   _boxes.block(0, i * _nColsBox, 3, _nColsBox) = box;
   _colors.block(0, i * _nColsBox, 3, _nColsBox) = color.replicate(1, _nColsBox);
 }
 
-void BoxRenderer::resize(const int n) {
+void PainterBox::resize(const int n) {
   _boxes = Eigen::Matrix3Xf(3, n * _nColsBox);
   _colors = Eigen::Matrix3Xf(3, n * _nColsBox);
   _size = n;
 }
 
-void BoxRenderer::apply() {
+void PainterBox::apply() {
   _renderer->setTriangles(_boxes, _colors);
 }
 

@@ -10,9 +10,8 @@ public:
   Vao();
   virtual ~Vao();
 
-  void initialize(std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
-    this->m_glExtraFunctions = glExtraFunctions;
-  }
+  void initialize(std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
+
   GLuint getVao() const {
     return m_vao;
   }
@@ -26,8 +25,6 @@ public:
   void uploadTexCoords0(GLuint location, const float* values, int count);
 
 private:
-  void createVBO(GLuint location, GLint size, GLenum type, GLboolean normalized);
-
   GLuint m_vao;
   std::map<GLint, GLuint> m_locationToVbo;
   int m_count;

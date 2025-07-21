@@ -13,7 +13,6 @@ class QImage;
 class QOpenGLShader;
 
 namespace csVisOpenGL {
-class Frame;
 class Shader;
 
 class ShaderFactory {
@@ -31,20 +30,16 @@ private:
     ShaderProgramNames() {}
   };
 
-  Frame* frame;
   std::map<int, ShaderProgramNames> shaderProgramNames;
   std::map<QString, QOpenGLShader*> vertexShaders;
   std::map<QString, QOpenGLShader*> fragmentShaders;
   std::unordered_map<GLuint, Eigen::Vector2i> textureSizes;
 
 public:
-  ShaderFactory(Frame* frame);
+  ShaderFactory();
   virtual ~ShaderFactory();
 
-  Shader* createShader(ShaderNames shader);
-  Frame* getFrame() {
-    return frame;
-  }
+  std::unique_ptr<Shader> createShader(ShaderNames shader);
 
   GLuint uploadTexture(const QImage& tex);
   Eigen::Vector2i getTextureSize(GLuint id) const;

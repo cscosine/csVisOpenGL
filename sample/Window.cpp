@@ -17,8 +17,8 @@ Window::Window(QWidget* parent)
   ui->setupUi(this);
   this->show();
 
-  vis.reset(new TestcsVisOpenGL());
-  ui->preview->addVisualizer(vis.get());
+  vis = std::make_shared<TestcsVisOpenGL>();
+  ui->preview->addVisualizer(vis);
   static_cast<csVisOpenGL::OrbitCameraController*>(ui->preview->getCameraController())->setRadius(10);
   static_cast<csVisOpenGL::OrbitCameraController*>(ui->preview->getCameraController())
       ->setTraslationLimits(-Eigen::Vector3f::Ones(), Eigen::Vector3f::Ones());

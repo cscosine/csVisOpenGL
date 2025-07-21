@@ -8,8 +8,8 @@ PainterAxes::PainterAxes()
     : renderer(new PerVertexLineRenderer()) {}
 PainterAxes::~PainterAxes() {}
 
-void PainterAxes::initialize(ShaderFactory* shaderFactory) {
-  renderer->initialize(shaderFactory);
+void PainterAxes::initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+  renderer->initialize(shaderFactory, glExtraFunctions);
   renderer->setLines(Eigen::Matrix3Xf(3, 0), Eigen::Matrix3Xf(3, 0));
 }
 

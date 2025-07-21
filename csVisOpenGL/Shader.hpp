@@ -27,10 +27,8 @@ private:
   UniformLocations uniformLocations;
   mutable QOpenGLShaderProgram shaderProgram;
 
-  Shader() {};
-
 public:
-  static Shader* createShader(QOpenGLShader* vertexShader, QOpenGLShader* fragmentShader);
+  Shader(QOpenGLShader* vertexShader, QOpenGLShader* fragmentShader);
 
   QOpenGLShaderProgram& getProgram() {
     return shaderProgram;
