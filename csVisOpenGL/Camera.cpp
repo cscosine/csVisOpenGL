@@ -9,12 +9,12 @@ const float Camera::zNearDefault = 0.01f;
 const float Camera::zFarDefault = 1000.0f;
 
 Camera::Camera()
-    : fov(45.0f)
-    , zNear(zNearDefault)
-    , zFar(zFarDefault)
-    , viewSize(Eigen::Vector2f::Constant(100))
-    , pose(Eigen::Isometry3f::Identity())
-    , scale(1.0f) {
+    : m_fov(45.0f)
+    , m_zNear(zNearDefault)
+    , m_zFar(zFarDefault)
+    , m_viewSize(Eigen::Vector2f::Constant(100))
+    , m_pose(Eigen::Isometry3f::Identity())
+    , m_scale(1.0f) {
   updateProjectionMatrix();
   updateViewMatrix();
 }
@@ -22,116 +22,110 @@ Camera::Camera()
 Camera::~Camera() {}
 
 void Camera::setOrthogonal() {
-  this->fov = -1;
+  m_fov = -1;
   updateProjectionMatrix();
 }
 
 void Camera::setScale(float s) {
-  this->scale = s;
+  m_scale = s;
   updateProjectionMatrix();
 }
 
 void Camera::setFov(float fov) {
-  this->fov = fov;
+  m_fov = fov;
   updateProjectionMatrix();
 }
 
 void Camera::setClippingPlanes(float zNear, float zFar) {
-  this->zNear = zNear;
-  this->zFar = zFar;
+  m_zNear = zNear;
+  m_zFar = zFar;
   updateProjectionMatrix();
 }
 
 void Camera::setViewSize(const Eigen::Vector2f& viewSize) {
-  this->viewSize = viewSize;
+  m_viewSize = viewSize;
   updateProjectionMatrix();
 }
 
 void Camera::setPose(const Eigen::Isometry3f& pose) {
-  this->pose = pose;
+  m_pose = pose;
   updateViewMatrix();
 }
 
 void Camera::updateProjectionMatrix() {
   // From http://www.songho.ca/opengl/gl_projectionmatrix.html
 
-  if (fov >= 0) {
+  if (m_fov >= 0) {
     // Get frustum coordinates
-    float ratio = viewSize.x() / viewSize.y();
-    float top = scale * zNear * tanf(fov * float(M_PI) / 180.0f * 0.5f);
-    float right = scale * top * ratio;
-    float bottom = -top;
-    float left = -right;
+    float const ratio = m_viewSize.x() / m_viewSize.y();
+    float const top = m_scale * m_zNear * tanf(m_fov * float(M_PI) / 180.0f * 0.5f);
+    float const right = m_scale * top * ratio;
+    float const bottom = -top;
+    float const left = -right;
 
     // Some intermediate calculations
-    float temp = 2.0f * zNear;
-    float temp2 = right - left;
-    float temp3 = top - bottom;
-    float temp4 = zFar - zNear;
+    float const temp = 2.0f * m_zNear;
+    float const temp2 = right - left;
+    float const temp3 = top - bottom;
+    float const temp4 = m_zFar - m_zNear;
 
     // Update projection and inverse projection matrices
-    projection.setZero();
-    projection(0, 0) = temp / temp2;
-    projection(1, 1) = temp / temp3;
-    projection(0, 2) = (right + left) / temp2;
-    projection(1, 2) = (top + bottom) / temp3;
-    projection(2, 2) = -(zFar + zNear) / temp4;
-    projection(3, 2) = -1.0;
-    projection(2, 3) = -(temp * zFar) / temp4;
-    inverseProjection = projection.inverse();
+    m_projection.setZero();
+    m_projection(0, 0) = temp / temp2;
+    m_projection(1, 1) = temp / temp3;
+    m_projection(0, 2) = (right + left) / temp2;
+    m_projection(1, 2) = (top + bottom) / temp3;
+    m_projection(2, 2) = -(m_zFar + m_zNear) / temp4;
+    m_projection(3, 2) = -1.0;
+    m_projection(2, 3) = -(temp * m_zFar) / temp4;
+    m_inverseProjection = m_projection.inverse();
   } else {
     // orthographic camera
-    float right, top;
-    // if (viewSize.x() > viewSize.y()) {
-    //   float ratio = viewSize.y() / viewSize.x();
-    //   right = scale;
-    //   top = scale * ratio;
-    // }
-    // else {
-    float ratio = viewSize.x() / viewSize.y();
-    right = scale * ratio;
-    top = scale;
-    //}
 
-    float tz = -(zFar + zNear) / (zFar - zNear);
+    float const ratio = m_viewSize.x() / m_viewSize.y();
+    float const right = m_scale * ratio;
+    float const top = m_scale;
 
-    projection.setZero();
-    projection(0, 0) = 1.0 / right;
-    projection(1, 1) = 1.0 / top;
-    projection(2, 2) = -2.0 / (zFar - zNear);
+    float const tz = -(m_zFar + m_zNear) / (m_zFar - m_zNear);
 
-    projection(2, 3) = tz;
-    projection(3, 3) = 1;
-    inverseProjection = projection.inverse();
+    m_projection.setZero();
+    m_projection(0, 0) = 1.0 / right;
+    m_projection(1, 1) = 1.0 / top;
+    m_projection(2, 2) = -2.0 / (m_zFar - m_zNear);
+
+    m_projection(2, 3) = tz;
+    m_projection(3, 3) = 1;
+    m_inverseProjection = m_projection.inverse();
   }
 
-  viewProjection = projection * view;
+  m_viewProjection = m_projection * m_view;
 }
 
 void Camera::updateViewMatrix() {
   // Considering the reference frame of the perspective projection, X axis has to be -Y, Y -> Z and Z -> -X
 
-  inverseView.setIdentity();
-  inverseView.col(0).head<3>() = -pose.linear().col(1);
-  inverseView.col(1).head<3>() = pose.linear().col(2);
-  inverseView.col(2).head<3>() = -pose.linear().col(0);
-  inverseView.col(3).head<3>() = pose.translation();
-  view = inverseView.inverse();
+  m_inverseView.setIdentity();
+  m_inverseView.col(0).head<3>() = -m_pose.linear().col(1);
+  m_inverseView.col(1).head<3>() = m_pose.linear().col(2);
+  m_inverseView.col(2).head<3>() = -m_pose.linear().col(0);
+  m_inverseView.col(3).head<3>() = m_pose.translation();
+  m_view = m_inverseView.inverse();
 
-  viewProjection = projection * view;
+  m_viewProjection = m_projection * m_view;
 }
 
 Eigen::Vector2f Camera::worldToScreen(const Eigen::Vector3f& worldPosition, bool flipY) const {
-  Eigen::Vector4f homogeneousWorld = worldPosition.homogeneous();
-  Eigen::Vector4f homogeneousScreen = viewProjection * homogeneousWorld;
+  Eigen::Vector4f const homogeneousWorld = worldPosition.homogeneous();
+  Eigen::Vector4f const homogeneousScreen = m_viewProjection * homogeneousWorld;
   Eigen::Vector2f point2dGL = Eigen::Vector2f::Zero();
-  if (std::abs(homogeneousScreen.w()) > 0.000001f)
+  if (std::abs(homogeneousScreen.w()) > 0.000001f) {
     point2dGL = (homogeneousScreen / std::abs(homogeneousScreen.w())).head<2>();
+  }
   Eigen::Vector2f point2dScreen = point2dGL / 2 + Eigen::Vector2f::Constant(0.5f);
-  point2dScreen.x() *= viewSize.x();
-  point2dScreen.y() *= viewSize.y();
+  point2dScreen.x() *= m_viewSize.x();
+  point2dScreen.y() *= m_viewSize.y();
   if (flipY)
-    point2dScreen.y() = viewSize.y() - 1 - point2dScreen.y();
+    point2dScreen.y() = m_viewSize.y() - 1 - point2dScreen.y();
 
   return point2dScreen;
 }
@@ -139,14 +133,14 @@ Eigen::Vector2f Camera::worldToScreen(const Eigen::Vector3f& worldPosition, bool
 Eigen::Vector3f Camera::screenToWorld(const Eigen::Vector2f& screenPosition, bool flipY) const {
   Eigen::Vector2f screenPos = screenPosition;
   if (flipY)
-    screenPos.y() = viewSize.y() - 1 - screenPosition.y();
+    screenPos.y() = m_viewSize.y() - 1 - screenPosition.y();
 
-  float x = (2.0f * screenPos.x()) / viewSize.x() - 1.0f;
-  float y = (2.0f * screenPos.y()) / viewSize.y() - 1.0f;
-  Eigen::Vector4f rayEye = inverseProjection * Eigen::Vector4f(x, y, -1, 1);
+  float x = (2.0f * screenPos.x()) / m_viewSize.x() - 1.0f;
+  float y = (2.0f * screenPos.y()) / m_viewSize.y() - 1.0f;
+  Eigen::Vector4f rayEye = m_inverseProjection * Eigen::Vector4f(x, y, -1, 1);
   rayEye.z() = -1;
   rayEye.w() = 0;
-  Eigen::Vector4f rayWorld = inverseView * rayEye;
+  Eigen::Vector4f rayWorld = m_inverseView * rayEye;
 
   return Eigen::Vector3f(rayWorld.x(), rayWorld.y(), rayWorld.z()).normalized();
 }

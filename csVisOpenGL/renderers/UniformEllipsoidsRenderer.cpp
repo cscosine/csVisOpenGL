@@ -52,25 +52,25 @@ void UniformEllipsoidsRenderer3D::initializeConcrete() {
 void UniformEllipsoidsRenderer3D::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
   glLineWidth(lineWidth);
 
-  shader->bind();
+  getShader().bind();
   {
-    glExtraFunctions->glBindVertexArray(vao->getVao());
-    glDrawArrays(GL_LINES, 0, vao->size());
-    glExtraFunctions->glBindVertexArray(0);
+    getQOpenGLExtraFunctions().glBindVertexArray(getVao().getVao());
+    glDrawArrays(GL_LINES, 0, getVao().size());
+    getQOpenGLExtraFunctions().glBindVertexArray(0);
   }
-  shader->release();
+  getShader().release();
 }
 
 void UniformEllipsoidsRenderer3D::setUniformColor(const Eigen::Vector4f& color) {
-  shader->bind();
-  glExtraFunctions->glUniform4f(shader->getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
-  shader->release();
+  getShader().bind();
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
+  getShader().release();
 }
 
 void UniformEllipsoidsRenderer3D::setUniformColor(const Eigen::Vector3f& color) {
-  shader->bind();
-  glExtraFunctions->glUniform4f(shader->getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
-  shader->release();
+  getShader().bind();
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
+  getShader().release();
 }
 
 void UniformEllipsoidsRenderer3D::setCovariances(const Eigen::Isometry3f& poses, const Eigen::Matrix3d& covariances, float nSigma) {
@@ -99,7 +99,7 @@ void UniformEllipsoidsRenderer3D::setCovariances(const std::vector<Eigen::Isomet
         poses[i].cast<float>() * (covR.cast<float>() * scale.cast<float>() * _spherePoints);
   }
 
-  vao->uploadPositions(shader->getVertexLocations().position, lines.data(), lines.cols());
+  getVao().uploadPositions(getShader().getVertexLocations().position, lines.data(), lines.cols());
 }
 
 //---------------------------------------------------------------------------------------------------------
@@ -134,25 +134,25 @@ void UniformEllipsoidsRenderer2D::initializeConcrete() {
 void UniformEllipsoidsRenderer2D::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
   glLineWidth(lineWidth);
 
-  shader->bind();
+  getShader().bind();
   {
-    glExtraFunctions->glBindVertexArray(vao->getVao());
-    glDrawArrays(GL_LINES, 0, vao->size());
-    glExtraFunctions->glBindVertexArray(0);
+    getQOpenGLExtraFunctions().glBindVertexArray(getVao().getVao());
+    glDrawArrays(GL_LINES, 0, getVao().size());
+    getQOpenGLExtraFunctions().glBindVertexArray(0);
   }
-  shader->release();
+  getShader().release();
 }
 
 void UniformEllipsoidsRenderer2D::setUniformColor(const Eigen::Vector4f& color) {
-  shader->bind();
-  glExtraFunctions->glUniform4f(shader->getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
-  shader->release();
+  getShader().bind();
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
+  getShader().release();
 }
 
 void UniformEllipsoidsRenderer2D::setUniformColor(const Eigen::Vector3f& color) {
-  shader->bind();
-  glExtraFunctions->glUniform4f(shader->getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
-  shader->release();
+  getShader().bind();
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
+  getShader().release();
 }
 
 void UniformEllipsoidsRenderer2D::setCovariances(const Eigen::Isometry3f& poses, const Eigen::Matrix2d& covariances, float nSigma) {
@@ -183,7 +183,7 @@ void UniformEllipsoidsRenderer2D::setCovariances(const std::vector<Eigen::Isomet
         poses[i].cast<float>() * (covR.cast<float>() * scale.cast<float>() * _circlePoints);
   }
 
-  vao->uploadPositions(shader->getVertexLocations().position, lines.data(), lines.cols());
+  getVao().uploadPositions(getShader().getVertexLocations().position, lines.data(), lines.cols());
 }
 
 } // namespace csVisOpenGL

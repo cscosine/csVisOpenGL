@@ -5,19 +5,6 @@
 
 namespace csVisOpenGL {
 class Camera {
-  Eigen::Matrix4f projection;
-  Eigen::Matrix4f inverseProjection;
-  Eigen::Matrix4f view;
-  Eigen::Matrix4f inverseView;
-  Eigen::Matrix4f viewProjection;
-
-  Eigen::Isometry3f pose;
-
-  float scale;
-  float fov;
-  float zNear;
-  float zFar;
-  Eigen::Vector2f viewSize;
 
 public:
   static const float zNearDefault, zFarDefault;
@@ -26,7 +13,7 @@ public:
   virtual ~Camera();
 
   bool isPerspective() const {
-    return fov > 0;
+    return m_fov > 0;
   }
   bool isOrthogonal() const {
     return !isPerspective();
@@ -41,48 +28,48 @@ public:
   void setScale(float s);
 
   float getScale() const {
-    return scale;
+    return m_scale;
   }
   float getFov() const {
-    return fov;
+    return m_fov;
   }
   float getZNear() const {
-    return zNear;
+    return m_zNear;
   }
   float getZFar() const {
-    return zFar;
+    return m_zFar;
   }
   const Eigen::Vector2f& getViewSize() const {
-    return viewSize;
+    return m_viewSize;
   }
   const Eigen::Isometry3f& getPose() const {
-    return pose;
+    return m_pose;
   }
 
   const Eigen::Matrix4f& getProjection() const {
-    return projection;
+    return m_projection;
   }
   const Eigen::Matrix4f& getInverseProjection() const {
-    return inverseProjection;
+    return m_inverseProjection;
   }
   const Eigen::Matrix4f& getView() const {
-    return view;
+    return m_view;
   }
   const Eigen::Matrix4f& getInverseView() const {
-    return inverseView;
+    return m_inverseView;
   }
   const Eigen::Matrix4f& getViewProjection() const {
-    return viewProjection;
+    return m_viewProjection;
   }
 
   Eigen::Vector3f forward() const {
-    return pose.rotation().col(0);
+    return m_pose.rotation().col(0);
   }
   Eigen::Vector3f left() const {
-    return pose.rotation().col(1);
+    return m_pose.rotation().col(1);
   }
   Eigen::Vector3f up() const {
-    return pose.rotation().col(2);
+    return m_pose.rotation().col(2);
   }
 
   Eigen::Vector2f worldToScreen(const Eigen::Vector3f& worldPosition, bool flipY) const;
@@ -91,5 +78,19 @@ public:
 private:
   void updateProjectionMatrix();
   void updateViewMatrix();
+
+  Eigen::Matrix4f m_projection;
+  Eigen::Matrix4f m_inverseProjection;
+  Eigen::Matrix4f m_view;
+  Eigen::Matrix4f m_inverseView;
+  Eigen::Matrix4f m_viewProjection;
+
+  Eigen::Isometry3f m_pose;
+
+  float m_scale;
+  float m_fov;
+  float m_zNear;
+  float m_zFar;
+  Eigen::Vector2f m_viewSize;
 };
 } // namespace csVisOpenGL

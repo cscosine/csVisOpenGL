@@ -12,12 +12,6 @@ class Vao;
 class Camera;
 
 class Renderer {
-protected:
-  std::unique_ptr<Shader> shader;
-  std::unique_ptr<Vao> vao;
-
-  std::shared_ptr<QOpenGLExtraFunctions> glExtraFunctions;
-
 public:
   Renderer(ShaderFactory::ShaderNames shaderName);
   virtual ~Renderer();
@@ -31,7 +25,16 @@ protected:
   virtual void initializeConcrete() = 0;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) = 0;
 
+  Shader& getShader();
+  Vao& getVao();
+  QOpenGLExtraFunctions& getQOpenGLExtraFunctions();
+
 private:
-  ShaderFactory::ShaderNames shaderName;
+  std::unique_ptr<Shader> m_shader;
+  std::unique_ptr<Vao> m_vao;
+
+  std::shared_ptr<QOpenGLExtraFunctions> m_glExtraFunctions;
+
+  ShaderFactory::ShaderNames m_shaderName;
 };
 } // namespace csVisOpenGL

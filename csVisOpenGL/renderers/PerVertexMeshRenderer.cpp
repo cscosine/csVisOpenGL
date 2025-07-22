@@ -22,25 +22,25 @@ void PerVertexMeshRenderer::drawConcrete(const Camera& camera, const Eigen::Matr
   else
     glDisable(GL_CULL_FACE);
 
-  shader->bind();
+  getShader().bind();
   {
-    glExtraFunctions->glBindVertexArray(vao->getVao());
-    glDrawArrays(GL_TRIANGLES, 0, vao->size());
-    glExtraFunctions->glBindVertexArray(0);
+    getQOpenGLExtraFunctions().glBindVertexArray(getVao().getVao());
+    glDrawArrays(GL_TRIANGLES, 0, getVao().size());
+    getQOpenGLExtraFunctions().glBindVertexArray(0);
   }
-  shader->release();
+  getShader().release();
 }
 
 void PerVertexMeshRenderer::setUniformColor(const Eigen::Vector4f& color) {
-  shader->bind();
-  glExtraFunctions->glUniform4f(shader->getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
-  shader->release();
+  getShader().bind();
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
+  getShader().release();
 }
 
 void PerVertexMeshRenderer::setUniformColor(const Eigen::Vector3f& color) {
-  shader->bind();
-  glExtraFunctions->glUniform4f(shader->getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
-  shader->release();
+  getShader().bind();
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
+  getShader().release();
 }
 
 void PerVertexMeshRenderer::setTriangles(const Eigen::Matrix3Xf& positions, const Eigen::Matrix3Xf& colors) {
@@ -51,7 +51,7 @@ void PerVertexMeshRenderer::setTriangles(const Eigen::Matrix3Xf& positions, cons
 
 void PerVertexMeshRenderer::setTriangles(const Eigen::Matrix3Xf& positions, const Eigen::Matrix4Xf& colors) {
   assert(positions.cols() == colors.cols());
-  vao->uploadPositions(shader->getVertexLocations().position, positions.data(), positions.cols());
-  vao->uploadVertexColors(shader->getVertexLocations().color, colors.data(), colors.cols());
+  getVao().uploadPositions(getShader().getVertexLocations().position, positions.data(), positions.cols());
+  getVao().uploadVertexColors(getShader().getVertexLocations().color, colors.data(), colors.cols());
 }
 } // namespace csVisOpenGL

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Eigen/Geometry>
 #include <QSet>
 
 class QFocusEvent;
@@ -12,9 +13,20 @@ namespace csVisOpenGL {
 class Camera;
 
 class CameraController {
+
 protected:
-  Camera& camera;
-  QSet<int> keysPressed;
+  Camera const& getCamera() const {
+    return m_camera;
+  }
+  QSet<int> const& getKeysPressed() const {
+    return m_keysPressed;
+  }
+
+  void setCameraPose(Eigen::Isometry3f const& pose);
+  void setCameraScale(float scale);
+  void setCameraClippingPlanes(float zNear, float zFar);
+  void setCameraOrthogonal();
+  void setCameraFov(float fov);
 
 public:
   CameraController(Camera& camera);
@@ -30,6 +42,10 @@ public:
   virtual void wheelEvent(QWheelEvent* e) {}
 
   virtual void update(float dT) = 0;
+
+private:
+  Camera& m_camera;
+  QSet<int> m_keysPressed;
 };
 
 } // namespace csVisOpenGL

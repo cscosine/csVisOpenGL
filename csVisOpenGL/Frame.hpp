@@ -10,43 +10,30 @@ namespace csVisOpenGL {
 class Camera;
 class CameraController;
 class ShaderFactory;
-class Visualizer;
+class VisualizerInterface;
 
 class Frame : public QOpenGLWidget {
-  bool initialized;
-  bool enabled;
-
-  std::chrono::steady_clock::time_point lastRenderTime;
-
-  std::unique_ptr<Camera> camera;
-  std::unique_ptr<CameraController> cameraController;
-  std::unique_ptr<ShaderFactory> shaderFactory;
-  std::vector<std::shared_ptr<Visualizer>> visualizers;
-
-  void timerEvent(QTimerEvent* event) override;
 
 public:
   Frame(QWidget* parent = 0);
   virtual ~Frame();
   // ------------- Visualizers
-  void addVisualizer(std::shared_ptr<Visualizer> const& visualizer);
+  void addVisualizer(std::shared_ptr<VisualizerInterface> const& visualizer);
 
   // ------------- Getters
   const Camera& getCamera() const {
-    return *camera;
+    return *m_camera;
   }
   CameraController* getCameraController() {
-    return cameraController.get();
+    return m_cameraController.get();
   }
   const CameraController* getCameraController() const {
-    return cameraController.get();
+    return m_cameraController.get();
   }
 
-  std::shared_ptr<QOpenGLExtraFunctions> const& getQOpenGLExtraFunctions() const {
-    return m_openGLExtraFunctions;
-  }
+private:
+  void timerEvent(QTimerEvent* event) override;
 
-protected:
   // ------------- GL methods
   virtual void initializeGL() override;
   virtual void paintGL() override;
@@ -63,7 +50,12 @@ protected:
   void mouseDoubleClick(QMouseEvent* e);
   void wheelEvent(QWheelEvent* e) override;
 
-private:
+  bool m_initialized;
   std::shared_ptr<QOpenGLExtraFunctions> m_openGLExtraFunctions;
+  std::chrono::steady_clock::time_point m_lastRenderTime;
+  std::unique_ptr<Camera> m_camera;
+  std::unique_ptr<CameraController> m_cameraController;
+  std::unique_ptr<ShaderFactory> m_shaderFactory;
+  std::vector<std::shared_ptr<VisualizerInterface>> m_visualizers;
 };
 } // namespace csVisOpenGL

@@ -20,34 +20,34 @@ void UniformPointRenderer::initializeConcrete() {
 void UniformPointRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
   glPointSize(pointSize);
 
-  shader->bind();
+  getShader().bind();
   {
     if (smoothPoints)
-      glEnable(GL_POINT_SMOOTH);
+      getQOpenGLExtraFunctions().glEnable(GL_POINT_SMOOTH);
     else
-      glDisable(GL_POINT_SMOOTH);
+      getQOpenGLExtraFunctions().glDisable(GL_POINT_SMOOTH);
 
-    glExtraFunctions->glBindVertexArray(vao->getVao());
-    glExtraFunctions->glDrawArrays(GL_POINTS, 0, vao->size());
-    glExtraFunctions->glBindVertexArray(0);
+    getQOpenGLExtraFunctions().glBindVertexArray(getVao().getVao());
+    getQOpenGLExtraFunctions().glDrawArrays(GL_POINTS, 0, getVao().size());
+    getQOpenGLExtraFunctions().glBindVertexArray(0);
   }
-  shader->release();
+  getShader().release();
 }
 
 void UniformPointRenderer::setUniformColor(const Eigen::Vector4f& color) {
-  shader->bind();
-  glExtraFunctions->glUniform4f(shader->getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
-  shader->release();
+  getShader().bind();
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
+  getShader().release();
 }
 
 void UniformPointRenderer::setUniformColor(const Eigen::Vector3f& color) {
-  shader->bind();
-  glExtraFunctions->glUniform4f(shader->getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
-  shader->release();
+  getShader().bind();
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
+  getShader().release();
 }
 
 void UniformPointRenderer::setPoints(const Eigen::Matrix3Xf& positions) {
-  vao->uploadPositions(shader->getVertexLocations().position, positions.data(), positions.cols());
+  getVao().uploadPositions(getShader().getVertexLocations().position, positions.data(), positions.cols());
 }
 
 } // namespace csVisOpenGL

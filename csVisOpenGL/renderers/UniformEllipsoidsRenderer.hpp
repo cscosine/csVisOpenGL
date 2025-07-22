@@ -23,7 +23,7 @@ public:
   void setCovariances(const std::vector<Eigen::Isometry3f>& poses, const std::vector<Eigen::Matrix3d>& covariances, float nSigma);
   void setCovariances(const Eigen::Isometry3f& poses, const Eigen::Matrix3d& covariances, float nSigma);
 
-protected:
+private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
 };
@@ -48,7 +48,7 @@ public:
   void setCovariances(const std::vector<Eigen::Isometry3f>& poses, const std::vector<Eigen::Matrix2d>& covariances, float nSigma);
   // void setCovariances(const std::vector<Pose2Dd> & poses, std::vector<Eigen::Matrix2d> & covariances, float nSigma);
 
-protected:
+private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
 };

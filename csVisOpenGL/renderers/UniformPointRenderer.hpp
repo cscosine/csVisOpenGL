@@ -22,7 +22,7 @@ public:
   void setUniformColor(const Eigen::Vector3f& color);
   void setPoints(const Eigen::Matrix3Xf& positions);
 
-protected:
+private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
 };

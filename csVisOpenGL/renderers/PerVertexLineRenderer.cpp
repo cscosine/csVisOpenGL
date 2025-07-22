@@ -19,31 +19,31 @@ void PerVertexLineRenderer::initializeConcrete() {
 void PerVertexLineRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
   glLineWidth(lineWidth);
 
-  shader->bind();
+  getShader().bind();
   {
-    glExtraFunctions->glBindVertexArray(vao->getVao());
-    glExtraFunctions->glDrawArrays(GL_LINES, 0, vao->size());
-    glExtraFunctions->glBindVertexArray(0);
+    getQOpenGLExtraFunctions().glBindVertexArray(getVao().getVao());
+    getQOpenGLExtraFunctions().glDrawArrays(GL_LINES, 0, getVao().size());
+    getQOpenGLExtraFunctions().glBindVertexArray(0);
   }
-  shader->release();
+  getShader().release();
 }
 
 void PerVertexLineRenderer::setUniformColor(const Eigen::Vector4f& color) {
-  shader->bind();
-  glExtraFunctions->glUniform4f(shader->getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
-  shader->release();
+  getShader().bind();
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
+  getShader().release();
 }
 
 void PerVertexLineRenderer::setUniformColor(const Eigen::Vector3f& color) {
-  shader->bind();
-  glExtraFunctions->glUniform4f(shader->getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
-  shader->release();
+  getShader().bind();
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
+  getShader().release();
 }
 
 void PerVertexLineRenderer::setLines(const Eigen::Matrix3Xf& positions, const Eigen::Matrix4Xf& colors) {
   assert(positions.cols() == colors.cols());
-  vao->uploadPositions(shader->getVertexLocations().position, positions.data(), positions.cols());
-  vao->uploadVertexColors(shader->getVertexLocations().color, colors.data(), colors.cols());
+  getVao().uploadPositions(getShader().getVertexLocations().position, positions.data(), positions.cols());
+  getVao().uploadVertexColors(getShader().getVertexLocations().color, colors.data(), colors.cols());
 }
 
 void PerVertexLineRenderer::setLines(const Eigen::Matrix3Xf& positions, const Eigen::Matrix3Xf& colors) {

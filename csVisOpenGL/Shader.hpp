@@ -22,33 +22,32 @@ public:
     GLint uniformColor;
   };
 
-private:
-  VertexLocations vertexLocations;
-  UniformLocations uniformLocations;
-  mutable QOpenGLShaderProgram shaderProgram;
-
 public:
   Shader(QOpenGLShader* vertexShader, QOpenGLShader* fragmentShader);
 
   QOpenGLShaderProgram& getProgram() {
-    return shaderProgram;
+    return m_shaderProgram;
   }
 
   const VertexLocations& getVertexLocations() const {
-    return vertexLocations;
+    return m_vertexLocations;
   }
   const UniformLocations& getUniformLocations() const {
-    return uniformLocations;
+    return m_uniformLocations;
   }
 
   bool bind() const {
-    return shaderProgram.bind();
+    return m_shaderProgram.bind();
   }
   void release() const {
-    shaderProgram.release();
+    m_shaderProgram.release();
   }
 
 private:
   void bindLocations();
+
+  VertexLocations m_vertexLocations;
+  UniformLocations m_uniformLocations;
+  mutable QOpenGLShaderProgram m_shaderProgram;
 };
 } // namespace csVisOpenGL

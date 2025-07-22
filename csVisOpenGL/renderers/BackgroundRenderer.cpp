@@ -16,19 +16,19 @@ void BackgroundRenderer::setDefaultColors() {
 }
 
 void BackgroundRenderer::setColors(const Eigen::Vector4f& zc, const Eigen::Vector4f& hc, const Eigen::Vector4f& nc) {
-  shader->bind();
-  shader->getProgram().setUniformValue("zenithColor", zc.x(), zc.y(), zc.z(), zc.w());
-  shader->getProgram().setUniformValue("horizonColor", hc.x(), hc.y(), hc.z(), hc.w());
-  shader->getProgram().setUniformValue("nadirColor", nc.x(), nc.y(), nc.z(), nc.w());
-  shader->release();
+  getShader().bind();
+  getShader().getProgram().setUniformValue("zenithColor", zc.x(), zc.y(), zc.z(), zc.w());
+  getShader().getProgram().setUniformValue("horizonColor", hc.x(), hc.y(), hc.z(), hc.w());
+  getShader().getProgram().setUniformValue("nadirColor", nc.x(), nc.y(), nc.z(), nc.w());
+  getShader().release();
 }
 
 void BackgroundRenderer::setColors(const Eigen::Vector3f& zc, const Eigen::Vector3f& hc, const Eigen::Vector3f& nc) {
-  shader->bind();
-  shader->getProgram().setUniformValue("zenithColor", zc.x(), zc.y(), zc.z(), 1.0);
-  shader->getProgram().setUniformValue("horizonColor", hc.x(), hc.y(), hc.z(), 1.0);
-  shader->getProgram().setUniformValue("nadirColor", nc.x(), nc.y(), nc.z(), 1.0);
-  shader->release();
+  getShader().bind();
+  getShader().getProgram().setUniformValue("zenithColor", zc.x(), zc.y(), zc.z(), 1.0);
+  getShader().getProgram().setUniformValue("horizonColor", hc.x(), hc.y(), hc.z(), 1.0);
+  getShader().getProgram().setUniformValue("nadirColor", nc.x(), nc.y(), nc.z(), 1.0);
+  getShader().release();
 }
 
 void BackgroundRenderer::initializeConcrete() {
@@ -50,11 +50,10 @@ void BackgroundRenderer::initializeConcrete() {
   bkgPoints(10) = 1.0;
   bkgPoints(11) = 0.0f;
 
-  vao->uploadPositions(shader->getVertexLocations().position, bkgPoints.data(), bkgPoints.cols());
+  getVao().uploadPositions(getShader().getVertexLocations().position, bkgPoints.data(), bkgPoints.cols());
 }
 
 void BackgroundRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
-  assert(shader);
 
   Eigen::Matrix4f P = camera.getProjection();
   P(2, 3) = 0;
@@ -68,14 +67,14 @@ void BackgroundRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4
   Eigen::Matrix<float, 4, 4, Eigen::RowMajor> PVinv = (P * V).inverse();
   QMatrix4x4 PVinv_q(PVinv.data());
 
-  shader->bind();
+  getShader().bind();
 
-  shader->getProgram().setUniformValue("inv_vp", PVinv_q);
-  glExtraFunctions->glBindVertexArray(vao->getVao());
-  glDrawArrays(GL_TRIANGLE_FAN, 0, vao->size());
-  glExtraFunctions->glBindVertexArray(0);
+  getShader().getProgram().setUniformValue("inv_vp", PVinv_q);
+  getQOpenGLExtraFunctions().glBindVertexArray(getVao().getVao());
+  glDrawArrays(GL_TRIANGLE_FAN, 0, getVao().size());
+  getQOpenGLExtraFunctions().glBindVertexArray(0);
 
-  shader->release();
+  getShader().release();
 }
 
 } // namespace csVisOpenGL

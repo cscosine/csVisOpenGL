@@ -47,39 +47,39 @@ void MeshColorRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f
   else
     glDisable(GL_CULL_FACE);
 
-  shader->bind();
+  getShader().bind();
   {
-    shader->getProgram().setUniformValue("cameraPosition", camera.getPose().translation().x(), camera.getPose().translation().y(),
-                                         camera.getPose().translation().z());
-    glExtraFunctions->glBindVertexArray(vao->getVao());
-    glDrawArrays(GL_TRIANGLES, 0, vao->size());
-    glExtraFunctions->glBindVertexArray(0);
+    getShader().getProgram().setUniformValue("cameraPosition", camera.getPose().translation().x(), camera.getPose().translation().y(),
+                                             camera.getPose().translation().z());
+    getQOpenGLExtraFunctions().glBindVertexArray(getVao().getVao());
+    glDrawArrays(GL_TRIANGLES, 0, getVao().size());
+    getQOpenGLExtraFunctions().glBindVertexArray(0);
   }
-  shader->release();
+  getShader().release();
 }
 
 void MeshColorRenderer::setUniformColor(const Eigen::Vector4f& color) {
-  shader->bind();
-  glExtraFunctions->glUniform4f(shader->getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
-  shader->release();
+  getShader().bind();
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
+  getShader().release();
 }
 
 void MeshColorRenderer::setUniformColor(const Eigen::Vector3f& color) {
-  shader->bind();
-  glExtraFunctions->glUniform4f(shader->getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
-  shader->release();
+  getShader().bind();
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
+  getShader().release();
 }
 
 void MeshColorRenderer::setMaterialShininess(float shininess) {
-  shader->bind();
-  shader->getProgram().setUniformValue("materialShininess", shininess);
-  shader->release();
+  getShader().bind();
+  getShader().getProgram().setUniformValue("materialShininess", shininess);
+  getShader().release();
 }
 
 void MeshColorRenderer::setMaterialSpecularIntensity(float specular) {
-  shader->bind();
-  shader->getProgram().setUniformValue("materialSpecularIntensity", specular);
-  shader->release();
+  getShader().bind();
+  getShader().getProgram().setUniformValue("materialSpecularIntensity", specular);
+  getShader().release();
 }
 
 void MeshColorRenderer::updateLight(int i) {
@@ -87,21 +87,21 @@ void MeshColorRenderer::updateLight(int i) {
     return;
 
   QString lightBaseLocation = QString("lights[%1].").arg(i);
-  shader->bind();
-  shader->getProgram().setUniformValue((lightBaseLocation + "enabled").toStdString().c_str(), lights[i]->enabled);
-  shader->getProgram().setUniformValue((lightBaseLocation + "position").toStdString().c_str(), lights[i]->position.x(),
-                                       lights[i]->position.y(), lights[i]->position.z());
-  shader->getProgram().setUniformValue((lightBaseLocation + "dir").toStdString().c_str(), lights[i]->dir.x(), lights[i]->dir.y(),
-                                       lights[i]->dir.z());
-  shader->getProgram().setUniformValue((lightBaseLocation + "color").toStdString().c_str(), lights[i]->color.x(), lights[i]->color.y(),
-                                       lights[i]->color.z());
-  shader->getProgram().setUniformValue((lightBaseLocation + "spot").toStdString().c_str(), lights[i]->spot);
-  shader->getProgram().setUniformValue((lightBaseLocation + "specularEnabled").toStdString().c_str(), lights[i]->specularEnabled);
-  shader->getProgram().setUniformValue((lightBaseLocation + "attenuation").toStdString().c_str(), lights[i]->attenuation);
-  shader->getProgram().setUniformValue((lightBaseLocation + "ambientCoefficient").toStdString().c_str(),
-                                       lights[i]->ambientCoefficient);
-  shader->getProgram().setUniformValue((lightBaseLocation + "coneAngle").toStdString().c_str(), lights[i]->coneAngle);
-  shader->release();
+  getShader().bind();
+  getShader().getProgram().setUniformValue((lightBaseLocation + "enabled").toStdString().c_str(), lights[i]->enabled);
+  getShader().getProgram().setUniformValue((lightBaseLocation + "position").toStdString().c_str(), lights[i]->position.x(),
+                                           lights[i]->position.y(), lights[i]->position.z());
+  getShader().getProgram().setUniformValue((lightBaseLocation + "dir").toStdString().c_str(), lights[i]->dir.x(), lights[i]->dir.y(),
+                                           lights[i]->dir.z());
+  getShader().getProgram().setUniformValue((lightBaseLocation + "color").toStdString().c_str(), lights[i]->color.x(),
+                                           lights[i]->color.y(), lights[i]->color.z());
+  getShader().getProgram().setUniformValue((lightBaseLocation + "spot").toStdString().c_str(), lights[i]->spot);
+  getShader().getProgram().setUniformValue((lightBaseLocation + "specularEnabled").toStdString().c_str(), lights[i]->specularEnabled);
+  getShader().getProgram().setUniformValue((lightBaseLocation + "attenuation").toStdString().c_str(), lights[i]->attenuation);
+  getShader().getProgram().setUniformValue((lightBaseLocation + "ambientCoefficient").toStdString().c_str(),
+                                           lights[i]->ambientCoefficient);
+  getShader().getProgram().setUniformValue((lightBaseLocation + "coneAngle").toStdString().c_str(), lights[i]->coneAngle);
+  getShader().release();
 }
 
 void MeshColorRenderer::setTriangles(const Eigen::Matrix3Xf& positions, const Eigen::Matrix3Xf& normals,
@@ -113,8 +113,8 @@ void MeshColorRenderer::setTriangles(const Eigen::Matrix3Xf& positions, const Ei
 
 void MeshColorRenderer::setTriangles(const Eigen::Matrix3Xf& positions, const Eigen::Matrix3Xf& normals,
                                      const Eigen::Matrix4Xf& colors) {
-  vao->uploadPositions(shader->getVertexLocations().position, positions.data(), positions.cols());
-  vao->uploadVertexColors(shader->getVertexLocations().color, colors.data(), colors.cols());
-  vao->uploadNormals(shader->getVertexLocations().normal, normals.data(), normals.cols());
+  getVao().uploadPositions(getShader().getVertexLocations().position, positions.data(), positions.cols());
+  getVao().uploadVertexColors(getShader().getVertexLocations().color, colors.data(), colors.cols());
+  getVao().uploadNormals(getShader().getVertexLocations().normal, normals.data(), normals.cols());
 }
 } // namespace csVisOpenGL

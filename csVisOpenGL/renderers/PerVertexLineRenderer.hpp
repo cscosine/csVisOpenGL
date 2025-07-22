@@ -19,7 +19,7 @@ public:
   void setLines(const Eigen::Matrix3Xf& positions, const Eigen::Matrix4Xf& colors);
   void setLines(const Eigen::Matrix3Xf& positions, const Eigen::Matrix3Xf& colors);
 
-protected:
+private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
 };

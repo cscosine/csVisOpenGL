@@ -3,7 +3,7 @@
 #include <csVisOpenGL/Camera.hpp>
 #include <csVisOpenGL/Frame.hpp>
 #include <csVisOpenGL/OrbitCameraController.hpp>
-#include <csVisOpenGL/Visualizer.hpp>
+#include <csVisOpenGL/VisualizerInterface.hpp>
 
 #include <QFocusEvent>
 #include <QMouseEvent>
@@ -15,11 +15,13 @@ namespace csVisOpenGL {
 
 Frame::Frame(QWidget* parent)
     : QOpenGLWidget(parent)
-    , initialized(false)
-    , enabled(false)
-    , camera(new Camera())
-    , cameraController(new OrbitCameraController(*camera))
-    , m_openGLExtraFunctions{std::make_unique<QOpenGLExtraFunctions>()} {
+    , m_initialized(false)
+    , m_openGLExtraFunctions{std::make_unique<QOpenGLExtraFunctions>()}
+    , m_lastRenderTime{std::chrono::steady_clock::now()} // unsorted
+    , m_camera(new Camera())
+    , m_cameraController(new OrbitCameraController(*m_camera))
+    , m_shaderFactory{}
+    , m_visualizers{} {
   setMinimumSize(300, 200);
   setMouseTracking(true);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -33,11 +35,11 @@ Frame::~Frame() {
 
 // -------------------------------------------------- Visualizers -------------------------------------------------
 
-void Frame::addVisualizer(std::shared_ptr<Visualizer> const& visualizer) {
-  visualizers.emplace_back(visualizer);
-  if (initialized) {
+void Frame::addVisualizer(std::shared_ptr<VisualizerInterface> const& visualizer) {
+  m_visualizers.emplace_back(visualizer);
+  if (m_initialized) {
     this->makeCurrent();
-    visualizer->initialize(shaderFactory.get(), m_openGLExtraFunctions);
+    visualizer->initialize(m_shaderFactory.get(), m_openGLExtraFunctions);
   }
 }
 
@@ -55,19 +57,18 @@ void Frame::initializeGL() {
   m_openGLExtraFunctions->glClearDepthf(0.0);
 
   // Create shader factory
-  shaderFactory = std::make_unique<ShaderFactory>();
+  m_shaderFactory = std::make_unique<ShaderFactory>();
 
   // Initialize visualizers already added
-  for (int i = 0; i < visualizers.size(); i++)
-    visualizers[i]->initialize(shaderFactory.get(), m_openGLExtraFunctions);
+  for (int i = 0; i < m_visualizers.size(); i++)
+    m_visualizers[i]->initialize(m_shaderFactory.get(), m_openGLExtraFunctions);
 
   // Initialize timers
   this->startTimer(40);
-  this->lastRenderTime = std::chrono::steady_clock::now();
+  m_lastRenderTime = std::chrono::steady_clock::now();
 
   // Done
-  initialized = true;
-  enabled = true;
+  m_initialized = true;
 }
 
 void Frame::timerEvent(QTimerEvent* event) {
@@ -75,13 +76,13 @@ void Frame::timerEvent(QTimerEvent* event) {
 }
 
 void Frame::paintGL() {
-  if (!enabled || !initialized)
+  if (!m_initialized)
     return;
 
   // Get time since last paint
   auto t_now = std::chrono::steady_clock::now();
-  float deltaTime = std::chrono::duration<float>(t_now - this->lastRenderTime).count();
-  this->lastRenderTime = t_now;
+  float deltaTime = std::chrono::duration<float>(t_now - m_lastRenderTime).count();
+  m_lastRenderTime = t_now;
 
   // Create a Qt Painter
   QPainter painter;
@@ -91,12 +92,12 @@ void Frame::paintGL() {
   painter.beginNativePainting();
 
   // Update camera
-  if (cameraController)
-    cameraController->update(deltaTime);
+  if (m_cameraController)
+    m_cameraController->update(deltaTime);
 
   // Update visualizers
-  for (int i = 0; i < visualizers.size(); i++) {
-    visualizers[i]->update(*camera);
+  for (int i = 0; i < m_visualizers.size(); i++) {
+    m_visualizers[i]->update(*m_camera);
   }
 
   // Draw
@@ -105,22 +106,22 @@ void Frame::paintGL() {
 
   // Background
   glDisable(GL_DEPTH_TEST);
-  for (int i = 0; i < visualizers.size(); i++) {
-    visualizers[i]->paintBackground(*camera);
+  for (int i = 0; i < m_visualizers.size(); i++) {
+    m_visualizers[i]->paintBackground(*m_camera);
   }
 
   // Solid
   glEnable(GL_DEPTH_TEST);
-  for (int i = 0; i < visualizers.size(); i++) {
-    visualizers[i]->paint(*camera);
+  for (int i = 0; i < m_visualizers.size(); i++) {
+    m_visualizers[i]->paint(*m_camera);
   }
 
   // Transparent
   glDepthMask(false);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  for (int i = 0; i < visualizers.size(); i++) {
-    visualizers[i]->paintTransparent(*camera);
+  for (int i = 0; i < m_visualizers.size(); i++) {
+    m_visualizers[i]->paintTransparent(*m_camera);
   }
   glDepthMask(true);
   glDisable(GL_BLEND);
@@ -130,11 +131,11 @@ void Frame::paintGL() {
   painter.endNativePainting();
   painter.save();
   painter.setClipping(true);
-  painter.setClipRect(QRect(0, 0, camera->getViewSize().x(), camera->getViewSize().y()));
+  painter.setClipRect(QRect(0, 0, m_camera->getViewSize().x(), m_camera->getViewSize().y()));
   painter.translate(QPoint(0, 0));
 
-  for (int i = 0; i < visualizers.size(); i++) {
-    visualizers[i]->paintQt(*camera, painter);
+  for (int i = 0; i < m_visualizers.size(); i++) {
+    m_visualizers[i]->paintQt(*m_camera, painter);
   }
 
   painter.restore();
@@ -145,8 +146,8 @@ void Frame::paintGL() {
 
   // after
   // glFlush();
-  for (int i = 0; i < visualizers.size(); i++) {
-    visualizers[i]->afterPaint(*camera);
+  for (int i = 0; i < m_visualizers.size(); i++) {
+    m_visualizers[i]->afterPaint(*m_camera);
   }
 }
 
@@ -154,7 +155,7 @@ void Frame::resizeGL(int width, int height) {
   // glMatrixMode(GL_PROJECTION);
   // glLoadIdentity();
   glViewport(0, 0, width, height);
-  camera->setViewSize(Eigen::Vector2f(width, height));
+  m_camera->setViewSize(Eigen::Vector2f(width, height));
 }
 
 // ---------------------------------------------------- Events ----------------------------------------------------
@@ -168,50 +169,50 @@ bool Frame::event(QEvent* event) {
 }
 
 void Frame::focusOutEvent(QFocusEvent* event) {
-  if (!cameraController)
+  if (!m_cameraController)
     return;
-  cameraController->focusOutEvent(event);
+  m_cameraController->focusOutEvent(event);
 }
 
 void Frame::keyPressEvent(QKeyEvent* e) {
-  if (!cameraController)
+  if (!m_cameraController)
     return;
-  cameraController->keyPressEvent(e);
+  m_cameraController->keyPressEvent(e);
 }
 
 void Frame::keyReleaseEvent(QKeyEvent* e) {
-  if (!cameraController)
+  if (!m_cameraController)
     return;
-  cameraController->keyReleaseEvent(e);
+  m_cameraController->keyReleaseEvent(e);
 }
 
 void Frame::mouseMoveEvent(QMouseEvent* e) {
-  if (!cameraController)
+  if (!m_cameraController)
     return;
-  cameraController->mouseMoveEvent(e);
+  m_cameraController->mouseMoveEvent(e);
 }
 
 void Frame::mousePressEvent(QMouseEvent* e) {
-  if (!cameraController)
+  if (!m_cameraController)
     return;
-  cameraController->mousePressEvent(e);
+  m_cameraController->mousePressEvent(e);
 }
 
 void Frame::mouseReleaseEvent(QMouseEvent* e) {
-  if (!cameraController)
+  if (!m_cameraController)
     return;
-  cameraController->mouseReleaseEvent(e);
+  m_cameraController->mouseReleaseEvent(e);
 }
 
 void Frame::mouseDoubleClick(QMouseEvent* e) {
-  if (!cameraController)
+  if (!m_cameraController)
     return;
-  cameraController->mouseDoubleClick(e);
+  m_cameraController->mouseDoubleClick(e);
 }
 
 void Frame::wheelEvent(QWheelEvent* e) {
-  if (!cameraController)
+  if (!m_cameraController)
     return;
-  cameraController->wheelEvent(e);
+  m_cameraController->wheelEvent(e);
 }
 } // namespace csVisOpenGL

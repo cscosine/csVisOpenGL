@@ -48,7 +48,7 @@ public:
   }
   void updateLight(int i);
 
-protected:
+private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
 };

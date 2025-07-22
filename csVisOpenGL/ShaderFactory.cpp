@@ -11,24 +11,24 @@
 namespace csVisOpenGL {
 
 ShaderFactory::ShaderFactory() {
-  shaderProgramNames[ShaderNames::DiffuseUniform] = ShaderProgramNames(":/shaders/uniformColor.vp", ":/shaders/diffuse.fp");
-  shaderProgramNames[ShaderNames::DiffusePerVertex] = ShaderProgramNames(":/shaders/vertexColor.vp", ":/shaders/diffuse.fp");
-  shaderProgramNames[ShaderNames::Mesh] = ShaderProgramNames(":/shaders/mesh.vp", ":/shaders/mesh.fp");
-  shaderProgramNames[ShaderNames::MeshColor] = ShaderProgramNames(":/shaders/meshColor.vp", ":/shaders/meshColor.fp");
-  shaderProgramNames[ShaderNames::Background] = ShaderProgramNames(":/shaders/bkg.vp", ":/shaders/bkg.fp");
-  shaderProgramNames[ShaderNames::Texture] = ShaderProgramNames(":/shaders/texture.vp", ":/shaders/texture.fp");
+  m_shaderProgramNames[ShaderNames::DiffuseUniform] = ShaderProgramNames(":/shaders/uniformColor.vp", ":/shaders/diffuse.fp");
+  m_shaderProgramNames[ShaderNames::DiffusePerVertex] = ShaderProgramNames(":/shaders/vertexColor.vp", ":/shaders/diffuse.fp");
+  m_shaderProgramNames[ShaderNames::Mesh] = ShaderProgramNames(":/shaders/mesh.vp", ":/shaders/mesh.fp");
+  m_shaderProgramNames[ShaderNames::MeshColor] = ShaderProgramNames(":/shaders/meshColor.vp", ":/shaders/meshColor.fp");
+  m_shaderProgramNames[ShaderNames::Background] = ShaderProgramNames(":/shaders/bkg.vp", ":/shaders/bkg.fp");
+  m_shaderProgramNames[ShaderNames::Texture] = ShaderProgramNames(":/shaders/texture.vp", ":/shaders/texture.fp");
 }
 
 ShaderFactory::~ShaderFactory() {
-  for (auto it : vertexShaders)
+  for (auto it : m_vertexShaders)
     delete it.second;
-  for (auto it : fragmentShaders)
+  for (auto it : m_fragmentShaders)
     delete it.second;
 
-  vertexShaders.clear();
-  fragmentShaders.clear();
+  m_vertexShaders.clear();
+  m_fragmentShaders.clear();
 
-  for (auto it : textureSizes) {
+  for (auto it : m_textureSizes) {
     GLuint id = it.first;
     glDeleteTextures(1, &id);
   }
@@ -36,8 +36,8 @@ ShaderFactory::~ShaderFactory() {
 
 std::unique_ptr<Shader> ShaderFactory::createShader(ShaderNames shader) {
   // Get the program names
-  auto shaderNamesIterator = shaderProgramNames.find(int(shader));
-  if (shaderNamesIterator == shaderProgramNames.end())
+  auto shaderNamesIterator = m_shaderProgramNames.find(int(shader));
+  if (shaderNamesIterator == m_shaderProgramNames.end())
     return nullptr;
   const QString& vertexName = shaderNamesIterator->second.vertexProgramName;
   const QString& fragmentName = shaderNamesIterator->second.fragmentProgramName;
@@ -45,8 +45,8 @@ std::unique_ptr<Shader> ShaderFactory::createShader(ShaderNames shader) {
   // Get vertex shader
   QOpenGLShader* vertex = nullptr;
   {
-    auto it = vertexShaders.find(vertexName);
-    if (it != vertexShaders.end())
+    auto it = m_vertexShaders.find(vertexName);
+    if (it != m_vertexShaders.end())
       vertex = it->second;
     else {
       vertex = new QOpenGLShader(QOpenGLShader::Vertex);
@@ -65,15 +65,15 @@ std::unique_ptr<Shader> ShaderFactory::createShader(ShaderNames shader) {
         std::cout << vertexName.toStdString() << " shader compile error; " << vertex->log().toStdString() << std::endl;
         return nullptr;
       }
-      vertexShaders[vertexName] = vertex;
+      m_vertexShaders[vertexName] = vertex;
     }
   }
 
   // Get fragment shader
   QOpenGLShader* fragment = nullptr;
   {
-    auto it = fragmentShaders.find(fragmentName);
-    if (it != fragmentShaders.end())
+    auto it = m_fragmentShaders.find(fragmentName);
+    if (it != m_fragmentShaders.end())
       fragment = it->second;
     else {
       fragment = new QOpenGLShader(QOpenGLShader::Fragment);
@@ -90,7 +90,7 @@ std::unique_ptr<Shader> ShaderFactory::createShader(ShaderNames shader) {
         std::cout << fragmentName.toStdString() << " shader compile error: " << fragment->log().toStdString() << std::endl;
         return nullptr;
       }
-      fragmentShaders[fragmentName] = fragment;
+      m_fragmentShaders[fragmentName] = fragment;
     }
   }
 
@@ -117,17 +117,17 @@ GLuint ShaderFactory::uploadTexture(const QImage& tex) {
   glBindTexture(GL_TEXTURE_2D, 0);
 
   auto size = glImage.size();
-  this->textureSizes[texID] = Eigen::Vector2i(size.width(), size.height());
+  this->m_textureSizes[texID] = Eigen::Vector2i(size.width(), size.height());
   return texID;
 }
 
 Eigen::Vector2i ShaderFactory::getTextureSize(GLuint id) const {
-  assert(textureSizes.count(id) > 0);
-  return textureSizes.at(id);
+  assert(m_textureSizes.count(id) > 0);
+  return m_textureSizes.at(id);
 }
 
 void ShaderFactory::releaseTexture(GLuint id) {
-  textureSizes.erase(id);
+  m_textureSizes.erase(id);
   glDeleteTextures(1, &id);
 }
 

@@ -38,7 +38,7 @@ Renderer.hpp
 ShaderFactory.hpp
 Shader.hpp
 Vao.hpp
-Visualizer.hpp
+VisualizerInterface.hpp
 PRIVATE
 CameraController.cpp
 Camera.cpp

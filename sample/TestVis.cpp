@@ -7,7 +7,7 @@
 #include <math.h>
 
 TestcsVisOpenGL::TestcsVisOpenGL()
-    : csVisOpenGL::Visualizer()
+    : csVisOpenGL::VisualizerInterface()
     , bkgSolid(false) {}
 TestcsVisOpenGL::~TestcsVisOpenGL() {
 

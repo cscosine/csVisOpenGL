@@ -1,5 +1,5 @@
 #pragma once
-#include <csVisOpenGL/Visualizer.hpp>
+#include <csVisOpenGL/VisualizerInterface.hpp>
 #include <csVisOpenGL/painters/PainterAxes.hpp>
 #include <csVisOpenGL/painters/PainterGrid.hpp>
 #include <csVisOpenGL/renderers/BackgroundRenderer.hpp>
@@ -15,7 +15,7 @@
 #include <csVisOpenGL/renderers/UniformMeshRenderer.hpp>
 #include <csVisOpenGL/renderers/UniformPointRenderer.hpp>
 
-class TestcsVisOpenGL : public csVisOpenGL::Visualizer {
+class TestcsVisOpenGL : public csVisOpenGL::VisualizerInterface {
   csVisOpenGL::UniformPointRenderer uniformPointRenderer;
   csVisOpenGL::PerVertexPointRenderer perVertexPointRenderer;
   csVisOpenGL::UniformLineRenderer uniformLineRenderer;

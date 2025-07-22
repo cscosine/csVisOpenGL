@@ -21,14 +21,14 @@ const float OrbitCameraController::defaultZoomSmoothing = 0.2f;
 
 OrbitCameraController::OrbitCameraController(Camera& camera)
     : CameraController(camera)
-    , pivotPos(camera.getPose().translation())
+    , pivotPos(getCamera().getPose().translation())
     , pivotPosDest(pivotPos)
     , radius(0)
     , radiusDest(radius)
-    , scale(camera.getScale())
-    , scaleDest(camera.getScale())
-    , ypr(camera.getPose().linear().eulerAngles(2, 1, 0))
-    , yprDest(camera.getPose().linear().eulerAngles(2, 1, 0))
+    , scale(getCamera().getScale())
+    , scaleDest(getCamera().getScale())
+    , ypr(getCamera().getPose().linear().eulerAngles(2, 1, 0))
+    , yprDest(getCamera().getPose().linear().eulerAngles(2, 1, 0))
     , mouseMoveSpeed(defaultMouseMoveSpeed)
     , keyboardMoveSpeed(defaultKeyboardMoveSpeed)
     , moveSpeedScale(1)
@@ -85,7 +85,7 @@ void OrbitCameraController::mouseMoveEvent(QMouseEvent* e) {
   // Perform the proper action
   QPointF dMouse = e->globalPosition() - lastMousePosition;
   if (rightClicked && settings.enableTrasl) {
-    Eigen::Vector3f movement = (camera.left() * dMouse.x()) + (camera.up() * dMouse.y());
+    Eigen::Vector3f movement = (getCamera().left() * dMouse.x()) + (getCamera().up() * dMouse.y());
     dPivotPos += movement * mouseMoveSpeed * moveSpeedScale * pow(radius, 0.75f);
   }
 
@@ -144,7 +144,7 @@ void OrbitCameraController::mouseDoubleClick(QMouseEvent* e) {
 
 void OrbitCameraController::wheelEvent(QWheelEvent* e) {
   if (settings.enableScale) {
-    if (camera.isPerspective()) {
+    if (getCamera().isPerspective()) {
       dRadius = -e->angleDelta().y() * zoomSpeed * zoomSpeedScale * pow(radius, 0.5f);
     } else {
       dScale = -e->angleDelta().y() * zoomSpeed * zoomSpeedScale * pow(scale, 0.5f);
@@ -167,19 +167,19 @@ void OrbitCameraController::update(float dT) {
   // Keyboard input
   float speedBoost = 1;
   QPointF keyDelta;
-  if (keysPressed.contains(Qt::Key_W) || keysPressed.contains(Qt::Key_Up))
+  if (getKeysPressed().contains(Qt::Key_W) || getKeysPressed().contains(Qt::Key_Up))
     keyDelta.setY(keyDelta.y() + 1);
-  if (keysPressed.contains(Qt::Key_S) || keysPressed.contains(Qt::Key_Down))
+  if (getKeysPressed().contains(Qt::Key_S) || getKeysPressed().contains(Qt::Key_Down))
     keyDelta.setY(keyDelta.y() - 1);
-  if (keysPressed.contains(Qt::Key_A) || keysPressed.contains(Qt::Key_Left))
+  if (getKeysPressed().contains(Qt::Key_A) || getKeysPressed().contains(Qt::Key_Left))
     keyDelta.setX(keyDelta.x() + 1);
-  if (keysPressed.contains(Qt::Key_D) || keysPressed.contains(Qt::Key_Right))
+  if (getKeysPressed().contains(Qt::Key_D) || getKeysPressed().contains(Qt::Key_Right))
     keyDelta.setX(keyDelta.x() - 1);
-  if (keysPressed.contains(Qt::Key_Shift))
+  if (getKeysPressed().contains(Qt::Key_Shift))
     speedBoost = keyboardSpeedBoost;
-  dPivotPos += (camera.left() * keyDelta.x()) * keyboardMoveSpeed * moveSpeedScale * speedBoost * dT * pow(radius, 0.75f);
-  if (camera.isPerspective()) {
-    dPivotPos += (camera.forward() * keyDelta.y()) * keyboardMoveSpeed * moveSpeedScale * speedBoost * dT * pow(radius, 0.75f);
+  dPivotPos += (getCamera().left() * keyDelta.x()) * keyboardMoveSpeed * moveSpeedScale * speedBoost * dT * pow(radius, 0.75f);
+  if (getCamera().isPerspective()) {
+    dPivotPos += (getCamera().forward() * keyDelta.y()) * keyboardMoveSpeed * moveSpeedScale * speedBoost * dT * pow(radius, 0.75f);
   } else {
     dScale -= keyDelta.y() * keyboardMoveSpeed * moveSpeedScale * speedBoost * dT * pow(scale, 0.75f);
   }
@@ -227,26 +227,26 @@ void OrbitCameraController::update(float dT) {
        Eigen::AngleAxisf(ypr(2), Eigen::Vector3f::UnitX()));
 
   // Update pose
-  Eigen::Isometry3f pose = camera.getPose();
+  Eigen::Isometry3f pose = getCamera().getPose();
   pose.linear() = R;
-  pose.translation() = pivotPos - (R.col(0) * radius * (camera.isPerspective() ? 1 : 0));
+  pose.translation() = pivotPos - (R.col(0) * radius * (getCamera().isPerspective() ? 1 : 0));
   for (int i = 0; i < 3; i++) {
     if (pose.translation()(i) < minPos(i)) {
       pose.translation()(i) = minPos(i);
-      pivotPos(i) = pose.translation()(i) + (R.col(0)(i) * radius * (camera.isPerspective() ? 1 : 0));
+      pivotPos(i) = pose.translation()(i) + (R.col(0)(i) * radius * (getCamera().isPerspective() ? 1 : 0));
       pivotPosDest(i) = pivotPos(i);
     }
     if (pose.translation()(i) > maxPos(i)) {
       pose.translation()(i) = maxPos(i);
-      pivotPos(i) = pose.translation()(i) + (R.col(0)(i) * radius * (camera.isPerspective() ? 1 : 0));
+      pivotPos(i) = pose.translation()(i) + (R.col(0)(i) * radius * (getCamera().isPerspective() ? 1 : 0));
       pivotPosDest(i) = pivotPos(i);
     }
   }
 
-  camera.setPose(pose);
+  setCameraPose(pose);
 
   // update scale
-  camera.setScale(scale);
+  setCameraScale(scale);
 
   // Reset velocities
   dPivotPos.setZero();
@@ -271,10 +271,10 @@ void OrbitCameraController::setPivotPosition(const Eigen::Vector3f& position, bo
   pivotPosDest = position;
   if (!smooth) {
     pivotPos = pivotPosDest;
-    Eigen::Isometry3f pose = camera.getPose();
-    pose.translation() = pivotPos - (camera.forward() * radius * (camera.isPerspective() ? 1 : 0));
+    Eigen::Isometry3f pose = getCamera().getPose();
+    pose.translation() = pivotPos - (getCamera().forward() * radius * (getCamera().isPerspective() ? 1 : 0));
 
-    camera.setPose(pose);
+    setCameraPose(pose);
   }
 }
 
@@ -282,26 +282,26 @@ void OrbitCameraController::setYpr(const Eigen::Vector3f& ypr, bool smooth) {
   yprDest = ypr;
   if (!smooth) {
     this->ypr = yprDest;
-    Eigen::Vector3f pos = camera.getPose().translation();
+    Eigen::Vector3f pos = getCamera().getPose().translation();
     Eigen::Isometry3f pose;
     pose.translation() = pos;
 
     pose.linear() = (Eigen::AngleAxisf(ypr(0), Eigen::Vector3f::UnitZ()) * Eigen::AngleAxisf(ypr(1), Eigen::Vector3f::UnitY()) *
                      Eigen::AngleAxisf(ypr(2), Eigen::Vector3f::UnitX()))
                         .toRotationMatrix();
-    camera.setPose(pose);
+    setCameraPose(pose);
   }
 }
 
 void OrbitCameraController::setRotation(const Eigen::Matrix3f& R, bool smooth) {
   Eigen::Isometry3f pose;
   pose.linear() = R;
-  pose.translation() = camera.getPose().translation();
+  pose.translation() = getCamera().getPose().translation();
 
   yprDest = pose.linear().eulerAngles(2, 1, 0);
   if (!smooth) {
     this->ypr = yprDest;
-    camera.setPose(pose);
+    setCameraPose(pose);
   }
 }
 
@@ -309,22 +309,22 @@ void OrbitCameraController::setRadius(float r, bool smooth) {
   radiusDest = r;
   if (!smooth) {
     radius = radiusDest;
-    auto pose = camera.getPose();
-    pose.translation() = pivotPos - (camera.forward() * radius * (camera.isPerspective() ? 1 : 0));
+    auto pose = getCamera().getPose();
+    pose.translation() = pivotPos - (getCamera().forward() * radius * (getCamera().isPerspective() ? 1 : 0));
 
-    camera.setPose(pose);
+    setCameraPose(pose);
   }
 }
 
 void OrbitCameraController::setZNearFar(float zNear, float zFar) {
-  camera.setClippingPlanes(zNear, zFar);
+  setCameraClippingPlanes(zNear, zFar);
 }
 
 void OrbitCameraController::setScale(float s, bool smooth) {
   scaleDest = s;
   if (!smooth) {
     scale = scaleDest;
-    camera.setScale(scaleDest);
+    setCameraScale(scaleDest);
   }
 }
 
@@ -334,10 +334,10 @@ void OrbitCameraController::setTraslationLimits(const Eigen::Vector3f& minPos, c
 }
 
 void OrbitCameraController::setCameraOrthogonal() {
-  camera.setOrthogonal();
+  setCameraOrthogonal();
 }
 void OrbitCameraController::setCameraPerspective(float fovDeg) {
-  camera.setFov(fovDeg);
+  setCameraFov(fovDeg);
   this->setScale(1.0, false);
 }
 

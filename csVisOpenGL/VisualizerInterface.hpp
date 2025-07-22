@@ -7,11 +7,11 @@ namespace csVisOpenGL {
 class Camera;
 class ShaderFactory;
 
-class Visualizer {
+class VisualizerInterface {
 
 public:
-  Visualizer() {}
-  virtual ~Visualizer() {}
+  VisualizerInterface() {}
+  virtual ~VisualizerInterface() {}
 
   virtual void initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {};
   virtual void update(const Camera& camera) {};

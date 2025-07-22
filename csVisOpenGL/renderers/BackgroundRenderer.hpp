@@ -15,7 +15,7 @@ public:
 
   void setDefaultColors();
 
-protected:
+private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
 };
