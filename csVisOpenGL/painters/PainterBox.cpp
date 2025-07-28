@@ -16,7 +16,7 @@ PainterBox::PainterBox()
 
 PainterBox::~PainterBox() {}
 
-void PainterBox::initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+void PainterBox::initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
   _renderer->initialize(shaderFactory, glExtraFunctions);
   resize(0);
   apply();

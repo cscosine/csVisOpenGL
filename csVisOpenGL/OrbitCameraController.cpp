@@ -334,7 +334,7 @@ void OrbitCameraController::setTraslationLimits(const Eigen::Vector3f& minPos, c
 }
 
 void OrbitCameraController::setCameraOrthogonal() {
-  setCameraOrthogonal();
+  CameraController::setCameraOrthogonal();
 }
 void OrbitCameraController::setCameraPerspective(float fovDeg) {
   setCameraFov(fovDeg);

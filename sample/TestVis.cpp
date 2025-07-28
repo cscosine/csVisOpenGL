@@ -14,14 +14,14 @@ TestcsVisOpenGL::~TestcsVisOpenGL() {
   std::cout << "~TestcsVisOpenGL" << std::endl;
 }
 
-void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory* shaderFactory,
+void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory& shaderFactory,
                                  std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
 
   {
     QImage img(2, 2, QImage::Format_RGB32);
     img.fill(Qt::red);
 
-    auto tid = shaderFactory->uploadTexture(img);
+    auto tid = m_texturesManager.uploadTexture(img);
     singleTextureRenderer.initialize(shaderFactory, glExtraFunctions);
     csVisOpenGL::SingleTextureRenderer::Matrix3x4f vectCoords;
     vectCoords.col(0) = Eigen::Vector3f(4 + 0, 4 + 0, 0);

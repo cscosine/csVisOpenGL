@@ -24,11 +24,11 @@ public:
   const Camera& getCamera() const {
     return *m_camera;
   }
-  CameraController* getCameraController() {
-    return m_cameraController.get();
+  CameraController& getCameraController() {
+    return *m_cameraController;
   }
-  const CameraController* getCameraController() const {
-    return m_cameraController.get();
+  const CameraController& getCameraController() const {
+    return *m_cameraController;
   }
 
 private:
@@ -50,12 +50,12 @@ private:
   void mouseDoubleClick(QMouseEvent* e);
   void wheelEvent(QWheelEvent* e) override;
 
-  bool m_initialized;
-  std::shared_ptr<QOpenGLExtraFunctions> m_openGLExtraFunctions;
-  std::chrono::steady_clock::time_point m_lastRenderTime;
-  std::unique_ptr<Camera> m_camera;
-  std::unique_ptr<CameraController> m_cameraController;
-  std::unique_ptr<ShaderFactory> m_shaderFactory;
+  std::shared_ptr<QOpenGLExtraFunctions> const m_openGLExtraFunctions;
+  std::unique_ptr<Camera> const m_camera;
+  std::unique_ptr<CameraController> const m_cameraController;
+  std::unique_ptr<ShaderFactory> const m_shaderFactory;
   std::vector<std::shared_ptr<VisualizerInterface>> m_visualizers;
+  bool m_initialized;
+  std::chrono::steady_clock::time_point m_lastRenderTime;
 };
 } // namespace csVisOpenGL

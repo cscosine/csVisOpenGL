@@ -13,7 +13,7 @@ public:
   VisualizerInterface() {}
   virtual ~VisualizerInterface() {}
 
-  virtual void initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {};
+  virtual void initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {};
   virtual void update(const Camera& camera) {};
   virtual void paintBackground(const Camera& camera) {};
   virtual void paint(const Camera& camera) {};

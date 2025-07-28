@@ -15,7 +15,7 @@ PainterCheckerBoard::PainterCheckerBoard()
 
 PainterCheckerBoard::~PainterCheckerBoard() {}
 
-void PainterCheckerBoard::initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+void PainterCheckerBoard::initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
 
   blackSquares->initialize(shaderFactory, glExtraFunctions);
   blackSquares->setUniformColor(Color::black);

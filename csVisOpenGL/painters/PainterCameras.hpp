@@ -20,7 +20,7 @@ public:
   PainterCameras();
   virtual ~PainterCameras();
 
-  void initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
+  void initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
   void draw(const Camera& camera);
   void draw(const Camera& camera, const Eigen::Matrix4f& m);
 

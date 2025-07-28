@@ -39,6 +39,7 @@ ShaderFactory.hpp
 Shader.hpp
 Vao.hpp
 VisualizerInterface.hpp
+TexturesManager.hpp
 PRIVATE
 CameraController.cpp
 Camera.cpp
@@ -49,6 +50,7 @@ OrbitCameraController.cpp
 Renderer.cpp
 Shader.cpp
 ShaderFactory.cpp
+TexturesManager.cpp
 Vao.cpp
 # resources
 vis.qrc

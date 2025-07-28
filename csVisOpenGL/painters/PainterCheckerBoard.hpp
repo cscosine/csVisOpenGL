@@ -24,7 +24,7 @@ public:
   PainterCheckerBoard();
   virtual ~PainterCheckerBoard();
 
-  void initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
+  void initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
   void draw(const Camera& camera);
 
   void setCheckerBoard(int w, int h, float squareSize, const Eigen::Isometry3f& pose, float xBase, float yBase, float axesScale);

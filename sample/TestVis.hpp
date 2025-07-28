@@ -1,4 +1,5 @@
 #pragma once
+#include <csVisOpenGL/TexturesManager.hpp>
 #include <csVisOpenGL/VisualizerInterface.hpp>
 #include <csVisOpenGL/painters/PainterAxes.hpp>
 #include <csVisOpenGL/painters/PainterGrid.hpp>
@@ -16,6 +17,8 @@
 #include <csVisOpenGL/renderers/UniformPointRenderer.hpp>
 
 class TestcsVisOpenGL : public csVisOpenGL::VisualizerInterface {
+  csVisOpenGL::TexturesManager m_texturesManager;
+
   csVisOpenGL::UniformPointRenderer uniformPointRenderer;
   csVisOpenGL::PerVertexPointRenderer perVertexPointRenderer;
   csVisOpenGL::UniformLineRenderer uniformLineRenderer;
@@ -42,7 +45,7 @@ public:
   TestcsVisOpenGL();
   virtual ~TestcsVisOpenGL();
 
-  void initialize(csVisOpenGL::ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) override;
+  void initialize(csVisOpenGL::ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) override;
   void update(const csVisOpenGL::Camera& camera) override;
   void paintBackground(const csVisOpenGL::Camera& camera) override;
   void paint(const csVisOpenGL::Camera& camera) override;

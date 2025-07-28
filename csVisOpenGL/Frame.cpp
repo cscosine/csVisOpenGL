@@ -15,13 +15,14 @@ namespace csVisOpenGL {
 
 Frame::Frame(QWidget* parent)
     : QOpenGLWidget(parent)
-    , m_initialized(false)
     , m_openGLExtraFunctions{std::make_unique<QOpenGLExtraFunctions>()}
+    , m_camera(std::make_unique<Camera>())
+    , m_cameraController(std::make_unique<OrbitCameraController>(*m_camera))
+    , m_shaderFactory{std::make_unique<ShaderFactory>()}
+    , m_visualizers{}
+    , m_initialized(false)
     , m_lastRenderTime{std::chrono::steady_clock::now()} // unsorted
-    , m_camera(new Camera())
-    , m_cameraController(new OrbitCameraController(*m_camera))
-    , m_shaderFactory{}
-    , m_visualizers{} {
+{
   setMinimumSize(300, 200);
   setMouseTracking(true);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -39,7 +40,7 @@ void Frame::addVisualizer(std::shared_ptr<VisualizerInterface> const& visualizer
   m_visualizers.emplace_back(visualizer);
   if (m_initialized) {
     this->makeCurrent();
-    visualizer->initialize(m_shaderFactory.get(), m_openGLExtraFunctions);
+    visualizer->initialize(*m_shaderFactory, m_openGLExtraFunctions);
   }
 }
 
@@ -56,12 +57,9 @@ void Frame::initializeGL() {
   m_openGLExtraFunctions->glClearColor(0.0, 0.0, 0.0, 0.0);
   m_openGLExtraFunctions->glClearDepthf(0.0);
 
-  // Create shader factory
-  m_shaderFactory = std::make_unique<ShaderFactory>();
-
   // Initialize visualizers already added
   for (int i = 0; i < m_visualizers.size(); i++)
-    m_visualizers[i]->initialize(m_shaderFactory.get(), m_openGLExtraFunctions);
+    m_visualizers[i]->initialize(*m_shaderFactory, m_openGLExtraFunctions);
 
   // Initialize timers
   this->startTimer(40);
@@ -92,8 +90,7 @@ void Frame::paintGL() {
   painter.beginNativePainting();
 
   // Update camera
-  if (m_cameraController)
-    m_cameraController->update(deltaTime);
+  m_cameraController->update(deltaTime);
 
   // Update visualizers
   for (int i = 0; i < m_visualizers.size(); i++) {
@@ -169,50 +166,35 @@ bool Frame::event(QEvent* event) {
 }
 
 void Frame::focusOutEvent(QFocusEvent* event) {
-  if (!m_cameraController)
-    return;
   m_cameraController->focusOutEvent(event);
 }
 
 void Frame::keyPressEvent(QKeyEvent* e) {
-  if (!m_cameraController)
-    return;
   m_cameraController->keyPressEvent(e);
 }
 
 void Frame::keyReleaseEvent(QKeyEvent* e) {
-  if (!m_cameraController)
-    return;
   m_cameraController->keyReleaseEvent(e);
 }
 
 void Frame::mouseMoveEvent(QMouseEvent* e) {
-  if (!m_cameraController)
-    return;
   m_cameraController->mouseMoveEvent(e);
 }
 
 void Frame::mousePressEvent(QMouseEvent* e) {
-  if (!m_cameraController)
-    return;
   m_cameraController->mousePressEvent(e);
 }
 
 void Frame::mouseReleaseEvent(QMouseEvent* e) {
-  if (!m_cameraController)
-    return;
   m_cameraController->mouseReleaseEvent(e);
 }
 
 void Frame::mouseDoubleClick(QMouseEvent* e) {
-  if (!m_cameraController)
-    return;
   m_cameraController->mouseDoubleClick(e);
 }
 
 void Frame::wheelEvent(QWheelEvent* e) {
-  if (!m_cameraController)
-    return;
   m_cameraController->wheelEvent(e);
 }
+
 } // namespace csVisOpenGL

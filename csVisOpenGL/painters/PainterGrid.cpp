@@ -10,7 +10,7 @@ PainterGrid::PainterGrid()
 
 PainterGrid::~PainterGrid() {}
 
-void PainterGrid::initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+void PainterGrid::initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
   Eigen::Vector3f darkGray = Eigen::Vector3f::Ones() * 0.35f;
   Eigen::Vector3f lightGray = Eigen::Vector3f::Ones() * 0.65f;
 

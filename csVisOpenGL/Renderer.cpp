@@ -14,9 +14,9 @@ Renderer::Renderer(ShaderFactory::ShaderNames shaderName)
 
 Renderer::~Renderer() {}
 
-void Renderer::initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+void Renderer::initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
   m_glExtraFunctions = glExtraFunctions;
-  m_shader = shaderFactory->createShader(m_shaderName);
+  m_shader = shaderFactory.createShader(m_shaderName);
   m_vao->initialize(glExtraFunctions);
   assert(m_shader);
   initializeConcrete();

@@ -17,7 +17,7 @@ public:
   PainterGrid();
   virtual ~PainterGrid();
 
-  void initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
+  void initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
   void draw(const Camera& camera);
 
   void setGrid(const Eigen::Isometry3f& p, const Eigen::Vector2f& size, const Eigen::Vector2i& steps);

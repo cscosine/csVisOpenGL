@@ -17,7 +17,7 @@ public:
   PainterAxes();
   virtual ~PainterAxes();
 
-  void initialize(ShaderFactory* shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
+  void initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
   void draw(const Camera& camera);
 
   void setPose(const Eigen::Isometry3f& p, float size);
