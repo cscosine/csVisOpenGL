@@ -75,6 +75,8 @@ private:
   // control enabled
   Settings settings;
 
+  QSet<int> m_keysPressed;
+
 public:
   OrbitCameraController(Camera& camera);
   virtual ~OrbitCameraController();
@@ -87,6 +89,8 @@ public:
   virtual void mouseDoubleClick(QMouseEvent* e) override;
   virtual void wheelEvent(QWheelEvent* e) override;
   virtual void update(float dT) override;
+  virtual void keyPressEvent(QKeyEvent* e) override;
+  virtual void keyReleaseEvent(QKeyEvent* e) override;
 
   // camera direct control
   void setCameraOrthogonal();

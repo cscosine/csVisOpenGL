@@ -55,12 +55,20 @@ OrbitCameraController::OrbitCameraController(Camera& camera)
     , maxPos(
           Eigen::Vector3f(Eigen::NumTraits<float>::highest(), Eigen::NumTraits<float>::highest(), Eigen::NumTraits<float>::highest()))
     , settings(Settings())
+    , m_keysPressed{}
 
 {}
 
 OrbitCameraController::~OrbitCameraController() {}
 
 // ----------------------------------------- Events
+void OrbitCameraController::keyPressEvent(QKeyEvent* e) {
+  m_keysPressed += e->key();
+}
+
+void OrbitCameraController::keyReleaseEvent(QKeyEvent* e) {
+  m_keysPressed -= e->key();
+}
 
 void OrbitCameraController::focusOutEvent(QFocusEvent* event) {
   if (leftClicked)
@@ -167,15 +175,15 @@ void OrbitCameraController::update(float dT) {
   // Keyboard input
   float speedBoost = 1;
   QPointF keyDelta;
-  if (getKeysPressed().contains(Qt::Key_W) || getKeysPressed().contains(Qt::Key_Up))
+  if (m_keysPressed.contains(Qt::Key_W) || m_keysPressed.contains(Qt::Key_Up))
     keyDelta.setY(keyDelta.y() + 1);
-  if (getKeysPressed().contains(Qt::Key_S) || getKeysPressed().contains(Qt::Key_Down))
+  if (m_keysPressed.contains(Qt::Key_S) || m_keysPressed.contains(Qt::Key_Down))
     keyDelta.setY(keyDelta.y() - 1);
-  if (getKeysPressed().contains(Qt::Key_A) || getKeysPressed().contains(Qt::Key_Left))
+  if (m_keysPressed.contains(Qt::Key_A) || m_keysPressed.contains(Qt::Key_Left))
     keyDelta.setX(keyDelta.x() + 1);
-  if (getKeysPressed().contains(Qt::Key_D) || getKeysPressed().contains(Qt::Key_Right))
+  if (m_keysPressed.contains(Qt::Key_D) || m_keysPressed.contains(Qt::Key_Right))
     keyDelta.setX(keyDelta.x() - 1);
-  if (getKeysPressed().contains(Qt::Key_Shift))
+  if (m_keysPressed.contains(Qt::Key_Shift))
     speedBoost = keyboardSpeedBoost;
   dPivotPos += (getCamera().left() * keyDelta.x()) * keyboardMoveSpeed * moveSpeedScale * speedBoost * dT * pow(radius, 0.75f);
   if (getCamera().isPerspective()) {

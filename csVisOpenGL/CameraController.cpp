@@ -5,18 +5,9 @@
 namespace csVisOpenGL {
 
 CameraController::CameraController(Camera& camera)
-    : m_camera(camera)
-    , m_keysPressed{} {}
+    : m_camera(camera) {}
 
 CameraController::~CameraController() {}
-
-void CameraController::keyPressEvent(QKeyEvent* e) {
-  m_keysPressed += e->key();
-}
-
-void CameraController::keyReleaseEvent(QKeyEvent* e) {
-  m_keysPressed -= e->key();
-}
 
 void CameraController::setCameraPose(Eigen::Isometry3f const& pose) {
   m_camera.setPose(pose);
