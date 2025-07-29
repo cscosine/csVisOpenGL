@@ -19,16 +19,16 @@ const float OrbitCameraController::defaultMoveSmoothing = 0.2f;
 const float OrbitCameraController::defaultRotateSmoothing = 0.2f;
 const float OrbitCameraController::defaultZoomSmoothing = 0.2f;
 
-OrbitCameraController::OrbitCameraController(Camera& camera)
-    : CameraController(camera)
-    , pivotPos(getCamera().getPose().translation())
+OrbitCameraController::OrbitCameraController()
+    : CameraController()
+    , pivotPos(m_camera.getPose().translation())
     , pivotPosDest(pivotPos)
     , radius(0)
     , radiusDest(radius)
-    , scale(getCamera().getScale())
-    , scaleDest(getCamera().getScale())
-    , ypr(getCamera().getPose().linear().eulerAngles(2, 1, 0))
-    , yprDest(getCamera().getPose().linear().eulerAngles(2, 1, 0))
+    , scale(m_camera.getScale())
+    , scaleDest(m_camera.getScale())
+    , ypr(m_camera.getPose().linear().eulerAngles(2, 1, 0))
+    , yprDest(m_camera.getPose().linear().eulerAngles(2, 1, 0))
     , mouseMoveSpeed(defaultMouseMoveSpeed)
     , keyboardMoveSpeed(defaultKeyboardMoveSpeed)
     , moveSpeedScale(1)
@@ -62,15 +62,15 @@ OrbitCameraController::OrbitCameraController(Camera& camera)
 OrbitCameraController::~OrbitCameraController() {}
 
 // ----------------------------------------- Events
-void OrbitCameraController::keyPressEvent(QKeyEvent* e) {
-  m_keysPressed += e->key();
+void OrbitCameraController::onKeyPressEvent(QKeyEvent& event) {
+  m_keysPressed += event.key();
 }
 
-void OrbitCameraController::keyReleaseEvent(QKeyEvent* e) {
-  m_keysPressed -= e->key();
+void OrbitCameraController::onKeyReleaseEvent(QKeyEvent& event) {
+  m_keysPressed -= event.key();
 }
 
-void OrbitCameraController::focusOutEvent(QFocusEvent* event) {
+void OrbitCameraController::onFocusOutEvent(QFocusEvent& event) {
   if (leftClicked)
     leftClicked = false;
   if (rightClicked)
@@ -78,22 +78,20 @@ void OrbitCameraController::focusOutEvent(QFocusEvent* event) {
   if (middleClicked)
     middleClicked = false;
 
-  event->accept();
-  emit focusLost();
+  event.accept();
 }
 
-void OrbitCameraController::mouseMoveEvent(QMouseEvent* e) {
+void OrbitCameraController::onMouseMoveEvent(QMouseEvent& event) {
   // Initialization
   if (lastMousePosition == QPointF(-1, -1)) {
-    lastMousePosition = e->globalPosition();
-    emit mouseMove(e->globalPosition(), e->globalPosition());
+    lastMousePosition = event.globalPosition();
     return;
   }
 
   // Perform the proper action
-  QPointF dMouse = e->globalPosition() - lastMousePosition;
+  QPointF dMouse = event.globalPosition() - lastMousePosition;
   if (rightClicked && settings.enableTrasl) {
-    Eigen::Vector3f movement = (getCamera().left() * dMouse.x()) + (getCamera().up() * dMouse.y());
+    Eigen::Vector3f movement = (m_camera.left() * dMouse.x()) + (m_camera.up() * dMouse.y());
     dPivotPos += movement * mouseMoveSpeed * moveSpeedScale * pow(radius, 0.75f);
   }
 
@@ -104,63 +102,53 @@ void OrbitCameraController::mouseMoveEvent(QMouseEvent* e) {
 
   // Done
   QPointF _lastMousePosition = lastMousePosition;
-  lastMousePosition = e->globalPosition();
-  e->accept();
-  emit mouseMove(e->globalPosition(), _lastMousePosition);
+  lastMousePosition = event.globalPosition();
+  event.accept();
 }
 
-void OrbitCameraController::mousePressEvent(QMouseEvent* e) {
-  if (e->button() == Qt::LeftButton) {
+void OrbitCameraController::onMousePressEvent(QMouseEvent& event) {
+  if (event.button() == Qt::LeftButton) {
     leftClicked = true;
     lastMousePosition = QPointF(-1, -1);
-    emit leftPressed(e);
-  } else if (e->button() == Qt::RightButton) {
+  } else if (event.button() == Qt::RightButton) {
     rightClicked = true;
     lastMousePosition = QPointF(-1, -1);
-    emit rightPressed(e);
-  } else if (e->button() == Qt::MouseButton::MiddleButton) {
+  } else if (event.button() == Qt::MouseButton::MiddleButton) {
     middleClicked = true;
     lastMousePosition = QPointF(-1, -1);
-    emit middlePressed(e);
   }
 
-  e->accept();
+  event.accept();
 }
 
-void OrbitCameraController::mouseReleaseEvent(QMouseEvent* e) {
-  if (e->button() == Qt::LeftButton) {
+void OrbitCameraController::onMouseReleaseEvent(QMouseEvent& event) {
+  if (event.button() == Qt::LeftButton) {
     leftClicked = false;
     lastMousePosition = QPointF(-1, -1);
-    emit leftReleased(e);
-  } else if (e->button() == Qt::RightButton) {
+  } else if (event.button() == Qt::RightButton) {
     rightClicked = false;
     lastMousePosition = QPointF(-1, -1);
-    emit rightReleased(e);
-  } else if (e->button() == Qt::MouseButton::MiddleButton) {
+  } else if (event.button() == Qt::MouseButton::MiddleButton) {
     middleClicked = false;
     lastMousePosition = QPointF(-1, -1);
-    emit middleReleased(e);
   }
 
-  e->accept();
+  event.accept();
 }
 
-void OrbitCameraController::mouseDoubleClick(QMouseEvent* e) {
-  e->accept();
-  emit leftDoubleClicked(e);
+void OrbitCameraController::onMouseDoubleClick(QMouseEvent& event) {
+  event.accept();
 }
 
-void OrbitCameraController::wheelEvent(QWheelEvent* e) {
+void OrbitCameraController::onWheelEvent(QWheelEvent& event) {
   if (settings.enableScale) {
-    if (getCamera().isPerspective()) {
-      dRadius = -e->angleDelta().y() * zoomSpeed * zoomSpeedScale * pow(radius, 0.5f);
+    if (m_camera.isPerspective()) {
+      dRadius = -event.angleDelta().y() * zoomSpeed * zoomSpeedScale * pow(radius, 0.5f);
     } else {
-      dScale = -e->angleDelta().y() * zoomSpeed * zoomSpeedScale * pow(scale, 0.5f);
+      dScale = -event.angleDelta().y() * zoomSpeed * zoomSpeedScale * pow(scale, 0.5f);
     }
-    e->accept();
+    event.accept();
   }
-
-  emit wheelScrolled(e);
 }
 
 // ----------------------------------------- Update
@@ -171,7 +159,7 @@ void OrbitCameraController::resetDestinations() {
   scaleDest = scale;
 }
 
-void OrbitCameraController::update(float dT) {
+Camera const& OrbitCameraController::getUpdatedCamera(float dT) {
   // Keyboard input
   float speedBoost = 1;
   QPointF keyDelta;
@@ -185,9 +173,9 @@ void OrbitCameraController::update(float dT) {
     keyDelta.setX(keyDelta.x() - 1);
   if (m_keysPressed.contains(Qt::Key_Shift))
     speedBoost = keyboardSpeedBoost;
-  dPivotPos += (getCamera().left() * keyDelta.x()) * keyboardMoveSpeed * moveSpeedScale * speedBoost * dT * pow(radius, 0.75f);
-  if (getCamera().isPerspective()) {
-    dPivotPos += (getCamera().forward() * keyDelta.y()) * keyboardMoveSpeed * moveSpeedScale * speedBoost * dT * pow(radius, 0.75f);
+  dPivotPos += (m_camera.left() * keyDelta.x()) * keyboardMoveSpeed * moveSpeedScale * speedBoost * dT * pow(radius, 0.75f);
+  if (m_camera.isPerspective()) {
+    dPivotPos += (m_camera.forward() * keyDelta.y()) * keyboardMoveSpeed * moveSpeedScale * speedBoost * dT * pow(radius, 0.75f);
   } else {
     dScale -= keyDelta.y() * keyboardMoveSpeed * moveSpeedScale * speedBoost * dT * pow(scale, 0.75f);
   }
@@ -235,18 +223,18 @@ void OrbitCameraController::update(float dT) {
        Eigen::AngleAxisf(ypr(2), Eigen::Vector3f::UnitX()));
 
   // Update pose
-  Eigen::Isometry3f pose = getCamera().getPose();
+  Eigen::Isometry3f pose = m_camera.getPose();
   pose.linear() = R;
-  pose.translation() = pivotPos - (R.col(0) * radius * (getCamera().isPerspective() ? 1 : 0));
+  pose.translation() = pivotPos - (R.col(0) * radius * (m_camera.isPerspective() ? 1 : 0));
   for (int i = 0; i < 3; i++) {
     if (pose.translation()(i) < minPos(i)) {
       pose.translation()(i) = minPos(i);
-      pivotPos(i) = pose.translation()(i) + (R.col(0)(i) * radius * (getCamera().isPerspective() ? 1 : 0));
+      pivotPos(i) = pose.translation()(i) + (R.col(0)(i) * radius * (m_camera.isPerspective() ? 1 : 0));
       pivotPosDest(i) = pivotPos(i);
     }
     if (pose.translation()(i) > maxPos(i)) {
       pose.translation()(i) = maxPos(i);
-      pivotPos(i) = pose.translation()(i) + (R.col(0)(i) * radius * (getCamera().isPerspective() ? 1 : 0));
+      pivotPos(i) = pose.translation()(i) + (R.col(0)(i) * radius * (m_camera.isPerspective() ? 1 : 0));
       pivotPosDest(i) = pivotPos(i);
     }
   }
@@ -261,6 +249,8 @@ void OrbitCameraController::update(float dT) {
   dYpr.setZero();
   dRadius = 0;
   dScale = 0;
+
+  return m_camera;
 }
 
 void OrbitCameraController::normalizeYpr(Eigen::Vector3f& ypr) const {
@@ -279,8 +269,8 @@ void OrbitCameraController::setPivotPosition(const Eigen::Vector3f& position, bo
   pivotPosDest = position;
   if (!smooth) {
     pivotPos = pivotPosDest;
-    Eigen::Isometry3f pose = getCamera().getPose();
-    pose.translation() = pivotPos - (getCamera().forward() * radius * (getCamera().isPerspective() ? 1 : 0));
+    Eigen::Isometry3f pose = m_camera.getPose();
+    pose.translation() = pivotPos - (m_camera.forward() * radius * (m_camera.isPerspective() ? 1 : 0));
 
     setCameraPose(pose);
   }
@@ -290,7 +280,7 @@ void OrbitCameraController::setYpr(const Eigen::Vector3f& ypr, bool smooth) {
   yprDest = ypr;
   if (!smooth) {
     this->ypr = yprDest;
-    Eigen::Vector3f pos = getCamera().getPose().translation();
+    Eigen::Vector3f pos = m_camera.getPose().translation();
     Eigen::Isometry3f pose;
     pose.translation() = pos;
 
@@ -304,7 +294,7 @@ void OrbitCameraController::setYpr(const Eigen::Vector3f& ypr, bool smooth) {
 void OrbitCameraController::setRotation(const Eigen::Matrix3f& R, bool smooth) {
   Eigen::Isometry3f pose;
   pose.linear() = R;
-  pose.translation() = getCamera().getPose().translation();
+  pose.translation() = m_camera.getPose().translation();
 
   yprDest = pose.linear().eulerAngles(2, 1, 0);
   if (!smooth) {
@@ -317,8 +307,8 @@ void OrbitCameraController::setRadius(float r, bool smooth) {
   radiusDest = r;
   if (!smooth) {
     radius = radiusDest;
-    auto pose = getCamera().getPose();
-    pose.translation() = pivotPos - (getCamera().forward() * radius * (getCamera().isPerspective() ? 1 : 0));
+    auto pose = m_camera.getPose();
+    pose.translation() = pivotPos - (m_camera.forward() * radius * (m_camera.isPerspective() ? 1 : 0));
 
     setCameraPose(pose);
   }

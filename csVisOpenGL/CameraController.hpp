@@ -2,6 +2,7 @@
 
 #include <Eigen/Geometry>
 #include <QSet>
+#include <csVisOpenGL/Camera.hpp>
 
 class QFocusEvent;
 class QKeyEvent;
@@ -10,15 +11,13 @@ class QWheelEvent;
 
 namespace csVisOpenGL {
 
-class Camera;
-
-class CameraController {
-
+class CameraControllerInterface {
+public:
+  virtual Camera const& getUpdatedCamera(float dT) = 0;
+  virtual void setViewSize(Eigen::Vector2f const& viewSize) = 0;
+};
+class CameraController : public CameraControllerInterface {
 protected:
-  Camera const& getCamera() const {
-    return m_camera;
-  }
-
   void setCameraPose(Eigen::Isometry3f const& pose);
   void setCameraScale(float scale);
   void setCameraClippingPlanes(float zNear, float zFar);
@@ -26,22 +25,19 @@ protected:
   void setCameraFov(float fov);
 
 public:
-  CameraController(Camera& camera);
+  CameraController();
   virtual ~CameraController();
 
-  virtual void focusOutEvent(QFocusEvent* event) = 0;
-  virtual void keyPressEvent(QKeyEvent* e) = 0;
-  virtual void keyReleaseEvent(QKeyEvent* e) = 0;
-  virtual void mouseMoveEvent(QMouseEvent* e) = 0;
-  virtual void mousePressEvent(QMouseEvent* e) = 0;
-  virtual void mouseReleaseEvent(QMouseEvent* e) = 0;
-  virtual void mouseDoubleClick(QMouseEvent* e) = 0;
-  virtual void wheelEvent(QWheelEvent* e) = 0;
+  void setViewSize(Eigen::Vector2f const& viewSize) override {
+    m_camera.setViewSize(viewSize);
+  }
 
-  virtual void update(float dT) = 0;
+  Eigen::Vector2f const& getViewSize() {
+    return m_camera.getViewSize();
+  }
 
-private:
-  Camera& m_camera;
+protected:
+  Camera m_camera;
 };
 
 } // namespace csVisOpenGL

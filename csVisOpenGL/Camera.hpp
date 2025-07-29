@@ -27,25 +27,22 @@ public:
 
   void setScale(float s);
 
+  // only to init camera controller
   float getScale() const {
     return m_scale;
   }
-  float getFov() const {
-    return m_fov;
-  }
-  float getZNear() const {
-    return m_zNear;
-  }
-  float getZFar() const {
-    return m_zFar;
-  }
+
+  // in frame
   const Eigen::Vector2f& getViewSize() const {
     return m_viewSize;
   }
+
+  // in orbit camera controller and in mesh renderer (for lights?)
   const Eigen::Isometry3f& getPose() const {
     return m_pose;
   }
 
+  // in renderers for uniforms
   const Eigen::Matrix4f& getProjection() const {
     return m_projection;
   }
@@ -62,6 +59,7 @@ public:
     return m_viewProjection;
   }
 
+  // can be changed with rotation, used in orbit camera controller
   Eigen::Vector3f forward() const {
     return m_pose.rotation().col(0);
   }

@@ -33,6 +33,8 @@ Camera.hpp
 Colors.hpp
 ColorUtils.hpp
 Frame.hpp
+FrameSlotsInterface.hpp
+FrameSignals.hpp
 OrbitCameraController.hpp
 Renderer.hpp
 ShaderFactory.hpp
@@ -46,6 +48,8 @@ Camera.cpp
 Colors.cpp
 ColorUtils.cpp
 Frame.cpp
+FrameSlotsInterface.cpp
+FrameSignals.cpp
 OrbitCameraController.cpp
 Renderer.cpp
 Shader.cpp

@@ -1,13 +1,13 @@
 #pragma once
 
+#include "csVisOpenGL/FrameSlotsInterface.hpp"
 #include <Eigen/Core>
 #include <QObject>
 #include <QPoint>
 #include <csVisOpenGL/CameraController.hpp>
 
 namespace csVisOpenGL {
-class OrbitCameraController : public QObject, public CameraController {
-  Q_OBJECT;
+class OrbitCameraController : public CameraController, public FrameSlotsInterface {
 
 public:
   struct Settings {
@@ -78,19 +78,25 @@ private:
   QSet<int> m_keysPressed;
 
 public:
-  OrbitCameraController(Camera& camera);
+  OrbitCameraController();
   virtual ~OrbitCameraController();
 
+  Camera const& getUpdatedCamera(float dT) override;
+
+  Camera const& getCamera() const {
+    return m_camera;
+  }
+
   // Controller interface
-  virtual void focusOutEvent(QFocusEvent* event) override;
-  virtual void mouseMoveEvent(QMouseEvent* e) override;
-  virtual void mousePressEvent(QMouseEvent* e) override;
-  virtual void mouseReleaseEvent(QMouseEvent* e) override;
-  virtual void mouseDoubleClick(QMouseEvent* e) override;
-  virtual void wheelEvent(QWheelEvent* e) override;
-  virtual void update(float dT) override;
-  virtual void keyPressEvent(QKeyEvent* e) override;
-  virtual void keyReleaseEvent(QKeyEvent* e) override;
+public slots:
+  void onFocusOutEvent(QFocusEvent& eventevent) override;
+  void onKeyPressEvent(QKeyEvent& eventevent) override;
+  void onKeyReleaseEvent(QKeyEvent& eventevent) override;
+  void onMouseMoveEvent(QMouseEvent& eventevent) override;
+  void onMousePressEvent(QMouseEvent& eventevent) override;
+  void onMouseReleaseEvent(QMouseEvent& eventevent) override;
+  void onMouseDoubleClick(QMouseEvent& eventevent) override;
+  void onWheelEvent(QWheelEvent& eventevent) override;
 
   // camera direct control
   void setCameraOrthogonal();

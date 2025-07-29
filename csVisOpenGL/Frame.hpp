@@ -5,12 +5,18 @@
 
 #include <chrono>
 #include <memory>
+#include <qevent.h>
+#include <qtmetamacros.h>
+
+#include <csVisOpenGL/FrameSignals.hpp>
 
 namespace csVisOpenGL {
 class Camera;
-class CameraController;
+class CameraControllerInterface;
 class ShaderFactory;
 class VisualizerInterface;
+
+class FrameSlotsInterface;
 
 class Frame : public QOpenGLWidget {
 
@@ -19,16 +25,14 @@ public:
   virtual ~Frame();
   // ------------- Visualizers
   void addVisualizer(std::shared_ptr<VisualizerInterface> const& visualizer);
+  void setCameraController(std::shared_ptr<CameraControllerInterface> const& cameraController) {
+    m_cameraController = cameraController;
+  }
 
-  // ------------- Getters
-  const Camera& getCamera() const {
-    return *m_camera;
-  }
-  CameraController& getCameraController() {
-    return *m_cameraController;
-  }
-  const CameraController& getCameraController() const {
-    return *m_cameraController;
+  void connectSlotsInterface(FrameSlotsInterface const& frameSlots) const;
+
+  FrameSignals const& getFrameSignals() const {
+    return m_frameSignals;
   }
 
 private:
@@ -42,20 +46,19 @@ private:
   // ------------- Events
   bool event(QEvent* event) override;
   void focusOutEvent(QFocusEvent* event) override;
-  void keyPressEvent(QKeyEvent* e) override;
-  void keyReleaseEvent(QKeyEvent* e) override;
-  void mouseMoveEvent(QMouseEvent* e) override;
-  void mousePressEvent(QMouseEvent* e) override;
-  void mouseReleaseEvent(QMouseEvent* e) override;
-  void mouseDoubleClick(QMouseEvent* e);
-  void wheelEvent(QWheelEvent* e) override;
+  void keyPressEvent(QKeyEvent* event) override;
+  void keyReleaseEvent(QKeyEvent* event) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
+  void wheelEvent(QWheelEvent* event) override;
 
   std::shared_ptr<QOpenGLExtraFunctions> const m_openGLExtraFunctions;
-  std::unique_ptr<Camera> const m_camera;
-  std::unique_ptr<CameraController> const m_cameraController;
+  std::shared_ptr<CameraControllerInterface> m_cameraController;
   std::unique_ptr<ShaderFactory> const m_shaderFactory;
   std::vector<std::shared_ptr<VisualizerInterface>> m_visualizers;
   bool m_initialized;
   std::chrono::steady_clock::time_point m_lastRenderTime;
+  FrameSignals m_frameSignals;
 };
 } // namespace csVisOpenGL

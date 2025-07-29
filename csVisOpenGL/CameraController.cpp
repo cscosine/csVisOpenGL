@@ -4,8 +4,8 @@
 
 namespace csVisOpenGL {
 
-CameraController::CameraController(Camera& camera)
-    : m_camera(camera) {}
+CameraController::CameraController()
+    : m_camera() {}
 
 CameraController::~CameraController() {}
 

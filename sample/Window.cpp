@@ -1,9 +1,9 @@
+#include <memory>
 #include <sample/Window.hpp>
 
 #include <sample/ui_Window.h>
 
 #include <csVisOpenGL/Camera.hpp>
-#include <csVisOpenGL/OrbitCameraController.hpp>
 
 #include <QFileDialog>
 #include <atomic>
@@ -12,29 +12,34 @@
 Window::Window(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::Window())
+    , m_cameraController(std::make_shared<csVisOpenGL::OrbitCameraController>())
 
 {
+  m_cameraController->setRadius(10);
+  m_cameraController->setTraslationLimits(-Eigen::Vector3f::Ones(), Eigen::Vector3f::Ones());
+
   ui->setupUi(this);
-  this->show();
+
+  ui->preview->setCameraController(m_cameraController);
+  ui->preview->connectSlotsInterface(*m_cameraController);
 
   vis = std::make_shared<TestcsVisOpenGL>();
-  ui->preview->addVisualizer(vis);
-  static_cast<csVisOpenGL::OrbitCameraController&>(ui->preview->getCameraController()).setRadius(10);
-  static_cast<csVisOpenGL::OrbitCameraController&>(ui->preview->getCameraController())
-      .setTraslationLimits(-Eigen::Vector3f::Ones(), Eigen::Vector3f::Ones());
-
   vis->bkgSolid = ui->radioButtonBkgSolid->isChecked();
+  ui->preview->addVisualizer(vis);
+
+  // later
+  this->show();
 }
 
 Window::~Window() {}
 
 void Window::on_checkBoxOrthoCamera_clicked() {
   if (ui->checkBoxOrthoCamera->isChecked()) {
-    static_cast<csVisOpenGL::OrbitCameraController&>(ui->preview->getCameraController()).resetDestinations();
-    static_cast<csVisOpenGL::OrbitCameraController&>(ui->preview->getCameraController()).setCameraOrthogonal();
+    m_cameraController->resetDestinations();
+    m_cameraController->setCameraOrthogonal();
   } else {
-    static_cast<csVisOpenGL::OrbitCameraController&>(ui->preview->getCameraController()).setCameraPerspective(45.0);
-    static_cast<csVisOpenGL::OrbitCameraController&>(ui->preview->getCameraController()).resetDestinations();
+    m_cameraController->setCameraPerspective(45.0);
+    m_cameraController->resetDestinations();
   }
 }
 

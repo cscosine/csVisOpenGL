@@ -8,7 +8,7 @@ Shader::Shader(QOpenGLShader* vertexShader, QOpenGLShader* fragmentShader) {
   m_shaderProgram.addShader(fragmentShader);
   if (!m_shaderProgram.link()) {
     std::cerr << "Program link error: " << m_shaderProgram.log().toStdString() << std::endl;
-    // TODO(sceriani): manage errors here.. maybe a static member that can return null / expected is better
+    // TODO(sc): manage errors here.. maybe a static member that can return null / expected is better
   }
   m_shaderProgram.release();
   this->bindLocations();

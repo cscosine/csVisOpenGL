@@ -1,5 +1,7 @@
 #pragma once
+#include "csVisOpenGL/OrbitCameraController.hpp"
 #include <QMainWindow>
+#include <memory>
 #include <sample/TestVis.hpp>
 
 namespace Ui {
@@ -11,6 +13,7 @@ class Window : public QMainWindow {
 
   std::unique_ptr<Ui::Window> ui;
   std::shared_ptr<TestcsVisOpenGL> vis;
+  std::shared_ptr<csVisOpenGL::OrbitCameraController> m_cameraController;
 
   Eigen::Vector3f pivotPos;
   Eigen::Vector3f ypr;
