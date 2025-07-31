@@ -8,7 +8,7 @@ namespace csVisOpenGL {
 
 UniformLineRenderer::UniformLineRenderer()
     : Renderer(ShaderFactory::ShaderNames::DiffuseUniform)
-    , lineWidth(1) {}
+    , m_lineWidth(1) {}
 
 UniformLineRenderer::~UniformLineRenderer() {}
 
@@ -17,7 +17,7 @@ void UniformLineRenderer::initializeConcrete() {
 }
 
 void UniformLineRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
-  glLineWidth(lineWidth);
+  glLineWidth(m_lineWidth);
 
   getShader().bind();
   {

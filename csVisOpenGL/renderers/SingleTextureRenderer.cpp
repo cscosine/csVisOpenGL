@@ -9,7 +9,7 @@ namespace csVisOpenGL {
 
 SingleTextureRenderer::SingleTextureRenderer()
     : Renderer(ShaderFactory::ShaderNames::Texture)
-    , texid(-1) {}
+    , m_texid(-1) {}
 
 void SingleTextureRenderer::initializeConcrete() {
   setUniformColor(Eigen::Vector4f::Ones().eval());
@@ -30,14 +30,14 @@ void SingleTextureRenderer::setUniformColor(const Eigen::Vector3f& color) {
 }
 
 void SingleTextureRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
-  if (texid >= 0) {
+  if (m_texid >= 0) {
 
     getShader().bind();
 
     glEnable(GL_TEXTURE_2D);
     getQOpenGLExtraFunctions().glActiveTexture(GL_TEXTURE0);
 
-    glBindTexture(GL_TEXTURE_2D, this->texid);
+    glBindTexture(GL_TEXTURE_2D, this->m_texid);
 
     getQOpenGLExtraFunctions().glBindVertexArray(getVao().getVao());
     glDrawArrays(GL_TRIANGLE_FAN, 0, getVao().size());
@@ -53,7 +53,7 @@ void SingleTextureRenderer::drawConcrete(const Camera& camera, const Eigen::Matr
 void SingleTextureRenderer::setTexture(GLuint texid, const Matrix3x4f& vertex, const Matrix2x4f& texCoord, TextureInterpolation ti) {
   getVao().uploadPositions(getShader().getVertexLocations().position, vertex.data(), vertex.cols());
   getVao().uploadTexCoords0(getShader().getVertexLocations().texCoord0, texCoord.data(), texCoord.cols());
-  this->texid = texid;
+  this->m_texid = texid;
 
   GLuint mode = GL_LINEAR;
 

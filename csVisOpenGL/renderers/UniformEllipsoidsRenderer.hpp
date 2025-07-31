@@ -5,16 +5,12 @@
 
 namespace csVisOpenGL {
 class UniformEllipsoidsRenderer3D : public Renderer {
-  GLfloat lineWidth;
-
-  Eigen::Matrix3Xf _spherePoints;
-
 public:
   UniformEllipsoidsRenderer3D();
   virtual ~UniformEllipsoidsRenderer3D();
 
   void setLineWidth(float lineWidth) {
-    this->lineWidth = lineWidth;
+    this->m_lineWidth = lineWidth;
   }
 
   void setUniformColor(const Eigen::Vector4f& color);
@@ -26,19 +22,20 @@ public:
 private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
+
+  GLfloat m_lineWidth;
+
+  Eigen::Matrix3Xf m_spherePoints;
 };
 
 class UniformEllipsoidsRenderer2D : public Renderer {
-  GLfloat lineWidth;
-
-  Eigen::Matrix3Xf _circlePoints;
 
 public:
   UniformEllipsoidsRenderer2D();
   virtual ~UniformEllipsoidsRenderer2D();
 
   void setLineWidth(float lineWidth) {
-    this->lineWidth = lineWidth;
+    this->m_lineWidth = lineWidth;
   }
 
   void setUniformColor(const Eigen::Vector4f& color);
@@ -51,6 +48,10 @@ public:
 private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
+
+  GLfloat m_lineWidth;
+
+  Eigen::Matrix3Xf m_circlePoints;
 };
 
 } // namespace csVisOpenGL

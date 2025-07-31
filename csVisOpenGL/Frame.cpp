@@ -12,12 +12,9 @@
 
 #include <csVisOpenGL/ShaderFactory.hpp>
 
-#include <iostream>
-
 namespace csVisOpenGL {
 
 void Frame::CameraState::onNewCamera(Camera const& camera) {
-  std::cout << "CameraState onNewCamera" << std::endl;
   m_camera = camera;
 }
 
@@ -61,7 +58,6 @@ void Frame::addVisualizer(std::shared_ptr<VisualizerInterface> const& visualizer
 // -------------------------------------------------- GL Methdos --------------------------------------------------
 
 void Frame::initializeGL() {
-  std::cout << "initializeGL()" << std::endl;
   // Initialize OpenGL
   makeCurrent();
   m_openGLExtraFunctions->initializeOpenGLFunctions();
@@ -101,9 +97,7 @@ void Frame::paintGL() {
   painter.beginNativePainting();
 
   // here give the possibility of updating the camera
-  std::cout << "Frame::paintGL" << std::endl;
   emit m_frameSignals.paintGL();
-  std::cout << "Frame::paintGL done" << std::endl;
 
   // Update visualizers
   for (int i = 0; i < m_visualizers.size(); i++) {

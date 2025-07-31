@@ -5,9 +5,6 @@ namespace csVisOpenGL {
 
 class BackgroundSolidRenderer : public Renderer {
 
-private:
-  Eigen::Vector4f color;
-
 public:
   BackgroundSolidRenderer();
   virtual ~BackgroundSolidRenderer() {};
@@ -20,6 +17,8 @@ public:
 private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
+
+  Eigen::Vector4f m_color;
 };
 
 } // namespace csVisOpenGL

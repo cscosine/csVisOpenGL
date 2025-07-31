@@ -10,7 +10,7 @@ namespace csVisOpenGL {
 
 UniformEllipsoidsRenderer3D::UniformEllipsoidsRenderer3D()
     : Renderer(ShaderFactory::ShaderNames::DiffuseUniform)
-    , lineWidth(1) {
+    , m_lineWidth(1) {
   // create sphere points
   float radius = 1;
   int rings = 32;
@@ -30,14 +30,14 @@ UniformEllipsoidsRenderer3D::UniformEllipsoidsRenderer3D()
     }
   }
 
-  _spherePoints.resize(Eigen::NoChange, (rings - 1) * sectors * 4);
+  m_spherePoints.resize(Eigen::NoChange, (rings - 1) * sectors * 4);
   pos = 0;
   for (int r = 0; r < rings - 1; r++) {
     for (int s = 0; s < sectors; s++) {
-      _spherePoints.col((pos * 4) + 0) = points.col(pos);
-      _spherePoints.col((pos * 4) + 1) = points.col(pos + 1);
-      _spherePoints.col((pos * 4) + 2) = points.col(pos);
-      _spherePoints.col((pos * 4) + 3) = points.col(pos + sectors);
+      m_spherePoints.col((pos * 4) + 0) = points.col(pos);
+      m_spherePoints.col((pos * 4) + 1) = points.col(pos + 1);
+      m_spherePoints.col((pos * 4) + 2) = points.col(pos);
+      m_spherePoints.col((pos * 4) + 3) = points.col(pos + sectors);
       pos++;
     }
   }
@@ -50,7 +50,7 @@ void UniformEllipsoidsRenderer3D::initializeConcrete() {
 }
 
 void UniformEllipsoidsRenderer3D::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
-  glLineWidth(lineWidth);
+  glLineWidth(m_lineWidth);
 
   getShader().bind();
   {
@@ -80,7 +80,7 @@ void UniformEllipsoidsRenderer3D::setCovariances(const Eigen::Isometry3f& poses,
 void UniformEllipsoidsRenderer3D::setCovariances(const std::vector<Eigen::Isometry3f>& poses,
                                                  const std::vector<Eigen::Matrix3d>& covariances, float nSigma) {
 
-  Eigen::Matrix3Xf lines(3, poses.size() * _spherePoints.cols());
+  Eigen::Matrix3Xf lines(3, poses.size() * m_spherePoints.cols());
   for (int i = 0; i < poses.size(); i++) {
     Eigen::Matrix3d eigenVectors = Eigen::Matrix3d::Zero();
     Eigen::Vector3d eigenValues = Eigen::Vector3d::Zero();
@@ -95,8 +95,8 @@ void UniformEllipsoidsRenderer3D::setCovariances(const std::vector<Eigen::Isomet
 
     Eigen::Matrix3d scale = nSigma * eigenValues.asDiagonal();
 
-    lines.block(0, i * _spherePoints.cols(), 3, _spherePoints.cols()) =
-        poses[i].cast<float>() * (covR.cast<float>() * scale.cast<float>() * _spherePoints);
+    lines.block(0, i * m_spherePoints.cols(), 3, m_spherePoints.cols()) =
+        poses[i].cast<float>() * (covR.cast<float>() * scale.cast<float>() * m_spherePoints);
   }
 
   getVao().uploadPositions(getShader().getVertexLocations().position, lines.data(), lines.cols());
@@ -106,23 +106,23 @@ void UniformEllipsoidsRenderer3D::setCovariances(const std::vector<Eigen::Isomet
 
 UniformEllipsoidsRenderer2D::UniformEllipsoidsRenderer2D()
     : Renderer(ShaderFactory::ShaderNames::DiffuseUniform)
-    , lineWidth(1) {
+    , m_lineWidth(1) {
   // create sphere points
   int sectors = 32;
   float const S = 1. / (float)(sectors - 1);
   Eigen::Matrix3Xf points;
-  _circlePoints.resize(Eigen::NoChange, 2 * sectors);
+  m_circlePoints.resize(Eigen::NoChange, 2 * sectors);
   int pos = 0;
-  _circlePoints.col(pos++) = Eigen::Vector3f(1, 0.0, 0.0);
+  m_circlePoints.col(pos++) = Eigen::Vector3f(1, 0.0, 0.0);
   for (int s = 1; s < sectors; s++) {
     float const x = cos(2 * M_PI * s * S);
     float const y = sin(2 * M_PI * s * S);
 
-    _circlePoints.col(pos++) = Eigen::Vector3f(x, y, 0.0);
-    _circlePoints.col(pos++) = Eigen::Vector3f(x, y, 0.0);
+    m_circlePoints.col(pos++) = Eigen::Vector3f(x, y, 0.0);
+    m_circlePoints.col(pos++) = Eigen::Vector3f(x, y, 0.0);
   }
-  _circlePoints.col(pos++) = _circlePoints.col(0);
-  assert(pos == _circlePoints.cols());
+  m_circlePoints.col(pos++) = m_circlePoints.col(0);
+  assert(pos == m_circlePoints.cols());
 }
 
 UniformEllipsoidsRenderer2D::~UniformEllipsoidsRenderer2D() {}
@@ -132,7 +132,7 @@ void UniformEllipsoidsRenderer2D::initializeConcrete() {
 }
 
 void UniformEllipsoidsRenderer2D::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
-  glLineWidth(lineWidth);
+  glLineWidth(m_lineWidth);
 
   getShader().bind();
   {
@@ -162,7 +162,7 @@ void UniformEllipsoidsRenderer2D::setCovariances(const Eigen::Isometry3f& poses,
 void UniformEllipsoidsRenderer2D::setCovariances(const std::vector<Eigen::Isometry3f>& poses,
                                                  const std::vector<Eigen::Matrix2d>& covariances, float nSigma) {
 
-  Eigen::Matrix3Xf lines(3, poses.size() * _circlePoints.cols());
+  Eigen::Matrix3Xf lines(3, poses.size() * m_circlePoints.cols());
   for (int i = 0; i < poses.size(); i++) {
     Eigen::Matrix2d eigenVectors = Eigen::Matrix2d::Zero();
     Eigen::Vector2d eigenValues = Eigen::Vector2d::Zero();
@@ -179,8 +179,8 @@ void UniformEllipsoidsRenderer2D::setCovariances(const std::vector<Eigen::Isomet
     Eigen::Matrix3d scale = Eigen::Matrix3d::Identity();
     scale.topLeftCorner<2, 2>() = nSigma * eigenValues.asDiagonal();
 
-    lines.block(0, i * _circlePoints.cols(), 3, _circlePoints.cols()) =
-        poses[i].cast<float>() * (covR.cast<float>() * scale.cast<float>() * _circlePoints);
+    lines.block(0, i * m_circlePoints.cols(), 3, m_circlePoints.cols()) =
+        poses[i].cast<float>() * (covR.cast<float>() * scale.cast<float>() * m_circlePoints);
   }
 
   getVao().uploadPositions(getShader().getVertexLocations().position, lines.data(), lines.cols());

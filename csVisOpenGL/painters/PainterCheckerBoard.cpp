@@ -7,40 +7,40 @@
 namespace csVisOpenGL {
 
 PainterCheckerBoard::PainterCheckerBoard()
-    : blackSquares(new UniformMeshRenderer())
-    , whiteSquares(new UniformMeshRenderer())
-    , axes(new PainterAxes())
-    , paintChecherboard(false)
-    , paintAxes(false) {}
+    : m_blackSquares(new UniformMeshRenderer())
+    , m_whiteSquares(new UniformMeshRenderer())
+    , m_axes(new PainterAxes())
+    , m_paintChecherboard(false)
+    , m_paintAxes(false) {}
 
 PainterCheckerBoard::~PainterCheckerBoard() {}
 
 void PainterCheckerBoard::initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
 
-  blackSquares->initialize(shaderFactory, glExtraFunctions);
-  blackSquares->setUniformColor(Color::black);
-  blackSquares->setTriangles(Eigen::Matrix3Xf());
+  m_blackSquares->initialize(shaderFactory, glExtraFunctions);
+  m_blackSquares->setUniformColor(Color::black);
+  m_blackSquares->setTriangles(Eigen::Matrix3Xf());
 
-  whiteSquares->initialize(shaderFactory, glExtraFunctions);
-  whiteSquares->setUniformColor(Color::white);
-  whiteSquares->setTriangles(Eigen::Matrix3Xf());
+  m_whiteSquares->initialize(shaderFactory, glExtraFunctions);
+  m_whiteSquares->setUniformColor(Color::white);
+  m_whiteSquares->setTriangles(Eigen::Matrix3Xf());
 
-  axes->initialize(shaderFactory, glExtraFunctions);
+  m_axes->initialize(shaderFactory, glExtraFunctions);
 }
 
 void PainterCheckerBoard::draw(const Camera& camera) {
-  if (paintChecherboard) {
-    blackSquares->draw(camera);
-    whiteSquares->draw(camera);
+  if (m_paintChecherboard) {
+    m_blackSquares->draw(camera);
+    m_whiteSquares->draw(camera);
   }
-  if (paintAxes) {
-    axes->draw(camera);
+  if (m_paintAxes) {
+    m_axes->draw(camera);
   }
 }
 
 void PainterCheckerBoard::setCheckerBoard(int w, int h, float squareSize, const Eigen::Isometry3f& pose, float xBase, float yBase,
                                           float axesScale) {
-  paintChecherboard = true;
+  m_paintChecherboard = true;
 
   {
     Eigen::Matrix3Xf baseSquare(3, 6);
@@ -91,13 +91,13 @@ void PainterCheckerBoard::setCheckerBoard(int w, int h, float squareSize, const 
     squaresBlack.row(2).setConstant(0);
     squaresWhite.row(2).setConstant(0);
 
-    blackSquares->setTriangles(pose * squaresBlack);
-    whiteSquares->setTriangles(pose * squaresWhite);
+    m_blackSquares->setTriangles(pose * squaresBlack);
+    m_whiteSquares->setTriangles(pose * squaresWhite);
   }
 
   if (axesScale > 0) {
-    paintAxes = true;
-    axes->setPose(pose, axesScale);
+    m_paintAxes = true;
+    m_axes->setPose(pose, axesScale);
   }
 }
 

@@ -7,29 +7,29 @@
 
 namespace csVisOpenGL {
 
-const int PainterBox::_nColsBox = 6 * (3 * 2);
+static constexpr int N_COLS_BOX{6 * (3 * 2)};
 
 PainterBox::PainterBox()
-    : _renderer(new PerVertexMeshRenderer()) {
+    : m_renderer(new PerVertexMeshRenderer()) {
   resize(0);
 }
 
 PainterBox::~PainterBox() {}
 
 void PainterBox::initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
-  _renderer->initialize(shaderFactory, glExtraFunctions);
+  m_renderer->initialize(shaderFactory, glExtraFunctions);
   resize(0);
   apply();
 }
 
 void PainterBox::draw(const Camera& camera) {
-  _renderer->draw(camera);
+  m_renderer->draw(camera);
 }
 
 Eigen::Matrix3Xf PainterBox::createBoxTriangles(const double width, const double length, const double height) {
-  // box with center of mass in (x,y,z)=(0,0,0)
+  // box with center in (x,y,z)=(0,0,0)
 
-  Eigen::Matrix3Xf ret(3, _nColsBox);
+  Eigen::Matrix3Xf ret(3, N_COLS_BOX);
 
   const double X = width;
   const double Y = length;
@@ -98,23 +98,23 @@ Eigen::Matrix3Xf PainterBox::createBoxTriangles(const double width, const double
 }
 
 const int PainterBox::size() const {
-  return _size;
+  return m_size;
 }
 
 void PainterBox::insertBox(const int i, const Eigen::Matrix3Xf& box, const Eigen::Vector3f& color) {
-  assert(i < _size);
-  _boxes.block(0, i * _nColsBox, 3, _nColsBox) = box;
-  _colors.block(0, i * _nColsBox, 3, _nColsBox) = color.replicate(1, _nColsBox);
+  assert(i < m_size);
+  m_boxes.block(0, i * N_COLS_BOX, 3, N_COLS_BOX) = box;
+  m_colors.block(0, i * N_COLS_BOX, 3, N_COLS_BOX) = color.replicate(1, N_COLS_BOX);
 }
 
 void PainterBox::resize(const int n) {
-  _boxes = Eigen::Matrix3Xf(3, n * _nColsBox);
-  _colors = Eigen::Matrix3Xf(3, n * _nColsBox);
-  _size = n;
+  m_boxes = Eigen::Matrix3Xf(3, n * N_COLS_BOX);
+  m_colors = Eigen::Matrix3Xf(3, n * N_COLS_BOX);
+  m_size = n;
 }
 
 void PainterBox::apply() {
-  _renderer->setTriangles(_boxes, _colors);
+  m_renderer->setTriangles(m_boxes, m_colors);
 }
 
 } // namespace csVisOpenGL

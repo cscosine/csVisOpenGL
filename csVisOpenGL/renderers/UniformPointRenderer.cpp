@@ -8,8 +8,8 @@ namespace csVisOpenGL {
 
 UniformPointRenderer::UniformPointRenderer()
     : Renderer(ShaderFactory::ShaderNames::DiffuseUniform)
-    , pointSize(1)
-    , smoothPoints(false) {}
+    , m_pointSize(1)
+    , m_smoothPoints(false) {}
 
 UniformPointRenderer::~UniformPointRenderer() {}
 
@@ -18,11 +18,11 @@ void UniformPointRenderer::initializeConcrete() {
 }
 
 void UniformPointRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
-  glPointSize(pointSize);
+  glPointSize(m_pointSize);
 
   getShader().bind();
   {
-    if (smoothPoints)
+    if (m_smoothPoints)
       getQOpenGLExtraFunctions().glEnable(GL_POINT_SMOOTH);
     else
       getQOpenGLExtraFunctions().glDisable(GL_POINT_SMOOTH);

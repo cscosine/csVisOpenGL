@@ -12,12 +12,6 @@ class PerVertexMeshRenderer;
 
 class PainterBox {
 
-  std::unique_ptr<PerVertexMeshRenderer> _renderer;
-  Eigen::Matrix3Xf _boxes;
-  Eigen::Matrix3Xf _colors;
-  int _size;
-  const static int _nColsBox;
-
 public:
   PainterBox();
   virtual ~PainterBox();
@@ -34,6 +28,10 @@ public:
   static Eigen::Matrix3Xf createBoxTriangles(const double width, const double length, const double height);
 
 private:
+  std::unique_ptr<PerVertexMeshRenderer> m_renderer;
+  Eigen::Matrix3Xf m_boxes;
+  Eigen::Matrix3Xf m_colors;
+  int m_size;
 };
 
 } // namespace csVisOpenGL

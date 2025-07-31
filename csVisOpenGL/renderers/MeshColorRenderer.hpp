@@ -19,15 +19,12 @@ public:
     Light();
   };
 
-  bool cull;
-  std::vector<Light*> lights;
-
 public:
   MeshColorRenderer();
   virtual ~MeshColorRenderer();
 
   void setCullFaceEnabled(bool set) {
-    this->cull = set;
+    this->m_cull = set;
   }
 
   void setUniformColor(const Eigen::Vector4f& color);
@@ -39,17 +36,20 @@ public:
   void setTriangles(const Eigen::Matrix3Xf& positions, const Eigen::Matrix3Xf& normals, const Eigen::Matrix4Xf& colors);
 
   int getLightCount() const {
-    return int(lights.size());
+    return int(m_lights.size());
   }
   Light& getLight(int i) {
     assert(i >= 0);
-    assert(i < lights.size());
-    return *lights[i];
+    assert(i < m_lights.size());
+    return *m_lights[i];
   }
   void updateLight(int i);
 
 private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
+
+  bool m_cull;
+  std::vector<std::unique_ptr<Light>> m_lights;
 };
 } // namespace csVisOpenGL

@@ -2,7 +2,6 @@
 #include <csVisOpenGL/renderers/BackgroundSolidRenderer.hpp>
 
 #include <csVisOpenGL/ShaderFactory.hpp>
-#include <iostream>
 
 namespace csVisOpenGL {
 
@@ -16,17 +15,17 @@ void BackgroundSolidRenderer::setDefaultColor() {
 }
 
 void BackgroundSolidRenderer::setColor(const Eigen::Vector4f& color) {
-  this->color = color;
+  this->m_color = color;
 }
 
 void BackgroundSolidRenderer::setColor(const Eigen::Vector3f& color) {
-  this->color.head<3>() = color;
+  this->m_color.head<3>() = color;
 }
 
 void BackgroundSolidRenderer::initializeConcrete() {}
 
 void BackgroundSolidRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
-  glClearColor(color.x(), color.y(), color.z(), color.w());
+  glClearColor(m_color.x(), m_color.y(), m_color.z(), m_color.w());
   glClear(GL_COLOR_BUFFER_BIT);
 }
 

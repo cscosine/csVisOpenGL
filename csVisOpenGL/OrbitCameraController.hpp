@@ -40,47 +40,47 @@ private:
   Camera m_camera;
 
   // Speeds
-  float mouseMoveSpeed;
-  float keyboardMoveSpeed;
-  float moveSpeedScale;
-  float keyboardSpeedBoost;
-  float rotateSpeed;
-  float zoomSpeed;
-  float zoomSpeedScale;
-  float moveSmoothing;
-  float rotateSmoothing;
-  float zoomSmoothing;
+  float m_mouseMoveSpeed;
+  float m_keyboardMoveSpeed;
+  float m_moveSpeedScale;
+  float m_keyboardSpeedBoost;
+  float m_rotateSpeed;
+  float m_zoomSpeed;
+  float m_zoomSpeedScale;
+  float m_moveSmoothing;
+  float m_rotateSmoothing;
+  float m_zoomSmoothing;
 
   // Interpolation
-  Eigen::Vector3f pivotPos;
-  Eigen::Vector3f pivotPosDest;
-  Eigen::Vector3f ypr;
-  Eigen::Vector3f yprDest;
-  float radius;
-  float radiusDest;
-  float scale;
-  float scaleDest;
+  Eigen::Vector3f m_pivotPos;
+  Eigen::Vector3f m_pivotPosDest;
+  Eigen::Vector3f m_ypr;
+  Eigen::Vector3f m_yprDest;
+  float m_radius;
+  float m_radiusDest;
+  float m_scale;
+  float m_scaleDest;
 
   // Movement
-  Eigen::Vector3f dPivotPos;
-  Eigen::Vector3f dYpr;
-  float dRadius;
-  float dScale;
+  Eigen::Vector3f m_dPivotPos;
+  Eigen::Vector3f m_dYpr;
+  float m_dRadius;
+  float m_dScale;
 
   // Mouse state
-  QPointF lastMousePosition;
-  bool leftClicked;
-  bool rightClicked;
-  bool middleClicked;
+  QPointF m_lastMousePosition;
+  bool m_leftClicked;
+  bool m_rightClicked;
+  bool m_middleClicked;
 
   // limits
-  float minRadius, maxRadius;
-  float minScale, maxScale;
-  Eigen::Vector3f minPos;
-  Eigen::Vector3f maxPos;
+  float m_minRadius, m_maxRadius;
+  float m_minScale, m_maxScale;
+  Eigen::Vector3f m_minPos;
+  Eigen::Vector3f m_maxPos;
 
   // control enabled
-  Settings settings;
+  Settings m_settings;
 
   QSet<int> m_keysPressed;
   CameraControllerSignals m_cameraSignals;
@@ -119,64 +119,64 @@ public slots:
 
   // Pose getters
   const Eigen::Vector3f& getPivotPosition() const {
-    return pivotPos;
+    return m_pivotPos;
   }
   const Eigen::Vector3f& getYpr() const {
-    return ypr;
+    return m_ypr;
   }
   const Eigen::Vector3f& getYprDest() const {
-    return yprDest;
+    return m_yprDest;
   }
   float getRadius() const {
-    return radius;
+    return m_radius;
   }
 
   // General getters
   bool isLeftClicked() const {
-    return leftClicked;
+    return m_leftClicked;
   }
   bool isRightClicked() const {
-    return rightClicked;
+    return m_rightClicked;
   }
   bool isMiddleClicked() const {
-    return middleClicked;
+    return m_middleClicked;
   }
 
   float getMinRadius() {
-    return minRadius;
+    return m_minRadius;
   }
   float getMaxRadius() {
-    return maxRadius;
+    return m_maxRadius;
   }
   float getMinScale() {
-    return minScale;
+    return m_minScale;
   }
   float getMaxScale() {
-    return maxScale;
+    return m_maxScale;
   }
   const Eigen::Vector3f& getMinPos() {
-    return minPos;
+    return m_minPos;
   }
   const Eigen::Vector3f& getMaxPos() {
-    return maxPos;
+    return m_maxPos;
   }
 
   // limits
   void setMinRadius(float v) {
-    minRadius = v;
+    m_minRadius = v;
   }
   void setMaxRadius(float v) {
-    maxRadius = v;
+    m_maxRadius = v;
   }
   void setMinScale(float v) {
-    minScale = v;
+    m_minScale = v;
   }
   void setMaxScale(float v) {
-    maxScale = v;
+    m_maxScale = v;
   }
   void setScaleLimits(float m, float M) {
-    minScale = m;
-    maxScale = M;
+    m_minScale = m;
+    m_maxScale = M;
   }
   void setTraslationLimits(const Eigen::Vector3f& minPos, const Eigen::Vector3f& maxPos);
 
@@ -185,43 +185,43 @@ public slots:
 
   // Interaction setters
   void setMouseMoveSpeed(float moveSpeed) {
-    this->mouseMoveSpeed = moveSpeed;
+    this->m_mouseMoveSpeed = moveSpeed;
   }
   void setKeyboardMoveSpeed(float moveSpeed) {
-    this->keyboardMoveSpeed = moveSpeed;
+    this->m_keyboardMoveSpeed = moveSpeed;
   }
   void setMoveSpeedScale(float scale) {
-    this->moveSpeedScale = scale;
+    this->m_moveSpeedScale = scale;
   }
   void setKeyboardSpeedBoost(float boost) {
-    this->keyboardSpeedBoost = boost;
+    this->m_keyboardSpeedBoost = boost;
   }
   void setRotateSpeed(float rotateSpeed) {
-    this->rotateSpeed = rotateSpeed;
+    this->m_rotateSpeed = rotateSpeed;
   }
   void setZoomSpeed(float zoomSpeed) {
-    this->zoomSpeed = zoomSpeed;
+    this->m_zoomSpeed = zoomSpeed;
   }
   void setZoomSpeedScale(float scale) {
-    this->zoomSpeedScale = scale;
+    this->m_zoomSpeedScale = scale;
   }
   void setMoveSmoothing(float moveSmoothing) {
-    this->moveSmoothing = moveSmoothing;
+    this->m_moveSmoothing = moveSmoothing;
   }
   void setRotateSmoothing(float rotateSmoothing) {
-    this->rotateSmoothing = rotateSmoothing;
+    this->m_rotateSmoothing = rotateSmoothing;
   }
   void setZoomSmoothing(float zoomSmoothing) {
-    this->zoomSmoothing = zoomSmoothing;
+    this->m_zoomSmoothing = zoomSmoothing;
   }
   void setSmoothing(float smoothing) {
-    moveSmoothing = smoothing;
-    rotateSmoothing = smoothing;
-    zoomSmoothing = smoothing;
+    m_moveSmoothing = smoothing;
+    m_rotateSmoothing = smoothing;
+    m_zoomSmoothing = smoothing;
   }
 
   void setEnabledControls(const Settings& set) {
-    this->settings = set;
+    this->m_settings = set;
   }
 
 private:
@@ -246,17 +246,5 @@ private:
     m_camera.setFov(fov);
     emit m_cameraSignals.newCamera(m_camera);
   }
-
-signals:
-  void focusLost();
-  void leftPressed(QMouseEvent* pos);
-  void leftReleased(QMouseEvent* pos);
-  void leftDoubleClicked(QMouseEvent* pos);
-  void rightPressed(QMouseEvent* pos);
-  void rightReleased(QMouseEvent* pos);
-  void middlePressed(QMouseEvent* pos);
-  void middleReleased(QMouseEvent* pos);
-  void wheelScrolled(QWheelEvent* pos);
-  void mouseMove(QPointF globalPos, QPointF prevGlobalPos);
 };
 } // namespace csVisOpenGL

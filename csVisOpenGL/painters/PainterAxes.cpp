@@ -5,16 +5,16 @@
 namespace csVisOpenGL {
 
 PainterAxes::PainterAxes()
-    : renderer(new PerVertexLineRenderer()) {}
+    : m_renderer(std::make_unique<PerVertexLineRenderer>()) {}
 PainterAxes::~PainterAxes() {}
 
 void PainterAxes::initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
-  renderer->initialize(shaderFactory, glExtraFunctions);
-  renderer->setLines(Eigen::Matrix3Xf(3, 0), Eigen::Matrix3Xf(3, 0));
+  m_renderer->initialize(shaderFactory, glExtraFunctions);
+  m_renderer->setLines(Eigen::Matrix3Xf(3, 0), Eigen::Matrix3Xf(3, 0));
 }
 
 void PainterAxes::draw(const Camera& camera) {
-  renderer->draw(camera);
+  m_renderer->draw(camera);
 }
 
 void PainterAxes::setPose(const Eigen::Isometry3f& p, float size) {
@@ -37,7 +37,7 @@ void PainterAxes::setPose(const Eigen::Isometry3f& p, float size) {
   colors.col(4) = Eigen::Vector3f::UnitZ();
   colors.col(5) = Eigen::Vector3f::UnitZ();
 
-  renderer->setLines(lines, colors);
+  m_renderer->setLines(lines, colors);
 }
 
 void PainterAxes::setPoses(const std::vector<Eigen::Isometry3f>& ps, const Eigen::VectorXf& size) {
@@ -64,7 +64,7 @@ void PainterAxes::setPoses(const std::vector<Eigen::Isometry3f>& ps, const Eigen
     all_lines.col(col++) = p.translation() + p.matrix().col(2).head<3>() * size(i);
   }
 
-  renderer->setLines(all_lines, all_colors);
+  m_renderer->setLines(all_lines, all_colors);
 }
 
 void PainterAxes::setPoses(const std::vector<Eigen::Isometry3f>& ps, float size) {
@@ -91,7 +91,7 @@ void PainterAxes::setPoses(const std::vector<Eigen::Isometry3f>& ps, float size)
     all_lines.col(col++) = p.translation() + p.matrix().col(2).head<3>() * size;
   }
 
-  renderer->setLines(all_lines, all_colors);
+  m_renderer->setLines(all_lines, all_colors);
 }
 
 void PainterAxes::setPoses(const std::vector<Eigen::Isometry3f>& ps, std::vector<float> size) {
@@ -118,11 +118,11 @@ void PainterAxes::setPoses(const std::vector<Eigen::Isometry3f>& ps, std::vector
     all_lines.col(col++) = p.translation() + p.matrix().col(2).head<3>() * size[i];
   }
 
-  renderer->setLines(all_lines, all_colors);
+  m_renderer->setLines(all_lines, all_colors);
 }
 
 void PainterAxes::setLineWidth(float f) {
-  renderer->setLineWidth(f);
+  m_renderer->setLineWidth(f);
 }
 
 } // namespace csVisOpenGL

@@ -6,8 +6,6 @@ namespace csVisOpenGL {
 
 class SingleTextureRenderer : public Renderer {
 private:
-  GLuint texid;
-
 public:
   using Matrix3x4f = Eigen::Matrix<float, 3, 4>;
   using Matrix2x4f = Eigen::Matrix<float, 2, 4>;
@@ -22,15 +20,17 @@ public:
 
   void setTexture(GLuint texid, const Matrix3x4f& vertex, const Matrix2x4f& texCoord, TextureInterpolation ti);
   void resetTexture() {
-    texid = -1;
+    m_texid = -1;
   }
   GLuint textureId() const {
-    return texid;
+    return m_texid;
   }
 
 private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
+
+  GLuint m_texid;
 };
 
 } // namespace csVisOpenGL

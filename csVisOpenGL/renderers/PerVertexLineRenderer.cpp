@@ -8,7 +8,7 @@ namespace csVisOpenGL {
 
 PerVertexLineRenderer::PerVertexLineRenderer()
     : Renderer(ShaderFactory::ShaderNames::DiffusePerVertex)
-    , lineWidth(1) {}
+    , m_lineWidth(1) {}
 
 PerVertexLineRenderer::~PerVertexLineRenderer() {}
 
@@ -17,7 +17,7 @@ void PerVertexLineRenderer::initializeConcrete() {
 }
 
 void PerVertexLineRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
-  glLineWidth(lineWidth);
+  glLineWidth(m_lineWidth);
 
   getShader().bind();
   {

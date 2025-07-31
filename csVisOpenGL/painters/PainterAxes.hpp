@@ -11,7 +11,6 @@ class ShaderFactory;
 class Camera;
 
 class PainterAxes {
-  std::unique_ptr<PerVertexLineRenderer> renderer;
 
 public:
   PainterAxes();
@@ -26,5 +25,8 @@ public:
   void setPoses(const std::vector<Eigen::Isometry3f>& p, std::vector<float> size);
 
   void setLineWidth(float w);
+
+private:
+  std::unique_ptr<PerVertexLineRenderer> m_renderer;
 };
 } // namespace csVisOpenGL

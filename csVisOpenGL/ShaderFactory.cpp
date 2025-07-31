@@ -57,7 +57,7 @@ std::unique_ptr<Shader> ShaderFactory::createShader(ShaderNames shader) {
       if (!vertex->compileSourceCode(source))
 
       {
-        std::cout << vertexName.toStdString() << " shader compile error; " << vertex->log().toStdString() << std::endl;
+        std::cerr << vertexName.toStdString() << " shader compile error; " << vertex->log().toStdString() << std::endl;
         return nullptr;
       }
       m_vertexShaders[vertexName] = vertex;
@@ -82,7 +82,7 @@ std::unique_ptr<Shader> ShaderFactory::createShader(ShaderNames shader) {
 
       // if (!fragment->compileSourceFile(fragmentName))
       if (!fragment->compileSourceCode(source)) {
-        std::cout << fragmentName.toStdString() << " shader compile error: " << fragment->log().toStdString() << std::endl;
+        std::cerr << fragmentName.toStdString() << " shader compile error: " << fragment->log().toStdString() << std::endl;
         return nullptr;
       }
       m_fragmentShaders[fragmentName] = fragment;

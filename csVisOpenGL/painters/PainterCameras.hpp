@@ -12,10 +12,6 @@ class Camera;
 
 class PainterCameras {
 
-  std::unique_ptr<UniformLineRenderer> renderer;
-
-  static Eigen::Matrix3Xf _baselines;
-
 public:
   PainterCameras();
   virtual ~PainterCameras();
@@ -30,5 +26,10 @@ public:
 
   void setPose(const Eigen::Isometry3f& p, float sizex, float sizey, float sizez);
   void setPoses(const std::vector<Eigen::Isometry3f>& p, float sizex, float sizey, float sizez);
+
+private:
+  std::unique_ptr<UniformLineRenderer> m_renderer;
+
+  Eigen::Matrix3Xf m_baselines;
 };
 } // namespace csVisOpenGL

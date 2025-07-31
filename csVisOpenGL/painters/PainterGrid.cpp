@@ -5,8 +5,8 @@
 namespace csVisOpenGL {
 
 PainterGrid::PainterGrid()
-    : primaryRenderer(new UniformLineRenderer())
-    , secondaryRenderer(new UniformLineRenderer()) {}
+    : m_primaryRenderer(new UniformLineRenderer())
+    , m_secondaryRenderer(new UniformLineRenderer()) {}
 
 PainterGrid::~PainterGrid() {}
 
@@ -14,18 +14,18 @@ void PainterGrid::initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpen
   Eigen::Vector3f darkGray = Eigen::Vector3f::Ones() * 0.35f;
   Eigen::Vector3f lightGray = Eigen::Vector3f::Ones() * 0.65f;
 
-  primaryRenderer->initialize(shaderFactory, glExtraFunctions);
-  primaryRenderer->setUniformColor(lightGray);
-  primaryRenderer->setLineWidth(2);
-  secondaryRenderer->initialize(shaderFactory, glExtraFunctions);
-  secondaryRenderer->setUniformColor(darkGray);
+  m_primaryRenderer->initialize(shaderFactory, glExtraFunctions);
+  m_primaryRenderer->setUniformColor(lightGray);
+  m_primaryRenderer->setLineWidth(2);
+  m_secondaryRenderer->initialize(shaderFactory, glExtraFunctions);
+  m_secondaryRenderer->setUniformColor(darkGray);
 
   this->setGrid(Eigen::Isometry3f::Identity(), Eigen::Vector2f(10, 10), Eigen::Vector2i(9, 9));
 }
 
 void PainterGrid::draw(const Camera& camera) {
-  primaryRenderer->draw(camera);
-  secondaryRenderer->draw(camera);
+  m_primaryRenderer->draw(camera);
+  m_secondaryRenderer->draw(camera);
 }
 
 void PainterGrid::setGrid(const Eigen::Isometry3f& pose, const Eigen::Vector2f& size, const Eigen::Vector2i& steps) {
@@ -59,7 +59,7 @@ void PainterGrid::setGrid(const Eigen::Isometry3f& pose, const Eigen::Vector2f& 
   primaryLines.col(10) = Eigen::Vector3f(centerX, maxY, 0);
   primaryLines.col(11) = Eigen::Vector3f(centerX, minY, 0);
 
-  primaryRenderer->setLines(pose * primaryLines);
+  m_primaryRenderer->setLines(pose * primaryLines);
 
   // Create secondary lines
   int idx = 0;
@@ -71,6 +71,6 @@ void PainterGrid::setGrid(const Eigen::Isometry3f& pose, const Eigen::Vector2f& 
     secondaryLines.col(idx++) = Eigen::Vector3f(minX, minY + (i + 1) * dY, 0);
     secondaryLines.col(idx++) = Eigen::Vector3f(maxX, minY + (i + 1) * dY, 0);
   }
-  secondaryRenderer->setLines(pose * secondaryLines);
+  m_secondaryRenderer->setLines(pose * secondaryLines);
 }
 } // namespace csVisOpenGL

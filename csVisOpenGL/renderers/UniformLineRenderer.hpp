@@ -4,14 +4,13 @@
 
 namespace csVisOpenGL {
 class UniformLineRenderer : public Renderer {
-  GLfloat lineWidth;
 
 public:
   UniformLineRenderer();
   virtual ~UniformLineRenderer();
 
   void setLineWidth(float lineWidth) {
-    this->lineWidth = lineWidth;
+    this->m_lineWidth = lineWidth;
   }
 
   void setUniformColor(const Eigen::Vector4f& color);
@@ -21,5 +20,7 @@ public:
 private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
+
+  GLfloat m_lineWidth;
 };
 } // namespace csVisOpenGL

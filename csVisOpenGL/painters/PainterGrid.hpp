@@ -11,7 +11,6 @@ class ShaderFactory;
 class Camera;
 
 class PainterGrid {
-  std::unique_ptr<UniformLineRenderer> primaryRenderer, secondaryRenderer;
 
 public:
   PainterGrid();
@@ -21,5 +20,9 @@ public:
   void draw(const Camera& camera);
 
   void setGrid(const Eigen::Isometry3f& p, const Eigen::Vector2f& size, const Eigen::Vector2i& steps);
+
+private:
+  std::unique_ptr<UniformLineRenderer> m_primaryRenderer;
+  std::unique_ptr<UniformLineRenderer> m_secondaryRenderer;
 };
 } // namespace csVisOpenGL

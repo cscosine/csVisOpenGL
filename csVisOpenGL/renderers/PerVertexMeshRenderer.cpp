@@ -8,7 +8,7 @@ namespace csVisOpenGL {
 
 PerVertexMeshRenderer::PerVertexMeshRenderer()
     : Renderer(ShaderFactory::ShaderNames::DiffusePerVertex)
-    , cull(false) {}
+    , m_cull(false) {}
 
 PerVertexMeshRenderer::~PerVertexMeshRenderer() {}
 
@@ -17,7 +17,7 @@ void PerVertexMeshRenderer::initializeConcrete() {
 }
 
 void PerVertexMeshRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
-  if (cull)
+  if (m_cull)
     glEnable(GL_CULL_FACE);
   else
     glDisable(GL_CULL_FACE);

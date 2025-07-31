@@ -4,7 +4,6 @@
 
 namespace csVisOpenGL {
 class UniformMeshRenderer : public Renderer {
-  bool cull;
 
 public:
   UniformMeshRenderer();
@@ -15,11 +14,13 @@ public:
   void setTriangles(const Eigen::Matrix3Xf& positions);
 
   void setCullFaceEnabled(bool set) {
-    this->cull = set;
+    this->m_cull = set;
   }
 
 private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
+
+  bool m_cull;
 };
 } // namespace csVisOpenGL

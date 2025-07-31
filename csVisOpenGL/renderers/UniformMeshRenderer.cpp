@@ -8,7 +8,7 @@ namespace csVisOpenGL {
 
 UniformMeshRenderer::UniformMeshRenderer()
     : Renderer(ShaderFactory::ShaderNames::DiffuseUniform)
-    , cull(false) {}
+    , m_cull(false) {}
 
 UniformMeshRenderer::~UniformMeshRenderer() {}
 
@@ -17,7 +17,7 @@ void UniformMeshRenderer::initializeConcrete() {
 }
 
 void UniformMeshRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
-  if (cull)
+  if (m_cull)
     glEnable(GL_CULL_FACE);
   else
     glDisable(GL_CULL_FACE);

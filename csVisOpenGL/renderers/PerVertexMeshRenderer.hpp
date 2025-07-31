@@ -4,7 +4,6 @@
 
 namespace csVisOpenGL {
 class PerVertexMeshRenderer : public Renderer {
-  bool cull;
 
 public:
   PerVertexMeshRenderer();
@@ -17,11 +16,13 @@ public:
   void setTriangles(const Eigen::Matrix3Xf& positions, const Eigen::Matrix4Xf& colors);
 
   void setCullFaceEnabled(bool set) {
-    this->cull = set;
+    this->m_cull = set;
   }
 
 private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
+
+  bool m_cull;
 };
 } // namespace csVisOpenGL

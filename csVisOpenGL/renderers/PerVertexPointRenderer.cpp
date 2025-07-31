@@ -8,8 +8,8 @@ namespace csVisOpenGL {
 
 PerVertexPointRenderer::PerVertexPointRenderer()
     : Renderer(ShaderFactory::ShaderNames::DiffusePerVertex)
-    , pointSize(1)
-    , smoothPoints(false) {}
+    , m_pointSize(1)
+    , m_smoothPoints(false) {}
 
 PerVertexPointRenderer::~PerVertexPointRenderer() {}
 
@@ -18,11 +18,11 @@ void PerVertexPointRenderer::initializeConcrete() {
 }
 
 void PerVertexPointRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
-  glPointSize(pointSize);
+  glPointSize(m_pointSize);
 
   getShader().bind();
   {
-    if (smoothPoints)
+    if (m_smoothPoints)
       glEnable(GL_POINT_SMOOTH);
     else
       glDisable(GL_POINT_SMOOTH);

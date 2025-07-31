@@ -21,13 +21,13 @@ MeshColorRenderer::Light::Light()
 
 MeshColorRenderer::MeshColorRenderer()
     : Renderer(ShaderFactory::ShaderNames::MeshColor)
-    , cull(false) {}
+    , m_cull(false) {}
 
 MeshColorRenderer::~MeshColorRenderer() {}
 
 void MeshColorRenderer::initializeConcrete() {
   for (int i = 0; i < 10; i++)
-    lights.push_back(new Light());
+    m_lights.push_back(std::make_unique<Light>());
   for (int i = 0; i < 10; i++)
     updateLight(i);
 
@@ -35,14 +35,14 @@ void MeshColorRenderer::initializeConcrete() {
   setMaterialShininess(30.0f);
   setMaterialSpecularIntensity(0.9f);
 
-  lights[0]->enabled = true;
-  lights[0]->dir = -Eigen::Vector3f::Ones().normalized();
-  lights[0]->spot = false;
+  m_lights[0]->enabled = true;
+  m_lights[0]->dir = -Eigen::Vector3f::Ones().normalized();
+  m_lights[0]->spot = false;
   updateLight(0);
 }
 
 void MeshColorRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
-  if (cull)
+  if (m_cull)
     glEnable(GL_CULL_FACE);
   else
     glDisable(GL_CULL_FACE);
@@ -83,24 +83,25 @@ void MeshColorRenderer::setMaterialSpecularIntensity(float specular) {
 }
 
 void MeshColorRenderer::updateLight(int i) {
-  if (i < 0 || i >= lights.size())
+  if (i < 0 || i >= m_lights.size())
     return;
 
   QString lightBaseLocation = QString("lights[%1].").arg(i);
   getShader().bind();
-  getShader().getProgram().setUniformValue((lightBaseLocation + "enabled").toStdString().c_str(), lights[i]->enabled);
-  getShader().getProgram().setUniformValue((lightBaseLocation + "position").toStdString().c_str(), lights[i]->position.x(),
-                                           lights[i]->position.y(), lights[i]->position.z());
-  getShader().getProgram().setUniformValue((lightBaseLocation + "dir").toStdString().c_str(), lights[i]->dir.x(), lights[i]->dir.y(),
-                                           lights[i]->dir.z());
-  getShader().getProgram().setUniformValue((lightBaseLocation + "color").toStdString().c_str(), lights[i]->color.x(),
-                                           lights[i]->color.y(), lights[i]->color.z());
-  getShader().getProgram().setUniformValue((lightBaseLocation + "spot").toStdString().c_str(), lights[i]->spot);
-  getShader().getProgram().setUniformValue((lightBaseLocation + "specularEnabled").toStdString().c_str(), lights[i]->specularEnabled);
-  getShader().getProgram().setUniformValue((lightBaseLocation + "attenuation").toStdString().c_str(), lights[i]->attenuation);
+  getShader().getProgram().setUniformValue((lightBaseLocation + "enabled").toStdString().c_str(), m_lights[i]->enabled);
+  getShader().getProgram().setUniformValue((lightBaseLocation + "position").toStdString().c_str(), m_lights[i]->position.x(),
+                                           m_lights[i]->position.y(), m_lights[i]->position.z());
+  getShader().getProgram().setUniformValue((lightBaseLocation + "dir").toStdString().c_str(), m_lights[i]->dir.x(),
+                                           m_lights[i]->dir.y(), m_lights[i]->dir.z());
+  getShader().getProgram().setUniformValue((lightBaseLocation + "color").toStdString().c_str(), m_lights[i]->color.x(),
+                                           m_lights[i]->color.y(), m_lights[i]->color.z());
+  getShader().getProgram().setUniformValue((lightBaseLocation + "spot").toStdString().c_str(), m_lights[i]->spot);
+  getShader().getProgram().setUniformValue((lightBaseLocation + "specularEnabled").toStdString().c_str(),
+                                           m_lights[i]->specularEnabled);
+  getShader().getProgram().setUniformValue((lightBaseLocation + "attenuation").toStdString().c_str(), m_lights[i]->attenuation);
   getShader().getProgram().setUniformValue((lightBaseLocation + "ambientCoefficient").toStdString().c_str(),
-                                           lights[i]->ambientCoefficient);
-  getShader().getProgram().setUniformValue((lightBaseLocation + "coneAngle").toStdString().c_str(), lights[i]->coneAngle);
+                                           m_lights[i]->ambientCoefficient);
+  getShader().getProgram().setUniformValue((lightBaseLocation + "coneAngle").toStdString().c_str(), m_lights[i]->coneAngle);
   getShader().release();
 }
 

@@ -4,18 +4,16 @@
 
 namespace csVisOpenGL {
 class PerVertexPointRenderer : public Renderer {
-  GLfloat pointSize;
-  bool smoothPoints;
 
 public:
   PerVertexPointRenderer();
   virtual ~PerVertexPointRenderer();
 
   void setPointSize(float pointSize) {
-    this->pointSize = pointSize;
+    this->m_pointSize = pointSize;
   }
   void setSmoothPoints(bool set) {
-    this->smoothPoints = set;
+    this->m_smoothPoints = set;
   }
 
   void setUniformColor(const Eigen::Vector4f& color);
@@ -28,5 +26,8 @@ public:
 private:
   virtual void initializeConcrete() override;
   virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
+
+  GLfloat m_pointSize;
+  bool m_smoothPoints;
 };
 } // namespace csVisOpenGL
