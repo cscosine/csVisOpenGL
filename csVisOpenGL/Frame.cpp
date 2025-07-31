@@ -1,7 +1,7 @@
+#include "csVisOpenGL/CameraControllerSlots.hpp"
 #include <QPainter>
 #include <QtGui/QOpenGLFunctions>
 #include <csVisOpenGL/Camera.hpp>
-#include <csVisOpenGL/CameraController.hpp>
 #include <csVisOpenGL/Frame.hpp>
 #include <csVisOpenGL/FrameSlotsInterface.hpp>
 #include <csVisOpenGL/VisualizerInterface.hpp>
@@ -16,17 +16,20 @@
 
 namespace csVisOpenGL {
 
+void Frame::CameraState::onNewCamera(Camera const& camera) {
+  std::cout << "CameraState onNewCamera" << std::endl;
+  m_camera = camera;
+}
+
 // --------------------------------------------------------------------------------------------------------------
 
 Frame::Frame(QWidget* parent)
     : QOpenGLWidget(parent)
     , m_openGLExtraFunctions{std::make_unique<QOpenGLExtraFunctions>()}
-    , m_cameraController(nullptr)
     , m_shaderFactory{std::make_unique<ShaderFactory>()}
     , m_visualizers{}
     , m_initialized(false)
-    , m_lastRenderTime{std::chrono::steady_clock::now()} // unsorted
-{
+    , m_cameraState() {
   setMinimumSize(300, 200);
   setMouseTracking(true);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -41,6 +44,10 @@ Frame::~Frame() {
 // -------------------------------------------------- Visualizers -------------------------------------------------
 void Frame::connectSlotsInterface(FrameSlotsInterface const& frameSlots) const {
   FrameSlotsInterface::connect(m_frameSignals, frameSlots);
+}
+
+void Frame::connectCameraControllerSignals(CameraControllerSignals const& cameraSignals) const {
+  CameraControllerSlots::connect(cameraSignals, m_cameraState);
 }
 
 void Frame::addVisualizer(std::shared_ptr<VisualizerInterface> const& visualizer) {
@@ -71,7 +78,8 @@ void Frame::initializeGL() {
 
   // Initialize timers
   this->startTimer(40);
-  m_lastRenderTime = std::chrono::steady_clock::now();
+
+  emit m_frameSignals.initializeGL();
 
   // Done
   m_initialized = true;
@@ -85,11 +93,6 @@ void Frame::paintGL() {
   if (!m_initialized)
     return;
 
-  // Get time since last paint
-  auto t_now = std::chrono::steady_clock::now();
-  float const deltaTime = std::chrono::duration<float>(t_now - m_lastRenderTime).count();
-  m_lastRenderTime = t_now;
-
   // Create a Qt Painter
   QPainter painter;
   if (!painter.begin(this))
@@ -97,12 +100,14 @@ void Frame::paintGL() {
   painter.setRenderHint(QPainter::Antialiasing);
   painter.beginNativePainting();
 
-  // Update camera
-  Camera const& camera = m_cameraController->getUpdatedCamera(deltaTime);
+  // here give the possibility of updating the camera
+  std::cout << "Frame::paintGL" << std::endl;
+  emit m_frameSignals.paintGL();
+  std::cout << "Frame::paintGL done" << std::endl;
 
   // Update visualizers
   for (int i = 0; i < m_visualizers.size(); i++) {
-    m_visualizers[i]->update(camera);
+    m_visualizers[i]->update(m_cameraState.getCamera());
   }
 
   // Draw
@@ -112,13 +117,13 @@ void Frame::paintGL() {
   // Background
   glDisable(GL_DEPTH_TEST);
   for (int i = 0; i < m_visualizers.size(); i++) {
-    m_visualizers[i]->paintBackground(camera);
+    m_visualizers[i]->paintBackground(m_cameraState.getCamera());
   }
 
   // Solid
   glEnable(GL_DEPTH_TEST);
   for (int i = 0; i < m_visualizers.size(); i++) {
-    m_visualizers[i]->paint(camera);
+    m_visualizers[i]->paint(m_cameraState.getCamera());
   }
 
   // Transparent
@@ -126,7 +131,7 @@ void Frame::paintGL() {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   for (int i = 0; i < m_visualizers.size(); i++) {
-    m_visualizers[i]->paintTransparent(camera);
+    m_visualizers[i]->paintTransparent(m_cameraState.getCamera());
   }
   glDepthMask(true);
   glDisable(GL_BLEND);
@@ -136,11 +141,11 @@ void Frame::paintGL() {
   painter.endNativePainting();
   painter.save();
   painter.setClipping(true);
-  painter.setClipRect(QRect(0, 0, camera.getViewSize().x(), camera.getViewSize().y()));
+  painter.setClipRect(QRect(0, 0, m_cameraState.getCamera().getViewSize().x(), m_cameraState.getCamera().getViewSize().y()));
   painter.translate(QPoint(0, 0));
 
   for (int i = 0; i < m_visualizers.size(); i++) {
-    m_visualizers[i]->paintQt(camera, painter);
+    m_visualizers[i]->paintQt(m_cameraState.getCamera(), painter);
   }
 
   painter.restore();
@@ -152,7 +157,7 @@ void Frame::paintGL() {
   // after
   // glFlush();
   for (int i = 0; i < m_visualizers.size(); i++) {
-    m_visualizers[i]->afterPaint(camera);
+    m_visualizers[i]->afterPaint(m_cameraState.getCamera());
   }
 }
 
@@ -160,7 +165,7 @@ void Frame::resizeGL(int width, int height) {
   // glMatrixMode(GL_PROJECTION);
   // glLoadIdentity();
   glViewport(0, 0, width, height);
-  m_cameraController->setViewSize(Eigen::Vector2f(width, height));
+  emit m_frameSignals.resizeGL(width, height);
 }
 
 // ---------------------------------------------------- Events ----------------------------------------------------

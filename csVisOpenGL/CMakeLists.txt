@@ -28,7 +28,8 @@ cs_find_package(csVisOpenGL PUBLIC OpenGL REQUIRED)
 
 cs_target_sources(csVisOpenGL
 	PRIVATE_INSTALL
-CameraController.hpp
+CameraControllerSignals.hpp
+CameraControllerSlots.hpp
 Camera.hpp
 Colors.hpp
 ColorUtils.hpp
@@ -43,7 +44,6 @@ Vao.hpp
 VisualizerInterface.hpp
 TexturesManager.hpp
 PRIVATE
-CameraController.cpp
 Camera.cpp
 Colors.cpp
 ColorUtils.cpp
@@ -56,6 +56,8 @@ Shader.cpp
 ShaderFactory.cpp
 TexturesManager.cpp
 Vao.cpp
+CameraControllerSignals.cpp
+CameraControllerSlots.cpp
 # resources
 vis.qrc
 		)

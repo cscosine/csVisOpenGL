@@ -24,6 +24,10 @@ public slots:
   virtual void onMouseDoubleClick(QMouseEvent& eventevent) = 0;
   virtual void onWheelEvent(QWheelEvent& eventevent) = 0;
 
+  virtual void onResizeGL(int width, int height) = 0;
+  virtual void onPaintGL() = 0;
+  virtual void onInitializeGL() = 0;
+
 public:
   static void connect(FrameSignals const& frameSignals, FrameSlotsInterface const& frameSlots);
 };

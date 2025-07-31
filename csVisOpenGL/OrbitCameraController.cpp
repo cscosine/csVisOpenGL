@@ -8,6 +8,8 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 
+#include <iostream>
+
 namespace csVisOpenGL {
 
 const float OrbitCameraController::defaultMouseMoveSpeed = 0.0015f;
@@ -20,7 +22,8 @@ const float OrbitCameraController::defaultRotateSmoothing = 0.2f;
 const float OrbitCameraController::defaultZoomSmoothing = 0.2f;
 
 OrbitCameraController::OrbitCameraController()
-    : CameraController()
+    : FrameSlotsInterface()
+    , m_camera()
     , pivotPos(m_camera.getPose().translation())
     , pivotPosDest(pivotPos)
     , radius(0)
@@ -56,6 +59,7 @@ OrbitCameraController::OrbitCameraController()
           Eigen::Vector3f(Eigen::NumTraits<float>::highest(), Eigen::NumTraits<float>::highest(), Eigen::NumTraits<float>::highest()))
     , settings(Settings())
     , m_keysPressed{}
+    , m_lastRenderTime{std::chrono::steady_clock::now()}
 
 {}
 
@@ -151,6 +155,22 @@ void OrbitCameraController::onWheelEvent(QWheelEvent& event) {
   }
 }
 
+void OrbitCameraController::onResizeGL(int width, int height) {
+  std::cout << "OrbitCameraController::onResizeGL" << std::endl;
+  m_camera.setViewSize(Eigen::Vector2f(width, height));
+  std::cout << "OrbitCameraController::onResizeGL emit newCamera" << std::endl;
+  emit m_cameraSignals.newCamera(m_camera);
+  std::cout << "OrbitCameraController::onResizeGL done" << std::endl;
+}
+
+void OrbitCameraController::onInitializeGL() {
+  std::cout << "OrbitCameraController::onInitializeGL" << std::endl;
+  m_lastRenderTime = std::chrono::steady_clock::now();
+  std::cout << "OrbitCameraController::onInitializeGL emit newCamera" << std::endl;
+  emit m_cameraSignals.newCamera(m_camera);
+  std::cout << "OrbitCameraController::onInitializeGL done" << std::endl;
+}
+
 // ----------------------------------------- Update
 
 void OrbitCameraController::resetDestinations() {
@@ -159,7 +179,13 @@ void OrbitCameraController::resetDestinations() {
   scaleDest = scale;
 }
 
-Camera const& OrbitCameraController::getUpdatedCamera(float dT) {
+void OrbitCameraController::onPaintGL() {
+  std::cout << "OrbitCameraController::onPaintGL" << std::endl;
+  // Get time since last paint
+  auto t_now = std::chrono::steady_clock::now();
+  float const dT = std::chrono::duration<float>(t_now - m_lastRenderTime).count();
+  m_lastRenderTime = t_now;
+
   // Keyboard input
   float speedBoost = 1;
   QPointF keyDelta;
@@ -250,7 +276,9 @@ Camera const& OrbitCameraController::getUpdatedCamera(float dT) {
   dRadius = 0;
   dScale = 0;
 
-  return m_camera;
+  std::cout << "OrbitCameraController::onPaintGL emit newCamera" << std::endl;
+  emit m_cameraSignals.newCamera(m_camera);
+  std::cout << "OrbitCameraController::onPaintGL dobe" << std::endl;
 }
 
 void OrbitCameraController::normalizeYpr(Eigen::Vector3f& ypr) const {
@@ -332,11 +360,14 @@ void OrbitCameraController::setTraslationLimits(const Eigen::Vector3f& minPos, c
 }
 
 void OrbitCameraController::setCameraOrthogonal() {
-  CameraController::setCameraOrthogonal();
+  m_camera.setOrthogonal();
+  emit m_cameraSignals.newCamera(m_camera);
 }
+
 void OrbitCameraController::setCameraPerspective(float fovDeg) {
   setCameraFov(fovDeg);
   this->setScale(1.0, false);
+  emit m_cameraSignals.newCamera(m_camera);
 }
 
 } // namespace csVisOpenGL

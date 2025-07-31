@@ -17,6 +17,10 @@ void FrameSlotsInterface::connect(FrameSignals const& frameSignals, FrameSlotsIn
   QObject::connect(&frameSignals, &FrameSignals::mouseReleaseEvent, &frameSlots, &FrameSlotsInterface::onMouseReleaseEvent);
   QObject::connect(&frameSignals, &FrameSignals::mouseDoubleClick, &frameSlots, &FrameSlotsInterface::onMouseDoubleClick);
   QObject::connect(&frameSignals, &FrameSignals::wheelEvent, &frameSlots, &FrameSlotsInterface::onWheelEvent);
+
+  QObject::connect(&frameSignals, &FrameSignals::initializeGL, &frameSlots, &FrameSlotsInterface::onInitializeGL);
+  QObject::connect(&frameSignals, &FrameSignals::paintGL, &frameSlots, &FrameSlotsInterface::onPaintGL);
+  QObject::connect(&frameSignals, &FrameSignals::resizeGL, &frameSlots, &FrameSlotsInterface::onResizeGL);
 }
 
 } // namespace csVisOpenGL

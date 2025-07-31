@@ -4,10 +4,12 @@
 #include <Eigen/Core>
 #include <QObject>
 #include <QPoint>
-#include <csVisOpenGL/CameraController.hpp>
+#include <QSet>
+#include <csVisOpenGL/Camera.hpp>
+#include <csVisOpenGL/CameraControllerSignals.hpp>
 
 namespace csVisOpenGL {
-class OrbitCameraController : public CameraController, public FrameSlotsInterface {
+class OrbitCameraController : public FrameSlotsInterface {
 
 public:
   struct Settings {
@@ -20,6 +22,9 @@ public:
         , enableTrasl(true)
         , enableScale(true) {}
   };
+  CameraControllerSignals const& getCameraControllerSignals() const {
+    return m_cameraSignals;
+  }
 
 private:
   // Default speeds
@@ -31,6 +36,8 @@ private:
   static const float defaultMoveSmoothing;
   static const float defaultRotateSmoothing;
   static const float defaultZoomSmoothing;
+
+  Camera m_camera;
 
   // Speeds
   float mouseMoveSpeed;
@@ -76,16 +83,12 @@ private:
   Settings settings;
 
   QSet<int> m_keysPressed;
+  CameraControllerSignals m_cameraSignals;
+  std::chrono::steady_clock::time_point m_lastRenderTime;
 
 public:
   OrbitCameraController();
   virtual ~OrbitCameraController();
-
-  Camera const& getUpdatedCamera(float dT) override;
-
-  Camera const& getCamera() const {
-    return m_camera;
-  }
 
   // Controller interface
 public slots:
@@ -97,6 +100,10 @@ public slots:
   void onMouseReleaseEvent(QMouseEvent& eventevent) override;
   void onMouseDoubleClick(QMouseEvent& eventevent) override;
   void onWheelEvent(QWheelEvent& eventevent) override;
+
+  void onResizeGL(int width, int height) override;
+  void onPaintGL() override;
+  void onInitializeGL() override;
 
   // camera direct control
   void setCameraOrthogonal();
@@ -219,6 +226,26 @@ public slots:
 
 private:
   void normalizeYpr(Eigen::Vector3f& ypr) const;
+
+  void setCameraPose(Eigen::Isometry3f const& pose) {
+    m_camera.setPose(pose);
+    emit m_cameraSignals.newCamera(m_camera);
+  }
+
+  void setCameraScale(float scale) {
+    m_camera.setScale(scale);
+    emit m_cameraSignals.newCamera(m_camera);
+  }
+
+  void setCameraClippingPlanes(float zNear, float zFar) {
+    m_camera.setClippingPlanes(zNear, zFar);
+    emit m_cameraSignals.newCamera(m_camera);
+  }
+
+  void setCameraFov(float fov) {
+    m_camera.setFov(fov);
+    emit m_cameraSignals.newCamera(m_camera);
+  }
 
 signals:
   void focusLost();

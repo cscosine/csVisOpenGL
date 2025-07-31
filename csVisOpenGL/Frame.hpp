@@ -8,6 +8,8 @@
 #include <qevent.h>
 #include <qtmetamacros.h>
 
+#include <csVisOpenGL/Camera.hpp>
+#include <csVisOpenGL/CameraControllerSlots.hpp>
 #include <csVisOpenGL/FrameSignals.hpp>
 
 namespace csVisOpenGL {
@@ -20,16 +22,32 @@ class FrameSlotsInterface;
 
 class Frame : public QOpenGLWidget {
 
+  class CameraState : public CameraControllerSlots {
+  public:
+    CameraState()
+        : m_camera() {}
+    void onNewCamera(Camera const& camera);
+
+    Camera const& getCamera() const {
+      return m_camera;
+    };
+
+  private:
+    Camera m_camera;
+  };
+
 public:
   Frame(QWidget* parent = 0);
   virtual ~Frame();
   // ------------- Visualizers
   void addVisualizer(std::shared_ptr<VisualizerInterface> const& visualizer);
-  void setCameraController(std::shared_ptr<CameraControllerInterface> const& cameraController) {
-    m_cameraController = cameraController;
-  }
 
   void connectSlotsInterface(FrameSlotsInterface const& frameSlots) const;
+  void connectCameraControllerSignals(CameraControllerSignals const& cameraSignals) const;
+
+  Camera const& getCamera() const {
+    return m_cameraState.getCamera();
+  };
 
   FrameSignals const& getFrameSignals() const {
     return m_frameSignals;
@@ -54,11 +72,10 @@ private:
   void wheelEvent(QWheelEvent* event) override;
 
   std::shared_ptr<QOpenGLExtraFunctions> const m_openGLExtraFunctions;
-  std::shared_ptr<CameraControllerInterface> m_cameraController;
   std::unique_ptr<ShaderFactory> const m_shaderFactory;
   std::vector<std::shared_ptr<VisualizerInterface>> m_visualizers;
   bool m_initialized;
-  std::chrono::steady_clock::time_point m_lastRenderTime;
   FrameSignals m_frameSignals;
+  CameraState const m_cameraState;
 };
 } // namespace csVisOpenGL

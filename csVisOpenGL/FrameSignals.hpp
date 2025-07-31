@@ -22,6 +22,10 @@ signals:
   void mouseDoubleClick(QMouseEvent& event);
   void wheelEvent(QWheelEvent& event);
 
+  void paintGL();
+  void initializeGL();
+  void resizeGL(int width, int height);
+
 public:
   static void connect(FrameSignals const& frameSignals, FrameSignals const& frameSignalsForward);
 };

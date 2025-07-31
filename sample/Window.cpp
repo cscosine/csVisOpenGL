@@ -20,8 +20,8 @@ Window::Window(QWidget* parent)
 
   ui->setupUi(this);
 
-  ui->preview->setCameraController(m_cameraController);
   ui->preview->connectSlotsInterface(*m_cameraController);
+  ui->preview->connectCameraControllerSignals(m_cameraController->getCameraControllerSignals());
 
   vis = std::make_shared<TestcsVisOpenGL>();
   vis->bkgSolid = ui->radioButtonBkgSolid->isChecked();

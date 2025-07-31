@@ -16,6 +16,10 @@ void FrameSignals::connect(FrameSignals const& frameSignals, FrameSignals const&
   QObject::connect(&frameSignals, &FrameSignals::mouseReleaseEvent, &frameSignalsForward, &FrameSignals::mouseReleaseEvent);
   QObject::connect(&frameSignals, &FrameSignals::mouseDoubleClick, &frameSignalsForward, &FrameSignals::mouseDoubleClick);
   QObject::connect(&frameSignals, &FrameSignals::wheelEvent, &frameSignalsForward, &FrameSignals::wheelEvent);
+
+  QObject::connect(&frameSignals, &FrameSignals::initializeGL, &frameSignalsForward, &FrameSignals::initializeGL);
+  QObject::connect(&frameSignals, &FrameSignals::paintGL, &frameSignalsForward, &FrameSignals::paintGL);
+  QObject::connect(&frameSignals, &FrameSignals::resizeGL, &frameSignalsForward, &FrameSignals::resizeGL);
 }
 
 } // namespace csVisOpenGL
