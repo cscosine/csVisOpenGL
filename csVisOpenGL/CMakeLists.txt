@@ -77,7 +77,7 @@ cs_target_link_libraries(csVisOpenGL
 		Qt6::OpenGLWidgets
 		OpenGL::GL
 		csVisOpenGL::csVisOpenGLAssert
-		csVisOpenGLLib::csVisOpenGLLib_csCMakeBaseInclude
+		csVisOpenGLSol::csVisOpenGLSol_csCMakeBaseInclude
 
 )
 
