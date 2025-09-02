@@ -78,6 +78,7 @@ cs_target_link_libraries(csVisOpenGL
 		OpenGL::GL
 		csVisOpenGL::csVisOpenGLAssert
 		csVisOpenGLSol::csVisOpenGLSol_csCMakeBaseInclude
+		csVisOpenGLSol::csVisOpenGLSol_csCMakeCompileOptionsDefault
 
 )
 
