@@ -41,14 +41,14 @@ Eigen::Vector3f ColorUtils::gradientGreenToRed(float v, float min, float max, bo
     int h = 359.0f - vr * 239.0f;
     return fromHSV(h, 255, 255);
   } else {
-    int h = vr * 119.0f;
+    int h = vr * 119.f;
     return fromHSV(h, 255, 255);
   }
 }
 
 Eigen::Matrix3Xf ColorUtils::gradientBlueToGreen(const std::vector<double>& v, float min, float max) {
   Eigen::Matrix3Xf mat(3, v.size());
-  for (int i = 0; i < v.size(); i++) {
+  for (size_t i = 0; i < v.size(); i++) {
     mat.col(i) = gradientBlueToGreen(v[i], min, max);
   }
   return mat;

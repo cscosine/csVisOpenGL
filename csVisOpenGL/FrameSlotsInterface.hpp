@@ -12,7 +12,7 @@ namespace csVisOpenGL {
 class FrameSignals;
 
 class FrameSlotsInterface : public QObject {
-  Q_OBJECT;
+  Q_OBJECT
 
 public slots:
   virtual void onFocusOutEvent(QFocusEvent& eventevent) = 0;

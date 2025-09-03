@@ -38,7 +38,8 @@ UniformPointRenderer.cpp
 cs_target_link_libraries(renderers
 	PUBLIC
 		csVisOpenGL::csVisOpenGL
-
+	PRIVATE
+		csVisOpenGLSol::csVisOpenGLSol_csCMakeCompileOptionsDefault
 )
 
 cs_install_target(renderers renderers DEFAULT)

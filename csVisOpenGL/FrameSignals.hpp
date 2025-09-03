@@ -9,7 +9,7 @@ class QWheelEvent;
 namespace csVisOpenGL {
 
 class FrameSignals : public QObject {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
 signals:

@@ -7,7 +7,7 @@ namespace csVisOpenGL {
 class Camera;
 
 class CameraControllerSignals : public QObject {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
 signals:

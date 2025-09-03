@@ -9,7 +9,7 @@ class Camera;
 class CameraControllerSignals;
 
 class CameraControllerSlots : public QObject {
-  Q_OBJECT;
+  Q_OBJECT
 public slots:
   virtual void onNewCamera(Camera const& camera) = 0;
 

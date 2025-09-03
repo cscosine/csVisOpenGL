@@ -9,7 +9,7 @@ class Window;
 }
 
 class Window : public QMainWindow {
-  Q_OBJECT;
+  Q_OBJECT
 
   std::unique_ptr<Ui::Window> ui;
   std::shared_ptr<TestcsVisOpenGL> vis;

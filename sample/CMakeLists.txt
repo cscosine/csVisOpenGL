@@ -21,6 +21,8 @@ cs_target_link_libraries(csVisOpenGLSample
 		csVisOpenGL::csVisOpenGL
 		csVisOpenGL::renderers
 		csVisOpenGL::painters
+	PRIVATE
+		csVisOpenGLSol::csVisOpenGLSol_csCMakeCompileOptionsDefault
 )
 
 cs_install_target(csVisOpenGLSample csVisOpenGLSample)
