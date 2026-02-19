@@ -1,7 +1,10 @@
 project(csVisOpenGLSample LANGUAGES CXX)
 
+
 # prepare application
 cs_add_executable(csVisOpenGLSample)
+
+cs_find_package(csVisOpenGLSample PUBLIC Qt6 COMPONENTS Widgets REQUIRED CONFIG)
 
 cs_target_sources(csVisOpenGLSample
 	PRIVATE
