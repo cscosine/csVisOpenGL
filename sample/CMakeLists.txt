@@ -28,6 +28,4 @@ cs_target_link_libraries(csVisOpenGLSample
 		csVisOpenGLSol::csVisOpenGLSol_csCMakeCompileOptionsDefault
 )
 
-cs_install_target(csVisOpenGLSample csVisOpenGLSample)
-
 cs_finalize_target(csVisOpenGLSample)
