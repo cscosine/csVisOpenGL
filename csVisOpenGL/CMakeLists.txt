@@ -77,10 +77,7 @@ cs_target_link_libraries(csVisOpenGL
 		Qt6::OpenGLWidgets
 		OpenGL::GL
 		csVisOpenGL::csVisOpenGLAssert
-		csVisOpenGLSol::csVisOpenGLSol_csCMakeBaseInclude
-	PRIVATE
-		csVisOpenGLSol::csVisOpenGLSol_csCMakeCompileOptionsDefault
-
+		csVisOpenGL::cscmake_base_include
 )
 
 cs_install_target(csVisOpenGL csVisOpenGL DEFAULT)

@@ -4,7 +4,7 @@ project(csVisOpenGLSample LANGUAGES CXX)
 # prepare application
 cs_add_executable(csVisOpenGLSample)
 
-cs_find_package(csVisOpenGLSample PUBLIC Qt6 COMPONENTS Widgets REQUIRED CONFIG)
+cs_find_package(csVisOpenGLSample PRIVATE Qt6 COMPONENTS Widgets REQUIRED CONFIG)
 
 cs_target_sources(csVisOpenGLSample
 	PRIVATE
@@ -24,8 +24,8 @@ cs_target_link_libraries(csVisOpenGLSample
 		csVisOpenGL::csVisOpenGL
 		csVisOpenGL::renderers
 		csVisOpenGL::painters
-	PRIVATE
-		csVisOpenGLSol::csVisOpenGLSol_csCMakeCompileOptionsDefault
 )
+
+# a sample: built, not installed
 
 cs_finalize_target(csVisOpenGLSample)
