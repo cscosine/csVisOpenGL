@@ -25,8 +25,6 @@ cs_target_link_libraries(painters
 	PUBLIC
 		csVisOpenGL::csVisOpenGL
 		csVisOpenGL::renderers
-	PRIVATE
-		csVisOpenGLSol::csVisOpenGLSol_csCMakeCompileOptionsDefault
 )
 
 cs_install_target(painters painters DEFAULT)

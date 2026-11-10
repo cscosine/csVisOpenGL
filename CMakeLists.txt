@@ -4,14 +4,13 @@ project(csVisOpenGLSol VERSION 1.0.0 LANGUAGES CXX)
 # add the csCMake system
 include(csCMake)
 
-cs_initialize_project(csVisOpenGLSol CXX_STANDARD 17
-    # add the default configurations supported by this project
-    DEFAULT_CONFIG Debug
-    DEFAULT_CONFIG Release
+cs_initialize_project(
+    NAMESPACE csVisOpenGL
+    CXX_STANDARD 17
+    # the default configurations supported by this project
+    DEFAULT_CONFIG Debug Release
     DEFAULT_CONFIG_MAPPED RelWithDebInfo MAPPED_TO "RelWithDebInfo,Release,"
-    # and the custom configurations supported by this project,
-    # specifiying on which base configuration they are based as second value,
-    # e.g. CUSTOM_CONFIG Paranoid Debug
+    # a custom configuration, based on Debug (imported targets: Debug, else Release)
     CUSTOM_CONFIG Paranoid BASED_ON "Debug,Release," POSTFIX "dp"
 )
 
@@ -20,4 +19,4 @@ add_subdirectory(csVisOpenGL)
 add_subdirectory(sample)
 
 # remember to add this at the end of the main cmake file
-cs_finalize_project(csVisOpenGL)
+cs_finalize_project()
