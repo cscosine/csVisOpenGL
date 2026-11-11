@@ -40,6 +40,4 @@ cs_target_link_libraries(renderers
 		csVisOpenGL::csVisOpenGL
 )
 
-cs_install_target(renderers renderers DEFAULT)
-
-cs_finalize_target(renderers)
+cs_install_target(renderers COMPONENT renderers DEFAULT)

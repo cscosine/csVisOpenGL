@@ -80,9 +80,7 @@ cs_target_link_libraries(csVisOpenGL
 		csVisOpenGL::cscmake_base_include
 )
 
-cs_install_target(csVisOpenGL csVisOpenGL DEFAULT)
+cs_install_target(csVisOpenGL COMPONENT csVisOpenGL DEFAULT)
 
 add_subdirectory(renderers)
 add_subdirectory(painters)
-
-cs_finalize_target(csVisOpenGL)

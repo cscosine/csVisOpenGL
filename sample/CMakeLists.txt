@@ -27,5 +27,3 @@ cs_target_link_libraries(csVisOpenGLSample
 )
 
 # a sample: built, not installed
-
-cs_finalize_target(csVisOpenGLSample)

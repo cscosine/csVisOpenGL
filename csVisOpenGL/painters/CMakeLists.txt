@@ -27,6 +27,4 @@ cs_target_link_libraries(painters
 		csVisOpenGL::renderers
 )
 
-cs_install_target(painters painters DEFAULT)
-
-cs_finalize_target(painters)
+cs_install_target(painters COMPONENT painters DEFAULT)

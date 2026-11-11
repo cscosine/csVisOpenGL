@@ -17,6 +17,3 @@ cs_initialize_project(
 # add libs, executables, etc
 add_subdirectory(csVisOpenGL)
 add_subdirectory(sample)
-
-# remember to add this at the end of the main cmake file
-cs_finalize_project()
