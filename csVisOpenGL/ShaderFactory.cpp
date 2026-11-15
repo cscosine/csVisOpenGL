@@ -1,4 +1,5 @@
 #include <QOpenGLContext>
+#include <QSurfaceFormat>
 #include <csVisOpenGL/ShaderFactory.hpp>
 #include <iostream>
 
@@ -9,6 +10,23 @@
 #include <QOpenGLWidget>
 
 namespace csVisOpenGL {
+
+namespace {
+
+// The #version line of the shaders for the current context: GLSL ES 3.00 for OpenGL ES; for a core profile (macOS: its
+// only context newer than OpenGL 2.1) GLSL 3.30 core, 1.50 core below OpenGL 3.3; else GLSL 1.30 (OpenGL 3.0 and
+// newer, compatibility profile: Linux, Windows)
+QString glslVersionLine() {
+  QOpenGLContext const* context = QOpenGLContext::currentContext();
+  if (context->isOpenGLES())
+    return QStringLiteral("#version 300 es\n");
+  QSurfaceFormat const format = context->format();
+  if (format.profile() == QSurfaceFormat::CoreProfile)
+    return format.version() < qMakePair(3, 3) ? QStringLiteral("#version 150 core\n") : QStringLiteral("#version 330 core\n");
+  return QStringLiteral("#version 130\n");
+}
+
+} // namespace
 
 ShaderFactory::ShaderFactory() {
   m_shaderProgramNames[ShaderNames::DiffuseUniform] = ShaderProgramNames(":/shaders/uniformColor.vp", ":/shaders/diffuse.fp");
@@ -49,10 +67,7 @@ std::unique_ptr<Shader> ShaderFactory::createShader(ShaderNames shader) {
       QFile f(vertexName);
       f.open(QFile::ReadOnly);
       QString source(f.readAll());
-      if (QOpenGLContext::currentContext()->isOpenGLES())
-        source.prepend(QByteArrayLiteral("#version 300 es\n"));
-      else
-        source.prepend(QByteArrayLiteral("#version 130\n"));
+      source.prepend(glslVersionLine());
       // if (!vertex->compileSourceFile(vertexName))
       if (!vertex->compileSourceCode(source))
 
@@ -75,10 +90,7 @@ std::unique_ptr<Shader> ShaderFactory::createShader(ShaderNames shader) {
       QFile f(fragmentName);
       f.open(QFile::ReadOnly);
       QString source(f.readAll());
-      if (QOpenGLContext::currentContext()->isOpenGLES())
-        source.prepend(QByteArrayLiteral("#version 300 es\n"));
-      else
-        source.prepend(QByteArrayLiteral("#version 130\n"));
+      source.prepend(glslVersionLine());
 
       // if (!fragment->compileSourceFile(fragmentName))
       if (!fragment->compileSourceCode(source)) {

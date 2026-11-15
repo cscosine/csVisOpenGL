@@ -8,6 +8,7 @@
 
 #include <QFocusEvent>
 #include <QMouseEvent>
+#include <QSurfaceFormat>
 #include <QWheelEvent>
 
 #include <csVisOpenGL/ShaderFactory.hpp>
@@ -31,6 +32,14 @@ Frame::Frame(QWidget* parent)
   setMouseTracking(true);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   setFocusPolicy(Qt::StrongFocus);
+#if defined(__APPLE__)
+  // macOS: OpenGL newer than 2.1 only as a core profile (the default context is 2.1, GLSL 1.20, which the shaders do
+  // not support): 4.1 core, the newest of macOS (the shaders: GLSL 3.30 core, ShaderFactory)
+  QSurfaceFormat surfaceFormat = format();
+  surfaceFormat.setVersion(4, 1);
+  surfaceFormat.setProfile(QSurfaceFormat::CoreProfile);
+  setFormat(surfaceFormat);
+#endif
 }
 
 Frame::~Frame() {
