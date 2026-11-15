@@ -26,4 +26,8 @@ cs_target_link_libraries(csVisOpenGLSample
 		csVisOpenGL::painters
 )
 
-# a sample: built, not installed
+# a sample: built, not installed; its deployment (cs_deployment): a folder that runs on another machine, made by the
+# install (Release), with the Qt plugins of a GUI application (cs_deployment_qt_gui, offscreen too); CI runs it
+# (--smoke)
+cs_deployment(sample TARGETS csVisOpenGLSample)
+cs_deployment_qt_gui(sample OFFSCREEN)
