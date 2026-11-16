@@ -1,3 +1,4 @@
+#include <cassert>
 #include <QImage>
 #include <csVisOpenGL/TexturesManager.hpp>
 

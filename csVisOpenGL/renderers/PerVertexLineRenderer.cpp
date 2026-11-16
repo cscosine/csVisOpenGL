@@ -1,3 +1,4 @@
+#include <cassert>
 #include <csVisOpenGL/renderers/PerVertexLineRenderer.hpp>
 
 #include <csVisOpenGL/Camera.hpp>

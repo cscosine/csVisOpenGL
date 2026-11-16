@@ -1,3 +1,4 @@
+#include <cassert>
 #include <csVisOpenGL/renderers/SingleTextureRenderer.hpp>
 
 #include <csVisOpenGL/Camera.hpp>

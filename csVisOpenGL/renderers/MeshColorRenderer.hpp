@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <csVisOpenGL/Renderer.hpp>
 
 namespace csVisOpenGL {
