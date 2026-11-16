@@ -1,3 +1,4 @@
+#include <cassert>
 #include <csVisOpenGL/Frame.hpp>
 #include <csVisOpenGL/Renderer.hpp>
 

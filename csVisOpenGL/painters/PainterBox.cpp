@@ -1,3 +1,4 @@
+#include <cassert>
 #include <csVisOpenGL/painters/PainterBox.hpp>
 
 #include <csVisOpenGL/renderers/PerVertexMeshRenderer.hpp>

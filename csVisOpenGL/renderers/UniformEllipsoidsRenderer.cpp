@@ -1,3 +1,4 @@
+#include <cassert>
 #include <csVisOpenGL/renderers/UniformEllipsoidsRenderer.hpp>
 
 #include <math.h>
