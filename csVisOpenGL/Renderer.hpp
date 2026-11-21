@@ -16,18 +16,18 @@ public:
   Renderer(ShaderFactory::ShaderNames shaderName);
   virtual ~Renderer();
 
-  void initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
+  void initialize(ShaderFactory &shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const &glExtraFunctions);
 
-  void draw(const Camera& camera);
-  void draw(const Camera& camera, const Eigen::Matrix4f& m);
+  void draw(const Camera &camera);
+  void draw(const Camera &camera, const Eigen::Matrix4f &m);
 
 protected:
   virtual void initializeConcrete() = 0;
-  virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) = 0;
+  virtual void drawConcrete(const Camera &camera, const Eigen::Matrix4f &m) = 0;
 
-  Shader& getShader();
-  Vao& getVao();
-  QOpenGLExtraFunctions& getQOpenGLExtraFunctions();
+  Shader &getShader();
+  Vao &getVao();
+  QOpenGLExtraFunctions &getQOpenGLExtraFunctions();
 
 private:
   std::unique_ptr<Shader> m_shader;

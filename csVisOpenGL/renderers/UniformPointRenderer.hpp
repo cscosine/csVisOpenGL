@@ -8,20 +8,16 @@ public:
   UniformPointRenderer();
   virtual ~UniformPointRenderer();
 
-  void setPointSize(float pointSize) {
-    this->m_pointSize = pointSize;
-  }
-  void setSmoothPoints(bool set) {
-    this->m_smoothPoints = set;
-  }
+  void setPointSize(float pointSize) { this->m_pointSize = pointSize; }
+  void setSmoothPoints(bool set) { this->m_smoothPoints = set; }
 
-  void setUniformColor(const Eigen::Vector4f& color);
-  void setUniformColor(const Eigen::Vector3f& color);
-  void setPoints(const Eigen::Matrix3Xf& positions);
+  void setUniformColor(const Eigen::Vector4f &color);
+  void setUniformColor(const Eigen::Vector3f &color);
+  void setPoints(const Eigen::Matrix3Xf &positions);
 
 private:
   virtual void initializeConcrete() override;
-  virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
+  virtual void drawConcrete(const Camera &camera, const Eigen::Matrix4f &m) override;
 
   GLfloat m_pointSize;
   bool m_smoothPoints;

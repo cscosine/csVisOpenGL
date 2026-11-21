@@ -17,20 +17,23 @@ namespace {
 // only context newer than OpenGL 2.1) GLSL 3.30 core, 1.50 core below OpenGL 3.3; else GLSL 1.30 (OpenGL 3.0 and
 // newer, compatibility profile: Linux, Windows)
 QString glslVersionLine() {
-  QOpenGLContext const* context = QOpenGLContext::currentContext();
+  QOpenGLContext const *context = QOpenGLContext::currentContext();
   if (context->isOpenGLES())
     return QStringLiteral("#version 300 es\n");
   QSurfaceFormat const format = context->format();
   if (format.profile() == QSurfaceFormat::CoreProfile)
-    return format.version() < qMakePair(3, 3) ? QStringLiteral("#version 150 core\n") : QStringLiteral("#version 330 core\n");
+    return format.version() < qMakePair(3, 3) ? QStringLiteral("#version 150 core\n")
+                                              : QStringLiteral("#version 330 core\n");
   return QStringLiteral("#version 130\n");
 }
 
 } // namespace
 
 ShaderFactory::ShaderFactory() {
-  m_shaderProgramNames[ShaderNames::DiffuseUniform] = ShaderProgramNames(":/shaders/uniformColor.vp", ":/shaders/diffuse.fp");
-  m_shaderProgramNames[ShaderNames::DiffusePerVertex] = ShaderProgramNames(":/shaders/vertexColor.vp", ":/shaders/diffuse.fp");
+  m_shaderProgramNames[ShaderNames::DiffuseUniform] =
+      ShaderProgramNames(":/shaders/uniformColor.vp", ":/shaders/diffuse.fp");
+  m_shaderProgramNames[ShaderNames::DiffusePerVertex] =
+      ShaderProgramNames(":/shaders/vertexColor.vp", ":/shaders/diffuse.fp");
   m_shaderProgramNames[ShaderNames::Mesh] = ShaderProgramNames(":/shaders/mesh.vp", ":/shaders/mesh.fp");
   m_shaderProgramNames[ShaderNames::MeshColor] = ShaderProgramNames(":/shaders/meshColor.vp", ":/shaders/meshColor.fp");
   m_shaderProgramNames[ShaderNames::Background] = ShaderProgramNames(":/shaders/bkg.vp", ":/shaders/bkg.fp");
@@ -52,11 +55,11 @@ std::unique_ptr<Shader> ShaderFactory::createShader(ShaderNames shader) {
   auto shaderNamesIterator = m_shaderProgramNames.find(int(shader));
   if (shaderNamesIterator == m_shaderProgramNames.end())
     return nullptr;
-  const QString& vertexName = shaderNamesIterator->second.vertexProgramName;
-  const QString& fragmentName = shaderNamesIterator->second.fragmentProgramName;
+  const QString &vertexName = shaderNamesIterator->second.vertexProgramName;
+  const QString &fragmentName = shaderNamesIterator->second.fragmentProgramName;
 
   // Get vertex shader
-  QOpenGLShader* vertex = nullptr;
+  QOpenGLShader *vertex = nullptr;
   {
     auto it = m_vertexShaders.find(vertexName);
     if (it != m_vertexShaders.end())
@@ -80,7 +83,7 @@ std::unique_ptr<Shader> ShaderFactory::createShader(ShaderNames shader) {
   }
 
   // Get fragment shader
-  QOpenGLShader* fragment = nullptr;
+  QOpenGLShader *fragment = nullptr;
   {
     auto it = m_fragmentShaders.find(fragmentName);
     if (it != m_fragmentShaders.end())
@@ -94,7 +97,8 @@ std::unique_ptr<Shader> ShaderFactory::createShader(ShaderNames shader) {
 
       // if (!fragment->compileSourceFile(fragmentName))
       if (!fragment->compileSourceCode(source)) {
-        std::cerr << fragmentName.toStdString() << " shader compile error: " << fragment->log().toStdString() << std::endl;
+        std::cerr << fragmentName.toStdString() << " shader compile error: " << fragment->log().toStdString()
+                  << std::endl;
         return nullptr;
       }
       m_fragmentShaders[fragmentName] = fragment;

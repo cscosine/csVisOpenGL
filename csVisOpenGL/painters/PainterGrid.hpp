@@ -16,10 +16,10 @@ public:
   PainterGrid();
   virtual ~PainterGrid();
 
-  void initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
-  void draw(const Camera& camera);
+  void initialize(ShaderFactory &shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const &glExtraFunctions);
+  void draw(const Camera &camera);
 
-  void setGrid(const Eigen::Isometry3f& p, const Eigen::Vector2f& size, const Eigen::Vector2i& steps);
+  void setGrid(const Eigen::Isometry3f &p, const Eigen::Vector2f &size, const Eigen::Vector2i &steps);
 
 private:
   std::unique_ptr<UniformLineRenderer> m_primaryRenderer;

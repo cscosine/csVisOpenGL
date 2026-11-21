@@ -7,17 +7,13 @@
 namespace csVisOpenGL {
 
 UniformPointRenderer::UniformPointRenderer()
-    : Renderer(ShaderFactory::ShaderNames::DiffuseUniform)
-    , m_pointSize(1)
-    , m_smoothPoints(false) {}
+    : Renderer(ShaderFactory::ShaderNames::DiffuseUniform), m_pointSize(1), m_smoothPoints(false) {}
 
 UniformPointRenderer::~UniformPointRenderer() {}
 
-void UniformPointRenderer::initializeConcrete() {
-  setUniformColor(Eigen::Vector4f::Ones().eval());
-}
+void UniformPointRenderer::initializeConcrete() { setUniformColor(Eigen::Vector4f::Ones().eval()); }
 
-void UniformPointRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
+void UniformPointRenderer::drawConcrete(const Camera &camera, const Eigen::Matrix4f &m) {
   glPointSize(m_pointSize);
 
   getShader().bind();
@@ -34,19 +30,21 @@ void UniformPointRenderer::drawConcrete(const Camera& camera, const Eigen::Matri
   getShader().release();
 }
 
-void UniformPointRenderer::setUniformColor(const Eigen::Vector4f& color) {
+void UniformPointRenderer::setUniformColor(const Eigen::Vector4f &color) {
   getShader().bind();
-  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2),
+                                         color(3));
   getShader().release();
 }
 
-void UniformPointRenderer::setUniformColor(const Eigen::Vector3f& color) {
+void UniformPointRenderer::setUniformColor(const Eigen::Vector3f &color) {
   getShader().bind();
-  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2),
+                                         1.0f);
   getShader().release();
 }
 
-void UniformPointRenderer::setPoints(const Eigen::Matrix3Xf& positions) {
+void UniformPointRenderer::setPoints(const Eigen::Matrix3Xf &positions) {
   getVao().uploadPositions(getShader().getVertexLocations().position, positions.data(), positions.cols());
 }
 

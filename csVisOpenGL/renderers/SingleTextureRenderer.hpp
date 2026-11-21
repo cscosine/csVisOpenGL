@@ -15,20 +15,16 @@ public:
   SingleTextureRenderer();
   virtual ~SingleTextureRenderer();
 
-  void setUniformColor(const Eigen::Vector4f& color);
-  void setUniformColor(const Eigen::Vector3f& color);
+  void setUniformColor(const Eigen::Vector4f &color);
+  void setUniformColor(const Eigen::Vector3f &color);
 
-  void setTexture(GLuint texid, const Matrix3x4f& vertex, const Matrix2x4f& texCoord, TextureInterpolation ti);
-  void resetTexture() {
-    m_texid = -1;
-  }
-  GLuint textureId() const {
-    return m_texid;
-  }
+  void setTexture(GLuint texid, const Matrix3x4f &vertex, const Matrix2x4f &texCoord, TextureInterpolation ti);
+  void resetTexture() { m_texid = -1; }
+  GLuint textureId() const { return m_texid; }
 
 private:
   virtual void initializeConcrete() override;
-  virtual void drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) override;
+  virtual void drawConcrete(const Camera &camera, const Eigen::Matrix4f &m) override;
 
   GLuint m_texid;
 };

@@ -16,10 +16,10 @@ public:
   PainterBox();
   virtual ~PainterBox();
 
-  void initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
-  void draw(const Camera& camera);
+  void initialize(ShaderFactory &shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const &glExtraFunctions);
+  void draw(const Camera &camera);
 
-  void insertBox(const int i, const Eigen::Matrix3Xf& box, const Eigen::Vector3f& color);
+  void insertBox(const int i, const Eigen::Matrix3Xf &box, const Eigen::Vector3f &color);
   void resize(const int n);
   void apply();
 

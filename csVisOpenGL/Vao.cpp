@@ -5,7 +5,8 @@ namespace csVisOpenGL {
 
 namespace detail {
 
-void uploadVBO(QOpenGLExtraFunctions& glExtraFunctions, GLuint vao, GLuint vbo, const float* values, int count, GLenum usage) {
+void uploadVBO(QOpenGLExtraFunctions &glExtraFunctions, GLuint vao, GLuint vbo, const float *values, int count,
+               GLenum usage) {
   assert(vbo > 0);
   glExtraFunctions.glBindVertexArray(vao);
   {
@@ -17,7 +18,8 @@ void uploadVBO(QOpenGLExtraFunctions& glExtraFunctions, GLuint vao, GLuint vbo, 
 }
 
 // vao is a reference, gets updated
-GLuint createVBO(QOpenGLExtraFunctions& glExtraFunctions, GLuint vao, GLuint location, GLint size, GLenum type, GLboolean normalized) {
+GLuint createVBO(QOpenGLExtraFunctions &glExtraFunctions, GLuint vao, GLuint location, GLint size, GLenum type,
+                 GLboolean normalized) {
   // Create (if it does not exist) and bind the VAO
   assert(vao != 0);
   glExtraFunctions.glBindVertexArray(vao);
@@ -39,11 +41,7 @@ GLuint createVBO(QOpenGLExtraFunctions& glExtraFunctions, GLuint vao, GLuint loc
 }
 } // namespace detail
 
-Vao::Vao()
-    : m_vao(0)
-    , m_locationToVbo{}
-    , m_count(-1)
-    , m_glExtraFunctions{nullptr} {}
+Vao::Vao() : m_vao(0), m_locationToVbo{}, m_count(-1), m_glExtraFunctions{nullptr} {}
 
 Vao::~Vao() {
   if (m_vao != 0) {
@@ -55,13 +53,13 @@ Vao::~Vao() {
   m_vao = 0;
 }
 
-void Vao::initialize(std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+void Vao::initialize(std::shared_ptr<QOpenGLExtraFunctions> const &glExtraFunctions) {
   this->m_glExtraFunctions = glExtraFunctions;
   m_glExtraFunctions->glGenVertexArrays(1, &m_vao);
   assert(m_vao != 0);
 }
 
-void Vao::uploadPositions(GLuint location, const float* values, int count) {
+void Vao::uploadPositions(GLuint location, const float *values, int count) {
   if (m_locationToVbo.find(location) == m_locationToVbo.end()) {
     m_locationToVbo[location] = detail::createVBO(*m_glExtraFunctions, m_vao, location, 3, GL_FLOAT, false);
   }
@@ -69,7 +67,7 @@ void Vao::uploadPositions(GLuint location, const float* values, int count) {
   m_count = count;
 }
 
-void Vao::uploadVertexColors(GLuint location, const float* values, int count) {
+void Vao::uploadVertexColors(GLuint location, const float *values, int count) {
   if (m_locationToVbo.find(location) == m_locationToVbo.end()) {
     m_locationToVbo[location] = detail::createVBO(*m_glExtraFunctions, m_vao, location, 4, GL_FLOAT, false);
   }
@@ -77,7 +75,7 @@ void Vao::uploadVertexColors(GLuint location, const float* values, int count) {
   m_count = count;
 }
 
-void Vao::uploadNormals(GLuint location, const float* values, int count) {
+void Vao::uploadNormals(GLuint location, const float *values, int count) {
   if (m_locationToVbo.find(location) == m_locationToVbo.end()) {
     m_locationToVbo[location] = detail::createVBO(*m_glExtraFunctions, m_vao, location, 3, GL_FLOAT, true);
   }
@@ -85,7 +83,7 @@ void Vao::uploadNormals(GLuint location, const float* values, int count) {
   m_count = count;
 }
 
-void Vao::uploadTexCoords0(GLuint location, const float* values, int count) {
+void Vao::uploadTexCoords0(GLuint location, const float *values, int count) {
   if (m_locationToVbo.find(location) == m_locationToVbo.end()) {
     m_locationToVbo[location] = detail::createVBO(*m_glExtraFunctions, m_vao, location, 2, GL_FLOAT, false);
   }
