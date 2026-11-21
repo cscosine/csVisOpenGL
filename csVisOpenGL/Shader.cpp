@@ -3,7 +3,7 @@
 
 namespace csVisOpenGL {
 
-Shader::Shader(QOpenGLShader* vertexShader, QOpenGLShader* fragmentShader) {
+Shader::Shader(QOpenGLShader *vertexShader, QOpenGLShader *fragmentShader) {
   m_shaderProgram.addShader(vertexShader);
   m_shaderProgram.addShader(fragmentShader);
   if (!m_shaderProgram.link()) {

@@ -9,10 +9,9 @@
 #include <atomic>
 #include <iostream>
 
-Window::Window(QWidget* parent)
-    : QMainWindow(parent)
-    , ui(new Ui::Window())
-    , m_cameraController(std::make_shared<csVisOpenGL::OrbitCameraController>())
+Window::Window(QWidget *parent)
+    : QMainWindow(parent), ui(new Ui::Window()),
+      m_cameraController(std::make_shared<csVisOpenGL::OrbitCameraController>())
 
 {
   m_cameraController->setRadius(10);
@@ -43,10 +42,6 @@ void Window::on_checkBoxOrthoCamera_clicked() {
   }
 }
 
-void Window::on_radioButtonBkgSolid_clicked() {
-  vis->bkgSolid = ui->radioButtonBkgSolid->isChecked();
-}
+void Window::on_radioButtonBkgSolid_clicked() { vis->bkgSolid = ui->radioButtonBkgSolid->isChecked(); }
 
-void Window::on_radioButtonBkgGradient_clicked() {
-  vis->bkgSolid = ui->radioButtonBkgSolid->isChecked();
-}
+void Window::on_radioButtonBkgGradient_clicked() { vis->bkgSolid = ui->radioButtonBkgSolid->isChecked(); }

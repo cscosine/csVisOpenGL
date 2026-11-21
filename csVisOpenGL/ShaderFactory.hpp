@@ -30,14 +30,13 @@ private:
     QString vertexProgramName;
     QString fragmentProgramName;
 
-    ShaderProgramNames(const QString& vertexProgramName, const QString& fragmentProgramName)
-        : vertexProgramName(vertexProgramName)
-        , fragmentProgramName(fragmentProgramName) {}
+    ShaderProgramNames(const QString &vertexProgramName, const QString &fragmentProgramName)
+        : vertexProgramName(vertexProgramName), fragmentProgramName(fragmentProgramName) {}
     ShaderProgramNames() {}
   };
 
   std::map<int, ShaderProgramNames> m_shaderProgramNames;
-  std::map<QString, QOpenGLShader*> m_vertexShaders;
-  std::map<QString, QOpenGLShader*> m_fragmentShaders;
+  std::map<QString, QOpenGLShader *> m_vertexShaders;
+  std::map<QString, QOpenGLShader *> m_fragmentShaders;
 };
 } // namespace csVisOpenGL

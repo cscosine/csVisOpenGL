@@ -16,13 +16,13 @@ public:
   PainterAxes();
   virtual ~PainterAxes();
 
-  void initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions);
-  void draw(const Camera& camera);
+  void initialize(ShaderFactory &shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const &glExtraFunctions);
+  void draw(const Camera &camera);
 
-  void setPose(const Eigen::Isometry3f& p, float size);
-  void setPoses(const std::vector<Eigen::Isometry3f>& p, const Eigen::VectorXf& size);
-  void setPoses(const std::vector<Eigen::Isometry3f>& p, float size);
-  void setPoses(const std::vector<Eigen::Isometry3f>& p, std::vector<float> size);
+  void setPose(const Eigen::Isometry3f &p, float size);
+  void setPoses(const std::vector<Eigen::Isometry3f> &p, const Eigen::VectorXf &size);
+  void setPoses(const std::vector<Eigen::Isometry3f> &p, float size);
+  void setPoses(const std::vector<Eigen::Isometry3f> &p, std::vector<float> size);
 
   void setLineWidth(float w);
 

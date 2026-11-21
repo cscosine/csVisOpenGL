@@ -11,11 +11,11 @@ class CameraControllerSignals : public QObject {
 
 public:
 signals:
-  void newCamera(Camera const& camera);
+  void newCamera(Camera const &camera);
 
 public:
-  static void connect(CameraControllerSignals const& cameraControllerSignals,
-                      CameraControllerSignals const& cameraControllerSignalsForward);
+  static void connect(CameraControllerSignals const &cameraControllerSignals,
+                      CameraControllerSignals const &cameraControllerSignalsForward);
 };
 
 } // namespace csVisOpenGL

@@ -7,15 +7,13 @@
 namespace csVisOpenGL {
 
 PainterCheckerBoard::PainterCheckerBoard()
-    : m_blackSquares(new UniformMeshRenderer())
-    , m_whiteSquares(new UniformMeshRenderer())
-    , m_axes(new PainterAxes())
-    , m_paintChecherboard(false)
-    , m_paintAxes(false) {}
+    : m_blackSquares(new UniformMeshRenderer()), m_whiteSquares(new UniformMeshRenderer()), m_axes(new PainterAxes()),
+      m_paintChecherboard(false), m_paintAxes(false) {}
 
 PainterCheckerBoard::~PainterCheckerBoard() {}
 
-void PainterCheckerBoard::initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+void PainterCheckerBoard::initialize(ShaderFactory &shaderFactory,
+                                     std::shared_ptr<QOpenGLExtraFunctions> const &glExtraFunctions) {
 
   m_blackSquares->initialize(shaderFactory, glExtraFunctions);
   m_blackSquares->setUniformColor(Color::black);
@@ -28,7 +26,7 @@ void PainterCheckerBoard::initialize(ShaderFactory& shaderFactory, std::shared_p
   m_axes->initialize(shaderFactory, glExtraFunctions);
 }
 
-void PainterCheckerBoard::draw(const Camera& camera) {
+void PainterCheckerBoard::draw(const Camera &camera) {
   if (m_paintChecherboard) {
     m_blackSquares->draw(camera);
     m_whiteSquares->draw(camera);
@@ -38,8 +36,8 @@ void PainterCheckerBoard::draw(const Camera& camera) {
   }
 }
 
-void PainterCheckerBoard::setCheckerBoard(int w, int h, float squareSize, const Eigen::Isometry3f& pose, float xBase, float yBase,
-                                          float axesScale) {
+void PainterCheckerBoard::setCheckerBoard(int w, int h, float squareSize, const Eigen::Isometry3f &pose, float xBase,
+                                          float yBase, float axesScale) {
   m_paintChecherboard = true;
 
   {
@@ -78,7 +76,8 @@ void PainterCheckerBoard::setCheckerBoard(int w, int h, float squareSize, const 
     for (int i = 0; i < numOddLines; i++) {
       for (int j = 0; j < numSquaresOdd; j++) {
         squaresBlack.block(0, countB * baseSquare.cols(), 3, 6) =
-            baseSquare.colwise() + Eigen::Vector3f(xBase + ((j * 2) + 1) * squareSize, yBase + ((i * 2) + 1) * squareSize, 0);
+            baseSquare.colwise() +
+            Eigen::Vector3f(xBase + ((j * 2) + 1) * squareSize, yBase + ((i * 2) + 1) * squareSize, 0);
         countB++;
       }
       for (int j = 0; j < numSquaresEven; j++) {

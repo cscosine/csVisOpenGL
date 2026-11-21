@@ -20,60 +20,32 @@ const float OrbitCameraController::defaultRotateSmoothing = 0.2f;
 const float OrbitCameraController::defaultZoomSmoothing = 0.2f;
 
 OrbitCameraController::OrbitCameraController()
-    : FrameSlotsInterface()
-    , m_camera()
-    , m_pivotPos(m_camera.getPose().translation())
-    , m_pivotPosDest(m_pivotPos)
-    , m_radius(0)
-    , m_radiusDest(m_radius)
-    , m_scale(m_camera.getScale())
-    , m_scaleDest(m_camera.getScale())
-    , m_ypr(m_camera.getPose().linear().eulerAngles(2, 1, 0))
-    , m_yprDest(m_camera.getPose().linear().eulerAngles(2, 1, 0))
-    , m_mouseMoveSpeed(defaultMouseMoveSpeed)
-    , m_keyboardMoveSpeed(defaultKeyboardMoveSpeed)
-    , m_moveSpeedScale(1)
-    , m_keyboardSpeedBoost(defaultKeyboardSpeedBoost)
-    , m_rotateSpeed(defaultRotateSpeed)
-    , m_zoomSpeed(defaultZoomSpeed)
-    , m_zoomSpeedScale(1)
-    , m_moveSmoothing(defaultMoveSmoothing)
-    , m_rotateSmoothing(defaultRotateSmoothing)
-    , m_zoomSmoothing(defaultZoomSmoothing)
-    , m_dPivotPos(Eigen::Vector3f::Zero())
-    , m_dRadius(0)
-    , m_dScale(0)
-    , m_minRadius(0.01f)
-    , m_maxRadius(1000.0f)
-    , m_minScale(0.01f)
-    , m_maxScale(1000.0f)
-    , m_dYpr(Eigen::Vector3f::Zero())
-    , m_lastMousePosition(-1, -1)
-    , m_leftClicked(false)
-    , m_rightClicked(false)
-    , m_middleClicked(false)
-    , m_minPos(
-          Eigen::Vector3f(Eigen::NumTraits<float>::lowest(), Eigen::NumTraits<float>::lowest(), Eigen::NumTraits<float>::lowest()))
-    , m_maxPos(
-          Eigen::Vector3f(Eigen::NumTraits<float>::highest(), Eigen::NumTraits<float>::highest(), Eigen::NumTraits<float>::highest()))
-    , m_settings(Settings())
-    , m_keysPressed{}
-    , m_lastRenderTime{std::chrono::steady_clock::now()}
+    : FrameSlotsInterface(), m_camera(), m_pivotPos(m_camera.getPose().translation()), m_pivotPosDest(m_pivotPos),
+      m_radius(0), m_radiusDest(m_radius), m_scale(m_camera.getScale()), m_scaleDest(m_camera.getScale()),
+      m_ypr(m_camera.getPose().linear().eulerAngles(2, 1, 0)),
+      m_yprDest(m_camera.getPose().linear().eulerAngles(2, 1, 0)), m_mouseMoveSpeed(defaultMouseMoveSpeed),
+      m_keyboardMoveSpeed(defaultKeyboardMoveSpeed), m_moveSpeedScale(1),
+      m_keyboardSpeedBoost(defaultKeyboardSpeedBoost), m_rotateSpeed(defaultRotateSpeed), m_zoomSpeed(defaultZoomSpeed),
+      m_zoomSpeedScale(1), m_moveSmoothing(defaultMoveSmoothing), m_rotateSmoothing(defaultRotateSmoothing),
+      m_zoomSmoothing(defaultZoomSmoothing), m_dPivotPos(Eigen::Vector3f::Zero()), m_dRadius(0), m_dScale(0),
+      m_minRadius(0.01f), m_maxRadius(1000.0f), m_minScale(0.01f), m_maxScale(1000.0f), m_dYpr(Eigen::Vector3f::Zero()),
+      m_lastMousePosition(-1, -1), m_leftClicked(false), m_rightClicked(false), m_middleClicked(false),
+      m_minPos(Eigen::Vector3f(Eigen::NumTraits<float>::lowest(), Eigen::NumTraits<float>::lowest(),
+                               Eigen::NumTraits<float>::lowest())),
+      m_maxPos(Eigen::Vector3f(Eigen::NumTraits<float>::highest(), Eigen::NumTraits<float>::highest(),
+                               Eigen::NumTraits<float>::highest())),
+      m_settings(Settings()), m_keysPressed{}, m_lastRenderTime{std::chrono::steady_clock::now()}
 
 {}
 
 OrbitCameraController::~OrbitCameraController() {}
 
 // ----------------------------------------- Events
-void OrbitCameraController::onKeyPressEvent(QKeyEvent& event) {
-  m_keysPressed += event.key();
-}
+void OrbitCameraController::onKeyPressEvent(QKeyEvent &event) { m_keysPressed += event.key(); }
 
-void OrbitCameraController::onKeyReleaseEvent(QKeyEvent& event) {
-  m_keysPressed -= event.key();
-}
+void OrbitCameraController::onKeyReleaseEvent(QKeyEvent &event) { m_keysPressed -= event.key(); }
 
-void OrbitCameraController::onFocusOutEvent(QFocusEvent& event) {
+void OrbitCameraController::onFocusOutEvent(QFocusEvent &event) {
   if (m_leftClicked)
     m_leftClicked = false;
   if (m_rightClicked)
@@ -84,7 +56,7 @@ void OrbitCameraController::onFocusOutEvent(QFocusEvent& event) {
   event.accept();
 }
 
-void OrbitCameraController::onMouseMoveEvent(QMouseEvent& event) {
+void OrbitCameraController::onMouseMoveEvent(QMouseEvent &event) {
   // Initialization
   if (m_lastMousePosition == QPointF(-1, -1)) {
     m_lastMousePosition = event.globalPosition();
@@ -109,7 +81,7 @@ void OrbitCameraController::onMouseMoveEvent(QMouseEvent& event) {
   event.accept();
 }
 
-void OrbitCameraController::onMousePressEvent(QMouseEvent& event) {
+void OrbitCameraController::onMousePressEvent(QMouseEvent &event) {
   if (event.button() == Qt::LeftButton) {
     m_leftClicked = true;
     m_lastMousePosition = QPointF(-1, -1);
@@ -124,7 +96,7 @@ void OrbitCameraController::onMousePressEvent(QMouseEvent& event) {
   event.accept();
 }
 
-void OrbitCameraController::onMouseReleaseEvent(QMouseEvent& event) {
+void OrbitCameraController::onMouseReleaseEvent(QMouseEvent &event) {
   if (event.button() == Qt::LeftButton) {
     m_leftClicked = false;
     m_lastMousePosition = QPointF(-1, -1);
@@ -139,11 +111,9 @@ void OrbitCameraController::onMouseReleaseEvent(QMouseEvent& event) {
   event.accept();
 }
 
-void OrbitCameraController::onMouseDoubleClick(QMouseEvent& event) {
-  event.accept();
-}
+void OrbitCameraController::onMouseDoubleClick(QMouseEvent &event) { event.accept(); }
 
-void OrbitCameraController::onWheelEvent(QWheelEvent& event) {
+void OrbitCameraController::onWheelEvent(QWheelEvent &event) {
   if (m_settings.enableScale) {
     if (m_camera.isPerspective()) {
       m_dRadius = -event.angleDelta().y() * m_zoomSpeed * m_zoomSpeedScale * pow(m_radius, 0.5f);
@@ -191,10 +161,11 @@ void OrbitCameraController::onPaintGL() {
     keyDelta.setX(keyDelta.x() - 1);
   if (m_keysPressed.contains(Qt::Key_Shift))
     speedBoost = m_keyboardSpeedBoost;
-  m_dPivotPos += (m_camera.left() * keyDelta.x()) * m_keyboardMoveSpeed * m_moveSpeedScale * speedBoost * dT * pow(m_radius, 0.75f);
+  m_dPivotPos += (m_camera.left() * keyDelta.x()) * m_keyboardMoveSpeed * m_moveSpeedScale * speedBoost * dT *
+                 pow(m_radius, 0.75f);
   if (m_camera.isPerspective()) {
-    m_dPivotPos +=
-        (m_camera.forward() * keyDelta.y()) * m_keyboardMoveSpeed * m_moveSpeedScale * speedBoost * dT * pow(m_radius, 0.75f);
+    m_dPivotPos += (m_camera.forward() * keyDelta.y()) * m_keyboardMoveSpeed * m_moveSpeedScale * speedBoost * dT *
+                   pow(m_radius, 0.75f);
   } else {
     m_dScale -= keyDelta.y() * m_keyboardMoveSpeed * m_moveSpeedScale * speedBoost * dT * pow(m_scale, 0.75f);
   }
@@ -272,7 +243,7 @@ void OrbitCameraController::onPaintGL() {
   emit m_cameraSignals.newCamera(m_camera);
 }
 
-void OrbitCameraController::normalizeYpr(Eigen::Vector3f& ypr) const {
+void OrbitCameraController::normalizeYpr(Eigen::Vector3f &ypr) const {
   // [0..2pi[
   for (int i = 0; i < 3; i++) {
     while (ypr(i) < 0)
@@ -284,7 +255,7 @@ void OrbitCameraController::normalizeYpr(Eigen::Vector3f& ypr) const {
 
 // ----------------------------------------- Pose setters
 
-void OrbitCameraController::setPivotPosition(const Eigen::Vector3f& position, bool smooth) {
+void OrbitCameraController::setPivotPosition(const Eigen::Vector3f &position, bool smooth) {
   m_pivotPosDest = position;
   if (!smooth) {
     m_pivotPos = m_pivotPosDest;
@@ -295,7 +266,7 @@ void OrbitCameraController::setPivotPosition(const Eigen::Vector3f& position, bo
   }
 }
 
-void OrbitCameraController::setYpr(const Eigen::Vector3f& ypr, bool smooth) {
+void OrbitCameraController::setYpr(const Eigen::Vector3f &ypr, bool smooth) {
   m_yprDest = ypr;
   if (!smooth) {
     this->m_ypr = m_yprDest;
@@ -303,14 +274,15 @@ void OrbitCameraController::setYpr(const Eigen::Vector3f& ypr, bool smooth) {
     Eigen::Isometry3f pose;
     pose.translation() = pos;
 
-    pose.linear() = (Eigen::AngleAxisf(ypr(0), Eigen::Vector3f::UnitZ()) * Eigen::AngleAxisf(ypr(1), Eigen::Vector3f::UnitY()) *
-                     Eigen::AngleAxisf(ypr(2), Eigen::Vector3f::UnitX()))
-                        .toRotationMatrix();
+    pose.linear() =
+        (Eigen::AngleAxisf(ypr(0), Eigen::Vector3f::UnitZ()) * Eigen::AngleAxisf(ypr(1), Eigen::Vector3f::UnitY()) *
+         Eigen::AngleAxisf(ypr(2), Eigen::Vector3f::UnitX()))
+            .toRotationMatrix();
     setCameraPose(pose);
   }
 }
 
-void OrbitCameraController::setRotation(const Eigen::Matrix3f& R, bool smooth) {
+void OrbitCameraController::setRotation(const Eigen::Matrix3f &R, bool smooth) {
   Eigen::Isometry3f pose;
   pose.linear() = R;
   pose.translation() = m_camera.getPose().translation();
@@ -333,9 +305,7 @@ void OrbitCameraController::setRadius(float r, bool smooth) {
   }
 }
 
-void OrbitCameraController::setZNearFar(float zNear, float zFar) {
-  setCameraClippingPlanes(zNear, zFar);
-}
+void OrbitCameraController::setZNearFar(float zNear, float zFar) { setCameraClippingPlanes(zNear, zFar); }
 
 void OrbitCameraController::setScale(float s, bool smooth) {
   m_scaleDest = s;
@@ -345,7 +315,7 @@ void OrbitCameraController::setScale(float s, bool smooth) {
   }
 }
 
-void OrbitCameraController::setTraslationLimits(const Eigen::Vector3f& minPos, const Eigen::Vector3f& maxPos) {
+void OrbitCameraController::setTraslationLimits(const Eigen::Vector3f &minPos, const Eigen::Vector3f &maxPos) {
   this->m_minPos = minPos;
   this->m_maxPos = maxPos;
 }

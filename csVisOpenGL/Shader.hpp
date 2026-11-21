@@ -23,25 +23,15 @@ public:
   };
 
 public:
-  Shader(QOpenGLShader* vertexShader, QOpenGLShader* fragmentShader);
+  Shader(QOpenGLShader *vertexShader, QOpenGLShader *fragmentShader);
 
-  QOpenGLShaderProgram& getProgram() {
-    return m_shaderProgram;
-  }
+  QOpenGLShaderProgram &getProgram() { return m_shaderProgram; }
 
-  const VertexLocations& getVertexLocations() const {
-    return m_vertexLocations;
-  }
-  const UniformLocations& getUniformLocations() const {
-    return m_uniformLocations;
-  }
+  const VertexLocations &getVertexLocations() const { return m_vertexLocations; }
+  const UniformLocations &getUniformLocations() const { return m_uniformLocations; }
 
-  bool bind() const {
-    return m_shaderProgram.bind();
-  }
-  void release() const {
-    m_shaderProgram.release();
-  }
+  bool bind() const { return m_shaderProgram.bind(); }
+  void release() const { m_shaderProgram.release(); }
 
 private:
   void bindLocations();

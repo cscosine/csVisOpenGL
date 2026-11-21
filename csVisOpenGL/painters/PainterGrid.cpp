@@ -5,12 +5,12 @@
 namespace csVisOpenGL {
 
 PainterGrid::PainterGrid()
-    : m_primaryRenderer(new UniformLineRenderer())
-    , m_secondaryRenderer(new UniformLineRenderer()) {}
+    : m_primaryRenderer(new UniformLineRenderer()), m_secondaryRenderer(new UniformLineRenderer()) {}
 
 PainterGrid::~PainterGrid() {}
 
-void PainterGrid::initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+void PainterGrid::initialize(ShaderFactory &shaderFactory,
+                             std::shared_ptr<QOpenGLExtraFunctions> const &glExtraFunctions) {
   Eigen::Vector3f darkGray = Eigen::Vector3f::Ones() * 0.35f;
   Eigen::Vector3f lightGray = Eigen::Vector3f::Ones() * 0.65f;
 
@@ -23,12 +23,12 @@ void PainterGrid::initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpen
   this->setGrid(Eigen::Isometry3f::Identity(), Eigen::Vector2f(10, 10), Eigen::Vector2i(9, 9));
 }
 
-void PainterGrid::draw(const Camera& camera) {
+void PainterGrid::draw(const Camera &camera) {
   m_primaryRenderer->draw(camera);
   m_secondaryRenderer->draw(camera);
 }
 
-void PainterGrid::setGrid(const Eigen::Isometry3f& pose, const Eigen::Vector2f& size, const Eigen::Vector2i& steps) {
+void PainterGrid::setGrid(const Eigen::Isometry3f &pose, const Eigen::Vector2f &size, const Eigen::Vector2i &steps) {
 
   // Get bounds
   int xSteps = steps(0);

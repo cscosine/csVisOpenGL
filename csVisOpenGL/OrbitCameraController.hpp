@@ -17,14 +17,9 @@ public:
     bool enableTrasl;
     bool enableScale;
 
-    Settings()
-        : enableRot(true)
-        , enableTrasl(true)
-        , enableScale(true) {}
+    Settings() : enableRot(true), enableTrasl(true), enableScale(true) {}
   };
-  CameraControllerSignals const& getCameraControllerSignals() const {
-    return m_cameraSignals;
-  }
+  CameraControllerSignals const &getCameraControllerSignals() const { return m_cameraSignals; }
 
 private:
   // Default speeds
@@ -92,14 +87,14 @@ public:
 
   // Controller interface
 public slots:
-  void onFocusOutEvent(QFocusEvent& eventevent) override;
-  void onKeyPressEvent(QKeyEvent& eventevent) override;
-  void onKeyReleaseEvent(QKeyEvent& eventevent) override;
-  void onMouseMoveEvent(QMouseEvent& eventevent) override;
-  void onMousePressEvent(QMouseEvent& eventevent) override;
-  void onMouseReleaseEvent(QMouseEvent& eventevent) override;
-  void onMouseDoubleClick(QMouseEvent& eventevent) override;
-  void onWheelEvent(QWheelEvent& eventevent) override;
+  void onFocusOutEvent(QFocusEvent &eventevent) override;
+  void onKeyPressEvent(QKeyEvent &eventevent) override;
+  void onKeyReleaseEvent(QKeyEvent &eventevent) override;
+  void onMouseMoveEvent(QMouseEvent &eventevent) override;
+  void onMousePressEvent(QMouseEvent &eventevent) override;
+  void onMouseReleaseEvent(QMouseEvent &eventevent) override;
+  void onMouseDoubleClick(QMouseEvent &eventevent) override;
+  void onWheelEvent(QWheelEvent &eventevent) override;
 
   void onResizeGL(int width, int height) override;
   void onPaintGL() override;
@@ -110,124 +105,68 @@ public slots:
   void setCameraPerspective(float fovDeg);
 
   // Pose setters
-  void setPivotPosition(const Eigen::Vector3f& position, bool smooth = true);
-  void setYpr(const Eigen::Vector3f& ypr, bool smooth = true);
-  void setRotation(const Eigen::Matrix3f& R, bool smooth = true);
+  void setPivotPosition(const Eigen::Vector3f &position, bool smooth = true);
+  void setYpr(const Eigen::Vector3f &ypr, bool smooth = true);
+  void setRotation(const Eigen::Matrix3f &R, bool smooth = true);
   void setRadius(float radius, bool smooth = true);
   void setScale(float scale, bool smooth = true);
   void setZNearFar(float zNear, float zFar);
 
   // Pose getters
-  const Eigen::Vector3f& getPivotPosition() const {
-    return m_pivotPos;
-  }
-  const Eigen::Vector3f& getYpr() const {
-    return m_ypr;
-  }
-  const Eigen::Vector3f& getYprDest() const {
-    return m_yprDest;
-  }
-  float getRadius() const {
-    return m_radius;
-  }
+  const Eigen::Vector3f &getPivotPosition() const { return m_pivotPos; }
+  const Eigen::Vector3f &getYpr() const { return m_ypr; }
+  const Eigen::Vector3f &getYprDest() const { return m_yprDest; }
+  float getRadius() const { return m_radius; }
 
   // General getters
-  bool isLeftClicked() const {
-    return m_leftClicked;
-  }
-  bool isRightClicked() const {
-    return m_rightClicked;
-  }
-  bool isMiddleClicked() const {
-    return m_middleClicked;
-  }
+  bool isLeftClicked() const { return m_leftClicked; }
+  bool isRightClicked() const { return m_rightClicked; }
+  bool isMiddleClicked() const { return m_middleClicked; }
 
-  float getMinRadius() {
-    return m_minRadius;
-  }
-  float getMaxRadius() {
-    return m_maxRadius;
-  }
-  float getMinScale() {
-    return m_minScale;
-  }
-  float getMaxScale() {
-    return m_maxScale;
-  }
-  const Eigen::Vector3f& getMinPos() {
-    return m_minPos;
-  }
-  const Eigen::Vector3f& getMaxPos() {
-    return m_maxPos;
-  }
+  float getMinRadius() { return m_minRadius; }
+  float getMaxRadius() { return m_maxRadius; }
+  float getMinScale() { return m_minScale; }
+  float getMaxScale() { return m_maxScale; }
+  const Eigen::Vector3f &getMinPos() { return m_minPos; }
+  const Eigen::Vector3f &getMaxPos() { return m_maxPos; }
 
   // limits
-  void setMinRadius(float v) {
-    m_minRadius = v;
-  }
-  void setMaxRadius(float v) {
-    m_maxRadius = v;
-  }
-  void setMinScale(float v) {
-    m_minScale = v;
-  }
-  void setMaxScale(float v) {
-    m_maxScale = v;
-  }
+  void setMinRadius(float v) { m_minRadius = v; }
+  void setMaxRadius(float v) { m_maxRadius = v; }
+  void setMinScale(float v) { m_minScale = v; }
+  void setMaxScale(float v) { m_maxScale = v; }
   void setScaleLimits(float m, float M) {
     m_minScale = m;
     m_maxScale = M;
   }
-  void setTraslationLimits(const Eigen::Vector3f& minPos, const Eigen::Vector3f& maxPos);
+  void setTraslationLimits(const Eigen::Vector3f &minPos, const Eigen::Vector3f &maxPos);
 
   // reset to camera defaults
   void resetDestinations();
 
   // Interaction setters
-  void setMouseMoveSpeed(float moveSpeed) {
-    this->m_mouseMoveSpeed = moveSpeed;
-  }
-  void setKeyboardMoveSpeed(float moveSpeed) {
-    this->m_keyboardMoveSpeed = moveSpeed;
-  }
-  void setMoveSpeedScale(float scale) {
-    this->m_moveSpeedScale = scale;
-  }
-  void setKeyboardSpeedBoost(float boost) {
-    this->m_keyboardSpeedBoost = boost;
-  }
-  void setRotateSpeed(float rotateSpeed) {
-    this->m_rotateSpeed = rotateSpeed;
-  }
-  void setZoomSpeed(float zoomSpeed) {
-    this->m_zoomSpeed = zoomSpeed;
-  }
-  void setZoomSpeedScale(float scale) {
-    this->m_zoomSpeedScale = scale;
-  }
-  void setMoveSmoothing(float moveSmoothing) {
-    this->m_moveSmoothing = moveSmoothing;
-  }
-  void setRotateSmoothing(float rotateSmoothing) {
-    this->m_rotateSmoothing = rotateSmoothing;
-  }
-  void setZoomSmoothing(float zoomSmoothing) {
-    this->m_zoomSmoothing = zoomSmoothing;
-  }
+  void setMouseMoveSpeed(float moveSpeed) { this->m_mouseMoveSpeed = moveSpeed; }
+  void setKeyboardMoveSpeed(float moveSpeed) { this->m_keyboardMoveSpeed = moveSpeed; }
+  void setMoveSpeedScale(float scale) { this->m_moveSpeedScale = scale; }
+  void setKeyboardSpeedBoost(float boost) { this->m_keyboardSpeedBoost = boost; }
+  void setRotateSpeed(float rotateSpeed) { this->m_rotateSpeed = rotateSpeed; }
+  void setZoomSpeed(float zoomSpeed) { this->m_zoomSpeed = zoomSpeed; }
+  void setZoomSpeedScale(float scale) { this->m_zoomSpeedScale = scale; }
+  void setMoveSmoothing(float moveSmoothing) { this->m_moveSmoothing = moveSmoothing; }
+  void setRotateSmoothing(float rotateSmoothing) { this->m_rotateSmoothing = rotateSmoothing; }
+  void setZoomSmoothing(float zoomSmoothing) { this->m_zoomSmoothing = zoomSmoothing; }
   void setSmoothing(float smoothing) {
     m_moveSmoothing = smoothing;
     m_rotateSmoothing = smoothing;
     m_zoomSmoothing = smoothing;
   }
 
-  void setEnabledControls(const Settings& set) {
-    this->m_settings = set;
-  }
+  void setEnabledControls(const Settings &set) { this->m_settings = set; }
 
 private:
-  void normalizeYpr(Eigen::Vector3f& ypr) const;
+  void normalizeYpr(Eigen::Vector3f &ypr) const;
 
-  void setCameraPose(Eigen::Isometry3f const& pose) {
+  void setCameraPose(Eigen::Isometry3f const &pose) {
     m_camera.setPose(pose);
     emit m_cameraSignals.newCamera(m_camera);
   }

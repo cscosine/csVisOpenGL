@@ -9,12 +9,8 @@ const float Camera::zNearDefault = 0.01f;
 const float Camera::zFarDefault = 1000.0f;
 
 Camera::Camera()
-    : m_fov(45.0f)
-    , m_zNear(zNearDefault)
-    , m_zFar(zFarDefault)
-    , m_viewSize(Eigen::Vector2f::Constant(100))
-    , m_pose(Eigen::Isometry3f::Identity())
-    , m_scale(1.0f) {
+    : m_fov(45.0f), m_zNear(zNearDefault), m_zFar(zFarDefault), m_viewSize(Eigen::Vector2f::Constant(100)),
+      m_pose(Eigen::Isometry3f::Identity()), m_scale(1.0f) {
   updateProjectionMatrix();
   updateViewMatrix();
 }
@@ -42,12 +38,12 @@ void Camera::setClippingPlanes(float zNear, float zFar) {
   updateProjectionMatrix();
 }
 
-void Camera::setViewSize(const Eigen::Vector2f& viewSize) {
+void Camera::setViewSize(const Eigen::Vector2f &viewSize) {
   m_viewSize = viewSize;
   updateProjectionMatrix();
 }
 
-void Camera::setPose(const Eigen::Isometry3f& pose) {
+void Camera::setPose(const Eigen::Isometry3f &pose) {
   m_pose = pose;
   updateViewMatrix();
 }
@@ -114,7 +110,7 @@ void Camera::updateViewMatrix() {
   m_viewProjection = m_projection * m_view;
 }
 
-Eigen::Vector2f Camera::worldToScreen(const Eigen::Vector3f& worldPosition, bool flipY) const {
+Eigen::Vector2f Camera::worldToScreen(const Eigen::Vector3f &worldPosition, bool flipY) const {
   Eigen::Vector4f const homogeneousWorld = worldPosition.homogeneous();
   Eigen::Vector4f const homogeneousScreen = m_viewProjection * homogeneousWorld;
   Eigen::Vector2f point2dGL = Eigen::Vector2f::Zero();
@@ -130,7 +126,7 @@ Eigen::Vector2f Camera::worldToScreen(const Eigen::Vector3f& worldPosition, bool
   return point2dScreen;
 }
 
-Eigen::Vector3f Camera::screenToWorld(const Eigen::Vector2f& screenPosition, bool flipY) const {
+Eigen::Vector3f Camera::screenToWorld(const Eigen::Vector2f &screenPosition, bool flipY) const {
   Eigen::Vector2f screenPos = screenPosition;
   if (flipY)
     screenPos.y() = m_viewSize.y() - 1 - screenPosition.y();

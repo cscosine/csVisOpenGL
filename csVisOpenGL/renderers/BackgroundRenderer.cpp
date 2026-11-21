@@ -7,15 +7,15 @@
 
 namespace csVisOpenGL {
 
-BackgroundRenderer::BackgroundRenderer()
-    : Renderer(ShaderFactory::ShaderNames::Background) {}
+BackgroundRenderer::BackgroundRenderer() : Renderer(ShaderFactory::ShaderNames::Background) {}
 
 void BackgroundRenderer::setDefaultColors() {
-  setColors(Eigen::Vector3f(31 / 255.0f, 88 / 255.0f, 125 / 255.0f), Eigen::Vector3f(42 / 255.0f, 117 / 255.0f, 169 / 255.0f),
+  setColors(Eigen::Vector3f(31 / 255.0f, 88 / 255.0f, 125 / 255.0f),
+            Eigen::Vector3f(42 / 255.0f, 117 / 255.0f, 169 / 255.0f),
             Eigen::Vector3f(20 / 255.0f, 40 / 255.0f, 80 / 255.0f));
 }
 
-void BackgroundRenderer::setColors(const Eigen::Vector4f& zc, const Eigen::Vector4f& hc, const Eigen::Vector4f& nc) {
+void BackgroundRenderer::setColors(const Eigen::Vector4f &zc, const Eigen::Vector4f &hc, const Eigen::Vector4f &nc) {
   getShader().bind();
   getShader().getProgram().setUniformValue("zenithColor", zc.x(), zc.y(), zc.z(), zc.w());
   getShader().getProgram().setUniformValue("horizonColor", hc.x(), hc.y(), hc.z(), hc.w());
@@ -23,7 +23,7 @@ void BackgroundRenderer::setColors(const Eigen::Vector4f& zc, const Eigen::Vecto
   getShader().release();
 }
 
-void BackgroundRenderer::setColors(const Eigen::Vector3f& zc, const Eigen::Vector3f& hc, const Eigen::Vector3f& nc) {
+void BackgroundRenderer::setColors(const Eigen::Vector3f &zc, const Eigen::Vector3f &hc, const Eigen::Vector3f &nc) {
   getShader().bind();
   getShader().getProgram().setUniformValue("zenithColor", zc.x(), zc.y(), zc.z(), 1.0);
   getShader().getProgram().setUniformValue("horizonColor", hc.x(), hc.y(), hc.z(), 1.0);
@@ -53,7 +53,7 @@ void BackgroundRenderer::initializeConcrete() {
   getVao().uploadPositions(getShader().getVertexLocations().position, bkgPoints.data(), bkgPoints.cols());
 }
 
-void BackgroundRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
+void BackgroundRenderer::drawConcrete(const Camera &camera, const Eigen::Matrix4f &m) {
 
   Eigen::Matrix4f P = camera.getProjection();
   P(2, 3) = 0;

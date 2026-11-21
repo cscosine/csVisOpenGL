@@ -46,7 +46,7 @@ Eigen::Vector3f ColorUtils::gradientGreenToRed(float v, float min, float max, bo
   }
 }
 
-Eigen::Matrix3Xf ColorUtils::gradientBlueToGreen(const std::vector<double>& v, float min, float max) {
+Eigen::Matrix3Xf ColorUtils::gradientBlueToGreen(const std::vector<double> &v, float min, float max) {
   Eigen::Matrix3Xf mat(3, v.size());
   for (size_t i = 0; i < v.size(); i++) {
     mat.col(i) = gradientBlueToGreen(v[i], min, max);
@@ -54,7 +54,7 @@ Eigen::Matrix3Xf ColorUtils::gradientBlueToGreen(const std::vector<double>& v, f
   return mat;
 }
 
-Eigen::Matrix3Xf ColorUtils::gradientRedToGreen(const std::vector<double>& v, float min, float max) {
+Eigen::Matrix3Xf ColorUtils::gradientRedToGreen(const std::vector<double> &v, float min, float max) {
   Eigen::Matrix3Xf mat(3, v.size());
   for (int i = 0; i < v.size(); i++) {
     mat.col(i) = gradientRedToGreen(v[i], min, max);
@@ -62,7 +62,7 @@ Eigen::Matrix3Xf ColorUtils::gradientRedToGreen(const std::vector<double>& v, fl
   return mat;
 }
 
-Eigen::Matrix3Xf ColorUtils::gradientGreenToRed(const std::vector<double>& v, float min, float max) {
+Eigen::Matrix3Xf ColorUtils::gradientGreenToRed(const std::vector<double> &v, float min, float max) {
   Eigen::Matrix3Xf mat(3, v.size());
   for (int i = 0; i < v.size(); i++) {
     mat.col(i) = gradientGreenToRed(v[i], min, max);

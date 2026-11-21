@@ -17,7 +17,7 @@ public:
   TexturesManager();
   virtual ~TexturesManager();
 
-  GLuint uploadTexture(const QImage& tex);
+  GLuint uploadTexture(const QImage &tex);
   Eigen::Vector2i getTextureSize(GLuint id) const;
   void releaseTexture(GLuint id);
 
