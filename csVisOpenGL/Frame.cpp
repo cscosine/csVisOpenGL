@@ -15,19 +15,13 @@
 
 namespace csVisOpenGL {
 
-void Frame::CameraState::onNewCamera(Camera const& camera) {
-  m_camera = camera;
-}
+void Frame::CameraState::onNewCamera(Camera const &camera) { m_camera = camera; }
 
 // --------------------------------------------------------------------------------------------------------------
 
-Frame::Frame(QWidget* parent)
-    : QOpenGLWidget(parent)
-    , m_openGLExtraFunctions{std::make_unique<QOpenGLExtraFunctions>()}
-    , m_shaderFactory{std::make_unique<ShaderFactory>()}
-    , m_visualizers{}
-    , m_initialized(false)
-    , m_cameraState() {
+Frame::Frame(QWidget *parent)
+    : QOpenGLWidget(parent), m_openGLExtraFunctions{std::make_unique<QOpenGLExtraFunctions>()},
+      m_shaderFactory{std::make_unique<ShaderFactory>()}, m_visualizers{}, m_initialized(false), m_cameraState() {
   setMinimumSize(300, 200);
   setMouseTracking(true);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -48,15 +42,15 @@ Frame::~Frame() {
 }
 
 // -------------------------------------------------- Visualizers -------------------------------------------------
-void Frame::connectSlotsInterface(FrameSlotsInterface const& frameSlots) const {
+void Frame::connectSlotsInterface(FrameSlotsInterface const &frameSlots) const {
   FrameSlotsInterface::connect(m_frameSignals, frameSlots);
 }
 
-void Frame::connectCameraControllerSignals(CameraControllerSignals const& cameraSignals) const {
+void Frame::connectCameraControllerSignals(CameraControllerSignals const &cameraSignals) const {
   CameraControllerSlots::connect(cameraSignals, m_cameraState);
 }
 
-void Frame::addVisualizer(std::shared_ptr<VisualizerInterface> const& visualizer) {
+void Frame::addVisualizer(std::shared_ptr<VisualizerInterface> const &visualizer) {
   m_visualizers.emplace_back(visualizer);
   if (m_initialized) {
     this->makeCurrent();
@@ -90,9 +84,7 @@ void Frame::initializeGL() {
   m_initialized = true;
 }
 
-void Frame::timerEvent(QTimerEvent* event) {
-  this->update();
-}
+void Frame::timerEvent(QTimerEvent *event) { this->update(); }
 
 void Frame::paintGL() {
   if (!m_initialized)
@@ -144,7 +136,8 @@ void Frame::paintGL() {
   painter.endNativePainting();
   painter.save();
   painter.setClipping(true);
-  painter.setClipRect(QRect(0, 0, m_cameraState.getCamera().getViewSize().x(), m_cameraState.getCamera().getViewSize().y()));
+  painter.setClipRect(
+      QRect(0, 0, m_cameraState.getCamera().getViewSize().x(), m_cameraState.getCamera().getViewSize().y()));
   painter.translate(QPoint(0, 0));
 
   for (int i = 0; i < m_visualizers.size(); i++) {
@@ -173,41 +166,29 @@ void Frame::resizeGL(int width, int height) {
 
 // ---------------------------------------------------- Events ----------------------------------------------------
 
-bool Frame::event(QEvent* event) {
+bool Frame::event(QEvent *event) {
   if (event->type() == QEvent::MouseButtonDblClick) {
-    emit m_frameSignals.mouseDoubleClick(static_cast<QMouseEvent&>(*event));
+    emit m_frameSignals.mouseDoubleClick(static_cast<QMouseEvent &>(*event));
     return true;
   }
   return QWidget::event(event);
 }
 
-void Frame::focusOutEvent(QFocusEvent* event) {
+void Frame::focusOutEvent(QFocusEvent *event) {
   // TODO(sc) add asserts on event != nullptr
   emit m_frameSignals.focusOutEvent(*event);
 }
 
-void Frame::keyPressEvent(QKeyEvent* event) {
-  emit m_frameSignals.keyPressEvent(*event);
-}
+void Frame::keyPressEvent(QKeyEvent *event) { emit m_frameSignals.keyPressEvent(*event); }
 
-void Frame::keyReleaseEvent(QKeyEvent* event) {
-  emit m_frameSignals.keyReleaseEvent(*event);
-}
+void Frame::keyReleaseEvent(QKeyEvent *event) { emit m_frameSignals.keyReleaseEvent(*event); }
 
-void Frame::mouseMoveEvent(QMouseEvent* event) {
-  emit m_frameSignals.mouseMoveEvent(*event);
-}
+void Frame::mouseMoveEvent(QMouseEvent *event) { emit m_frameSignals.mouseMoveEvent(*event); }
 
-void Frame::mousePressEvent(QMouseEvent* event) {
-  emit m_frameSignals.mousePressEvent(*event);
-}
+void Frame::mousePressEvent(QMouseEvent *event) { emit m_frameSignals.mousePressEvent(*event); }
 
-void Frame::mouseReleaseEvent(QMouseEvent* event) {
-  emit m_frameSignals.mouseReleaseEvent(*event);
-}
+void Frame::mouseReleaseEvent(QMouseEvent *event) { emit m_frameSignals.mouseReleaseEvent(*event); }
 
-void Frame::wheelEvent(QWheelEvent* event) {
-  emit m_frameSignals.wheelEvent(*event);
-}
+void Frame::wheelEvent(QWheelEvent *event) { emit m_frameSignals.wheelEvent(*event); }
 
 } // namespace csVisOpenGL

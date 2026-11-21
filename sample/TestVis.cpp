@@ -6,16 +6,11 @@
 #include <iostream>
 #include <math.h>
 
-TestcsVisOpenGL::TestcsVisOpenGL()
-    : csVisOpenGL::VisualizerInterface()
-    , bkgSolid(false) {}
-TestcsVisOpenGL::~TestcsVisOpenGL() {
+TestcsVisOpenGL::TestcsVisOpenGL() : csVisOpenGL::VisualizerInterface(), bkgSolid(false) {}
+TestcsVisOpenGL::~TestcsVisOpenGL() { std::cout << "~TestcsVisOpenGL" << std::endl; }
 
-  std::cout << "~TestcsVisOpenGL" << std::endl;
-}
-
-void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory& shaderFactory,
-                                 std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory &shaderFactory,
+                                 std::shared_ptr<QOpenGLExtraFunctions> const &glExtraFunctions) {
 
   {
     QImage img(2, 2, QImage::Format_RGB32);
@@ -33,7 +28,8 @@ void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory& shaderFactory,
     texCoords.col(1) = Eigen::Vector2f(1, 0);
     texCoords.col(2) = Eigen::Vector2f(1, 1);
     texCoords.col(3) = Eigen::Vector2f(0, 1);
-    singleTextureRenderer.setTexture(tid, vectCoords, texCoords, csVisOpenGL::SingleTextureRenderer::TextureInterpolation::Linear);
+    singleTextureRenderer.setTexture(tid, vectCoords, texCoords,
+                                     csVisOpenGL::SingleTextureRenderer::TextureInterpolation::Linear);
   }
 
   bkgRenderer.initialize(shaderFactory, glExtraFunctions);
@@ -238,15 +234,15 @@ void TestcsVisOpenGL::initialize(csVisOpenGL::ShaderFactory& shaderFactory,
   }
 }
 
-void TestcsVisOpenGL::update(const csVisOpenGL::Camera& camera) {
-  auto& light0 = meshRenderer.getLight(0);
+void TestcsVisOpenGL::update(const csVisOpenGL::Camera &camera) {
+  auto &light0 = meshRenderer.getLight(0);
   light0.enabled = true;
   light0.dir = (-(camera.up() / 4.0f) + (camera.left() / 4.0f) + camera.forward()).normalized();
   light0.color = Eigen::Vector3f::Ones() * 0.6f;
   light0.ambientCoefficient = 0.1f;
   meshRenderer.updateLight(0);
 
-  auto& light1 = meshRenderer.getLight(1);
+  auto &light1 = meshRenderer.getLight(1);
   light1.enabled = true;
   light1.dir = -(-(camera.up() / 4.0f) + (camera.left()) + camera.forward()).normalized();
   light1.color = Eigen::Vector3f::Ones() * 0.2f;
@@ -255,14 +251,14 @@ void TestcsVisOpenGL::update(const csVisOpenGL::Camera& camera) {
   meshRenderer.updateLight(1);
 }
 
-void TestcsVisOpenGL::paintBackground(const csVisOpenGL::Camera& camera) {
+void TestcsVisOpenGL::paintBackground(const csVisOpenGL::Camera &camera) {
   if (!bkgSolid)
     bkgRenderer.draw(camera);
   else
     bkgSolidRenderer.draw(camera);
 }
 
-void TestcsVisOpenGL::paint(const csVisOpenGL::Camera& camera) {
+void TestcsVisOpenGL::paint(const csVisOpenGL::Camera &camera) {
 
   uniformPointRenderer.draw(camera);
   perVertexPointRenderer.draw(camera);
@@ -275,7 +271,7 @@ void TestcsVisOpenGL::paint(const csVisOpenGL::Camera& camera) {
   meshRenderer.draw(camera);
 }
 
-void TestcsVisOpenGL::paintTransparent(const csVisOpenGL::Camera& camera) {
+void TestcsVisOpenGL::paintTransparent(const csVisOpenGL::Camera &camera) {
   singleTextureRenderer.draw(camera);
 
   uniformLineRenderer.draw(camera);
@@ -285,7 +281,7 @@ void TestcsVisOpenGL::paintTransparent(const csVisOpenGL::Camera& camera) {
   meshColorRenderer.draw(camera);
 }
 
-void TestcsVisOpenGL::paintQt(const csVisOpenGL::Camera& camera, QPainter& painter) {
+void TestcsVisOpenGL::paintQt(const csVisOpenGL::Camera &camera, QPainter &painter) {
   Eigen::Vector2f origin2d = camera.worldToScreen(Eigen::Vector3f::Zero(), true);
 
   painter.setPen(QPen(QBrush(Qt::yellow), 2));

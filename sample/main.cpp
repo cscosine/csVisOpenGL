@@ -13,13 +13,13 @@
 // right after the check (std::_Exit, the output flushed): no teardown, which
 // the software OpenGL of Mesa on Windows can hang at the unload of its
 // threads, and nothing left to check.
-static void checkAndQuit(Window const& window) {
-  auto const views = window.findChildren<QOpenGLWidget*>();
+static void checkAndQuit(Window const &window) {
+  auto const views = window.findChildren<QOpenGLWidget *>();
   if (views.isEmpty()) {
     std::cerr << "smoke: failed, no OpenGL view" << std::endl;
     std::_Exit(1);
   }
-  for (QOpenGLWidget const* view : views) {
+  for (QOpenGLWidget const *view : views) {
     if (!view->isValid() || view->context() == nullptr) {
       std::cerr << "smoke: failed, no OpenGL context for " << view->objectName().toStdString() << std::endl;
       std::_Exit(1);
@@ -31,7 +31,7 @@ static void checkAndQuit(Window const& window) {
   std::_Exit(0);
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
   Q_INIT_RESOURCE(vis);
 
   QApplication app(argc, argv);

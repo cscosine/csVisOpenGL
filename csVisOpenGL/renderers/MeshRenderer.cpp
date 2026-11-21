@@ -9,19 +9,10 @@
 namespace csVisOpenGL {
 
 MeshRenderer::Light::Light()
-    : enabled(false)
-    , position(Eigen::Vector3f::Zero())
-    , dir(Eigen::Vector3f::UnitX())
-    , color(Eigen::Vector3f::Ones())
-    , spot(false)
-    , specularEnabled(true)
-    , attenuation(0)
-    , ambientCoefficient(0.2f)
-    , coneAngle(float(M_PI / 4.0f)) {}
+    : enabled(false), position(Eigen::Vector3f::Zero()), dir(Eigen::Vector3f::UnitX()), color(Eigen::Vector3f::Ones()),
+      spot(false), specularEnabled(true), attenuation(0), ambientCoefficient(0.2f), coneAngle(float(M_PI / 4.0f)) {}
 
-MeshRenderer::MeshRenderer()
-    : Renderer(ShaderFactory::ShaderNames::Mesh)
-    , m_cull(false) {}
+MeshRenderer::MeshRenderer() : Renderer(ShaderFactory::ShaderNames::Mesh), m_cull(false) {}
 
 MeshRenderer::~MeshRenderer() {}
 
@@ -42,7 +33,7 @@ void MeshRenderer::initializeConcrete() {
   updateLight(0);
 }
 
-void MeshRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
+void MeshRenderer::drawConcrete(const Camera &camera, const Eigen::Matrix4f &m) {
   if (m_cull)
     glEnable(GL_CULL_FACE);
   else
@@ -50,8 +41,8 @@ void MeshRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) 
 
   getShader().bind();
   {
-    getShader().getProgram().setUniformValue("cameraPosition", camera.getPose().translation().x(), camera.getPose().translation().y(),
-                                             camera.getPose().translation().z());
+    getShader().getProgram().setUniformValue("cameraPosition", camera.getPose().translation().x(),
+                                             camera.getPose().translation().y(), camera.getPose().translation().z());
     getQOpenGLExtraFunctions().glBindVertexArray(getVao().getVao());
     getQOpenGLExtraFunctions().glDrawArrays(GL_TRIANGLES, 0, getVao().size());
     getQOpenGLExtraFunctions().glBindVertexArray(0);
@@ -59,15 +50,17 @@ void MeshRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) 
   getShader().release();
 }
 
-void MeshRenderer::setUniformColor(const Eigen::Vector4f& color) {
+void MeshRenderer::setUniformColor(const Eigen::Vector4f &color) {
   getShader().bind();
-  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2),
+                                         color(3));
   getShader().release();
 }
 
-void MeshRenderer::setUniformColor(const Eigen::Vector3f& color) {
+void MeshRenderer::setUniformColor(const Eigen::Vector3f &color) {
   getShader().bind();
-  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2),
+                                         1.0f);
   getShader().release();
 }
 
@@ -90,8 +83,9 @@ void MeshRenderer::updateLight(int i) {
   QString lightBaseLocation = QString("lights[%1].").arg(i);
   getShader().bind();
   getShader().getProgram().setUniformValue((lightBaseLocation + "enabled").toStdString().c_str(), m_lights[i]->enabled);
-  getShader().getProgram().setUniformValue((lightBaseLocation + "position").toStdString().c_str(), m_lights[i]->position.x(),
-                                           m_lights[i]->position.y(), m_lights[i]->position.z());
+  getShader().getProgram().setUniformValue((lightBaseLocation + "position").toStdString().c_str(),
+                                           m_lights[i]->position.x(), m_lights[i]->position.y(),
+                                           m_lights[i]->position.z());
   getShader().getProgram().setUniformValue((lightBaseLocation + "dir").toStdString().c_str(), m_lights[i]->dir.x(),
                                            m_lights[i]->dir.y(), m_lights[i]->dir.z());
   getShader().getProgram().setUniformValue((lightBaseLocation + "color").toStdString().c_str(), m_lights[i]->color.x(),
@@ -99,14 +93,16 @@ void MeshRenderer::updateLight(int i) {
   getShader().getProgram().setUniformValue((lightBaseLocation + "spot").toStdString().c_str(), m_lights[i]->spot);
   getShader().getProgram().setUniformValue((lightBaseLocation + "specularEnabled").toStdString().c_str(),
                                            m_lights[i]->specularEnabled);
-  getShader().getProgram().setUniformValue((lightBaseLocation + "attenuation").toStdString().c_str(), m_lights[i]->attenuation);
+  getShader().getProgram().setUniformValue((lightBaseLocation + "attenuation").toStdString().c_str(),
+                                           m_lights[i]->attenuation);
   getShader().getProgram().setUniformValue((lightBaseLocation + "ambientCoefficient").toStdString().c_str(),
                                            m_lights[i]->ambientCoefficient);
-  getShader().getProgram().setUniformValue((lightBaseLocation + "coneAngle").toStdString().c_str(), m_lights[i]->coneAngle);
+  getShader().getProgram().setUniformValue((lightBaseLocation + "coneAngle").toStdString().c_str(),
+                                           m_lights[i]->coneAngle);
   getShader().release();
 }
 
-void MeshRenderer::setTriangles(const Eigen::Matrix3Xf& positions, const Eigen::Matrix3Xf& normals) {
+void MeshRenderer::setTriangles(const Eigen::Matrix3Xf &positions, const Eigen::Matrix3Xf &normals) {
   getVao().uploadPositions(getShader().getVertexLocations().position, positions.data(), positions.cols());
   getVao().uploadNormals(getShader().getVertexLocations().normal, normals.data(), normals.cols());
 }

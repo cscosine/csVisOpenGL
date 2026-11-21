@@ -1,5 +1,5 @@
-#include <cassert>
 #include <QImage>
+#include <cassert>
 #include <csVisOpenGL/TexturesManager.hpp>
 
 namespace csVisOpenGL {
@@ -13,7 +13,7 @@ TexturesManager::~TexturesManager() {
   }
 }
 
-GLuint TexturesManager::uploadTexture(const QImage& tex) {
+GLuint TexturesManager::uploadTexture(const QImage &tex) {
   assert(!tex.isNull());
 
   GLuint texID;
@@ -28,7 +28,8 @@ GLuint TexturesManager::uploadTexture(const QImage& tex) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, glImage.width(), glImage.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, glImage.bits());
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, glImage.width(), glImage.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
+               glImage.bits());
   glBindTexture(GL_TEXTURE_2D, 0);
 
   auto size = glImage.size();

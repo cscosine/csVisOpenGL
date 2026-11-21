@@ -3,8 +3,8 @@
 
 namespace csVisOpenGL {
 
-void CameraControllerSlots::connect(CameraControllerSignals const& cameraControllerSignals,
-                                    CameraControllerSlots const& cameraControllerSlots) {
+void CameraControllerSlots::connect(CameraControllerSignals const &cameraControllerSignals,
+                                    CameraControllerSlots const &cameraControllerSlots) {
   QObject::connect(&cameraControllerSignals, &CameraControllerSignals::newCamera, &cameraControllerSlots,
                    &CameraControllerSlots::onNewCamera);
 }

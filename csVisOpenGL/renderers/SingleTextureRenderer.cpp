@@ -8,29 +8,27 @@
 
 namespace csVisOpenGL {
 
-SingleTextureRenderer::SingleTextureRenderer()
-    : Renderer(ShaderFactory::ShaderNames::Texture)
-    , m_texid(-1) {}
+SingleTextureRenderer::SingleTextureRenderer() : Renderer(ShaderFactory::ShaderNames::Texture), m_texid(-1) {}
 
-void SingleTextureRenderer::initializeConcrete() {
-  setUniformColor(Eigen::Vector4f::Ones().eval());
-}
+void SingleTextureRenderer::initializeConcrete() { setUniformColor(Eigen::Vector4f::Ones().eval()); }
 
 SingleTextureRenderer::~SingleTextureRenderer() {}
 
-void SingleTextureRenderer::setUniformColor(const Eigen::Vector4f& color) {
+void SingleTextureRenderer::setUniformColor(const Eigen::Vector4f &color) {
   getShader().bind();
-  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2),
+                                         color(3));
   getShader().release();
 }
 
-void SingleTextureRenderer::setUniformColor(const Eigen::Vector3f& color) {
+void SingleTextureRenderer::setUniformColor(const Eigen::Vector3f &color) {
   getShader().bind();
-  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2),
+                                         1.0f);
   getShader().release();
 }
 
-void SingleTextureRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
+void SingleTextureRenderer::drawConcrete(const Camera &camera, const Eigen::Matrix4f &m) {
   if (m_texid >= 0) {
 
     getShader().bind();
@@ -51,7 +49,8 @@ void SingleTextureRenderer::drawConcrete(const Camera& camera, const Eigen::Matr
   }
 }
 
-void SingleTextureRenderer::setTexture(GLuint texid, const Matrix3x4f& vertex, const Matrix2x4f& texCoord, TextureInterpolation ti) {
+void SingleTextureRenderer::setTexture(GLuint texid, const Matrix3x4f &vertex, const Matrix2x4f &texCoord,
+                                       TextureInterpolation ti) {
   getVao().uploadPositions(getShader().getVertexLocations().position, vertex.data(), vertex.cols());
   getVao().uploadTexCoords0(getShader().getVertexLocations().texCoord0, texCoord.data(), texCoord.cols());
   this->m_texid = texid;

@@ -10,8 +10,7 @@
 namespace csVisOpenGL {
 
 UniformEllipsoidsRenderer3D::UniformEllipsoidsRenderer3D()
-    : Renderer(ShaderFactory::ShaderNames::DiffuseUniform)
-    , m_lineWidth(1) {
+    : Renderer(ShaderFactory::ShaderNames::DiffuseUniform), m_lineWidth(1) {
   // create sphere points
   float radius = 1;
   int rings = 32;
@@ -46,11 +45,9 @@ UniformEllipsoidsRenderer3D::UniformEllipsoidsRenderer3D()
 
 UniformEllipsoidsRenderer3D::~UniformEllipsoidsRenderer3D() {}
 
-void UniformEllipsoidsRenderer3D::initializeConcrete() {
-  setUniformColor(Eigen::Vector4f::Ones().eval());
-}
+void UniformEllipsoidsRenderer3D::initializeConcrete() { setUniformColor(Eigen::Vector4f::Ones().eval()); }
 
-void UniformEllipsoidsRenderer3D::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
+void UniformEllipsoidsRenderer3D::drawConcrete(const Camera &camera, const Eigen::Matrix4f &m) {
   glLineWidth(m_lineWidth);
 
   getShader().bind();
@@ -62,24 +59,27 @@ void UniformEllipsoidsRenderer3D::drawConcrete(const Camera& camera, const Eigen
   getShader().release();
 }
 
-void UniformEllipsoidsRenderer3D::setUniformColor(const Eigen::Vector4f& color) {
+void UniformEllipsoidsRenderer3D::setUniformColor(const Eigen::Vector4f &color) {
   getShader().bind();
-  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2),
+                                         color(3));
   getShader().release();
 }
 
-void UniformEllipsoidsRenderer3D::setUniformColor(const Eigen::Vector3f& color) {
+void UniformEllipsoidsRenderer3D::setUniformColor(const Eigen::Vector3f &color) {
   getShader().bind();
-  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2),
+                                         1.0f);
   getShader().release();
 }
 
-void UniformEllipsoidsRenderer3D::setCovariances(const Eigen::Isometry3f& poses, const Eigen::Matrix3d& covariances, float nSigma) {
+void UniformEllipsoidsRenderer3D::setCovariances(const Eigen::Isometry3f &poses, const Eigen::Matrix3d &covariances,
+                                                 float nSigma) {
   setCovariances(std::vector<Eigen::Isometry3f>{poses}, std::vector<Eigen::Matrix3d>{covariances}, nSigma);
 }
 
-void UniformEllipsoidsRenderer3D::setCovariances(const std::vector<Eigen::Isometry3f>& poses,
-                                                 const std::vector<Eigen::Matrix3d>& covariances, float nSigma) {
+void UniformEllipsoidsRenderer3D::setCovariances(const std::vector<Eigen::Isometry3f> &poses,
+                                                 const std::vector<Eigen::Matrix3d> &covariances, float nSigma) {
 
   Eigen::Matrix3Xf lines(3, poses.size() * m_spherePoints.cols());
   for (int i = 0; i < poses.size(); i++) {
@@ -106,8 +106,7 @@ void UniformEllipsoidsRenderer3D::setCovariances(const std::vector<Eigen::Isomet
 //---------------------------------------------------------------------------------------------------------
 
 UniformEllipsoidsRenderer2D::UniformEllipsoidsRenderer2D()
-    : Renderer(ShaderFactory::ShaderNames::DiffuseUniform)
-    , m_lineWidth(1) {
+    : Renderer(ShaderFactory::ShaderNames::DiffuseUniform), m_lineWidth(1) {
   // create sphere points
   int sectors = 32;
   float const S = 1. / (float)(sectors - 1);
@@ -128,11 +127,9 @@ UniformEllipsoidsRenderer2D::UniformEllipsoidsRenderer2D()
 
 UniformEllipsoidsRenderer2D::~UniformEllipsoidsRenderer2D() {}
 
-void UniformEllipsoidsRenderer2D::initializeConcrete() {
-  setUniformColor(Eigen::Vector4f::Ones().eval());
-}
+void UniformEllipsoidsRenderer2D::initializeConcrete() { setUniformColor(Eigen::Vector4f::Ones().eval()); }
 
-void UniformEllipsoidsRenderer2D::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
+void UniformEllipsoidsRenderer2D::drawConcrete(const Camera &camera, const Eigen::Matrix4f &m) {
   glLineWidth(m_lineWidth);
 
   getShader().bind();
@@ -144,24 +141,27 @@ void UniformEllipsoidsRenderer2D::drawConcrete(const Camera& camera, const Eigen
   getShader().release();
 }
 
-void UniformEllipsoidsRenderer2D::setUniformColor(const Eigen::Vector4f& color) {
+void UniformEllipsoidsRenderer2D::setUniformColor(const Eigen::Vector4f &color) {
   getShader().bind();
-  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2),
+                                         color(3));
   getShader().release();
 }
 
-void UniformEllipsoidsRenderer2D::setUniformColor(const Eigen::Vector3f& color) {
+void UniformEllipsoidsRenderer2D::setUniformColor(const Eigen::Vector3f &color) {
   getShader().bind();
-  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2),
+                                         1.0f);
   getShader().release();
 }
 
-void UniformEllipsoidsRenderer2D::setCovariances(const Eigen::Isometry3f& poses, const Eigen::Matrix2d& covariances, float nSigma) {
+void UniformEllipsoidsRenderer2D::setCovariances(const Eigen::Isometry3f &poses, const Eigen::Matrix2d &covariances,
+                                                 float nSigma) {
   setCovariances(std::vector<Eigen::Isometry3f>{poses}, std::vector<Eigen::Matrix2d>{covariances}, nSigma);
 }
 
-void UniformEllipsoidsRenderer2D::setCovariances(const std::vector<Eigen::Isometry3f>& poses,
-                                                 const std::vector<Eigen::Matrix2d>& covariances, float nSigma) {
+void UniformEllipsoidsRenderer2D::setCovariances(const std::vector<Eigen::Isometry3f> &poses,
+                                                 const std::vector<Eigen::Matrix2d> &covariances, float nSigma) {
 
   Eigen::Matrix3Xf lines(3, poses.size() * m_circlePoints.cols());
   for (int i = 0; i < poses.size(); i++) {

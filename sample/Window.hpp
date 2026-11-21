@@ -20,7 +20,7 @@ class Window : public QMainWindow {
   float radius;
 
 public:
-  Window(QWidget* parent = 0);
+  Window(QWidget *parent = 0);
   virtual ~Window();
 
 public slots:

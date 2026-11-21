@@ -10,22 +10,18 @@ namespace csVisOpenGL {
 
 static constexpr int N_COLS_BOX{6 * (3 * 2)};
 
-PainterBox::PainterBox()
-    : m_renderer(new PerVertexMeshRenderer()) {
-  resize(0);
-}
+PainterBox::PainterBox() : m_renderer(new PerVertexMeshRenderer()) { resize(0); }
 
 PainterBox::~PainterBox() {}
 
-void PainterBox::initialize(ShaderFactory& shaderFactory, std::shared_ptr<QOpenGLExtraFunctions> const& glExtraFunctions) {
+void PainterBox::initialize(ShaderFactory &shaderFactory,
+                            std::shared_ptr<QOpenGLExtraFunctions> const &glExtraFunctions) {
   m_renderer->initialize(shaderFactory, glExtraFunctions);
   resize(0);
   apply();
 }
 
-void PainterBox::draw(const Camera& camera) {
-  m_renderer->draw(camera);
-}
+void PainterBox::draw(const Camera &camera) { m_renderer->draw(camera); }
 
 Eigen::Matrix3Xf PainterBox::createBoxTriangles(const double width, const double length, const double height) {
   // box with center in (x,y,z)=(0,0,0)
@@ -98,11 +94,9 @@ Eigen::Matrix3Xf PainterBox::createBoxTriangles(const double width, const double
   return ret;
 }
 
-const int PainterBox::size() const {
-  return m_size;
-}
+const int PainterBox::size() const { return m_size; }
 
-void PainterBox::insertBox(const int i, const Eigen::Matrix3Xf& box, const Eigen::Vector3f& color) {
+void PainterBox::insertBox(const int i, const Eigen::Matrix3Xf &box, const Eigen::Vector3f &color) {
   assert(i < m_size);
   m_boxes.block(0, i * N_COLS_BOX, 3, N_COLS_BOX) = box;
   m_colors.block(0, i * N_COLS_BOX, 3, N_COLS_BOX) = color.replicate(1, N_COLS_BOX);
@@ -114,8 +108,6 @@ void PainterBox::resize(const int n) {
   m_size = n;
 }
 
-void PainterBox::apply() {
-  m_renderer->setTriangles(m_boxes, m_colors);
-}
+void PainterBox::apply() { m_renderer->setTriangles(m_boxes, m_colors); }
 
 } // namespace csVisOpenGL

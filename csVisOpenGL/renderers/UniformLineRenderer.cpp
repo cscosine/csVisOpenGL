@@ -6,17 +6,13 @@
 
 namespace csVisOpenGL {
 
-UniformLineRenderer::UniformLineRenderer()
-    : Renderer(ShaderFactory::ShaderNames::DiffuseUniform)
-    , m_lineWidth(1) {}
+UniformLineRenderer::UniformLineRenderer() : Renderer(ShaderFactory::ShaderNames::DiffuseUniform), m_lineWidth(1) {}
 
 UniformLineRenderer::~UniformLineRenderer() {}
 
-void UniformLineRenderer::initializeConcrete() {
-  setUniformColor(Eigen::Vector4f::Ones().eval());
-}
+void UniformLineRenderer::initializeConcrete() { setUniformColor(Eigen::Vector4f::Ones().eval()); }
 
-void UniformLineRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix4f& m) {
+void UniformLineRenderer::drawConcrete(const Camera &camera, const Eigen::Matrix4f &m) {
   glLineWidth(m_lineWidth);
 
   getShader().bind();
@@ -28,19 +24,21 @@ void UniformLineRenderer::drawConcrete(const Camera& camera, const Eigen::Matrix
   getShader().release();
 }
 
-void UniformLineRenderer::setUniformColor(const Eigen::Vector4f& color) {
+void UniformLineRenderer::setUniformColor(const Eigen::Vector4f &color) {
   getShader().bind();
-  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), color(3));
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2),
+                                         color(3));
   getShader().release();
 }
 
-void UniformLineRenderer::setUniformColor(const Eigen::Vector3f& color) {
+void UniformLineRenderer::setUniformColor(const Eigen::Vector3f &color) {
   getShader().bind();
-  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2), 1.0f);
+  getQOpenGLExtraFunctions().glUniform4f(getShader().getUniformLocations().uniformColor, color(0), color(1), color(2),
+                                         1.0f);
   getShader().release();
 }
 
-void UniformLineRenderer::setLines(const Eigen::Matrix3Xf& positions) {
+void UniformLineRenderer::setLines(const Eigen::Matrix3Xf &positions) {
   getVao().uploadPositions(getShader().getVertexLocations().position, positions.data(), positions.cols());
 }
 

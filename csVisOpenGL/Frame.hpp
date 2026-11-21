@@ -24,37 +24,30 @@ class Frame : public QOpenGLWidget {
 
   class CameraState : public CameraControllerSlots {
   public:
-    CameraState()
-        : m_camera() {}
-    void onNewCamera(Camera const& camera);
+    CameraState() : m_camera() {}
+    void onNewCamera(Camera const &camera);
 
-    Camera const& getCamera() const {
-      return m_camera;
-    };
+    Camera const &getCamera() const { return m_camera; };
 
   private:
     Camera m_camera;
   };
 
 public:
-  Frame(QWidget* parent = 0);
+  Frame(QWidget *parent = 0);
   virtual ~Frame();
   // ------------- Visualizers
-  void addVisualizer(std::shared_ptr<VisualizerInterface> const& visualizer);
+  void addVisualizer(std::shared_ptr<VisualizerInterface> const &visualizer);
 
-  void connectSlotsInterface(FrameSlotsInterface const& frameSlots) const;
-  void connectCameraControllerSignals(CameraControllerSignals const& cameraSignals) const;
+  void connectSlotsInterface(FrameSlotsInterface const &frameSlots) const;
+  void connectCameraControllerSignals(CameraControllerSignals const &cameraSignals) const;
 
-  Camera const& getCamera() const {
-    return m_cameraState.getCamera();
-  };
+  Camera const &getCamera() const { return m_cameraState.getCamera(); };
 
-  FrameSignals const& getFrameSignals() const {
-    return m_frameSignals;
-  }
+  FrameSignals const &getFrameSignals() const { return m_frameSignals; }
 
 private:
-  void timerEvent(QTimerEvent* event) override;
+  void timerEvent(QTimerEvent *event) override;
 
   // ------------- GL methods
   virtual void initializeGL() override;
@@ -62,14 +55,14 @@ private:
   virtual void resizeGL(int width, int height) override;
 
   // ------------- Events
-  bool event(QEvent* event) override;
-  void focusOutEvent(QFocusEvent* event) override;
-  void keyPressEvent(QKeyEvent* event) override;
-  void keyReleaseEvent(QKeyEvent* event) override;
-  void mouseMoveEvent(QMouseEvent* event) override;
-  void mousePressEvent(QMouseEvent* event) override;
-  void mouseReleaseEvent(QMouseEvent* event) override;
-  void wheelEvent(QWheelEvent* event) override;
+  bool event(QEvent *event) override;
+  void focusOutEvent(QFocusEvent *event) override;
+  void keyPressEvent(QKeyEvent *event) override;
+  void keyReleaseEvent(QKeyEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void wheelEvent(QWheelEvent *event) override;
 
   std::shared_ptr<QOpenGLExtraFunctions> const m_openGLExtraFunctions;
   std::unique_ptr<ShaderFactory> const m_shaderFactory;
