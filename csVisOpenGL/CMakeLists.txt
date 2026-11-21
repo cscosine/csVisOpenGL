@@ -7,13 +7,13 @@ list(APPEND CMAKE_MODULE_PATH "${csCore_BASE_DIR}/cmake/csCore/assert/")
 include(csAssert)
 
 # set defaults for Paranoid additional configuration
-cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT RELEASE Paranoid ON)
-cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT RELWITHDEBINFO Paranoid ON)
-cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT DEBUG Paranoid ON)
-cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT PARANOID Paranoid ON)
-cssetassertdefaultonforconfig(${PROJECT_NAME} ASSERT SAFE_MATH Paranoid ON)
+cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELEASE Paranoid ON)
+cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT RELWITHDEBINFO Paranoid ON)
+cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT DEBUG Paranoid ON)
+cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT PARANOID Paranoid ON)
+cs_assert_set_default_on_for_config(${PROJECT_NAME} ASSERT SAFE_MATH Paranoid ON)
 
-csassertgenerateproject(csVisOpenGL csVisOpenGL) #generate target csVisOpenGL::csVisOpenGLAssert
+cs_assert_generate_project(csVisOpenGL csVisOpenGL) #generate target csVisOpenGL::csVisOpenGLAssert
 list(POP_BACK CMAKE_MODULE_PATH)
 
 # prepare standard library
